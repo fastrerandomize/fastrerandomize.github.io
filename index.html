@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>fastrerandomize</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Times New Roman, Times New Roman;
+            margin: 0;
+            padding: 0;
+            background-color: #F9FAFB;
+            color: #111827;
+        }
+        .highlight {
+            background-color: #C3C5C8;
+        }
+        header { 
+            background-color: #1E293B; 
+            color: white; 
+            padding: 20px; 
+            text-align: center; 
+            font-size: 20px; 
+        }
+        nav {
+            display: block;
+            align-items: center;
+            justify-content: space-between;
+        }
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        nav ul li {
+            display: inline;
+            margin: 0 10px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            padding: 5px 10px;
+            transition: background-color 0.3s, border-radius 0.3s;
+        }
+        nav ul li a:hover {
+            background-color: #2563EB;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        main {
+            padding: 20px;
+        }
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .feature {
+            background-color: #F6F7F8;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin: 15px;
+            padding: 20px;
+            width: 30%;
+        }
+        .feature h3 {
+            margin-top: 0;
+        }
+        footer {
+            clear: both;
+            background-color: #1E293B; 
+            color: white;
+            text-align: center;
+            padding: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="install.html">Install</a></li>
+                <li><a href="documentation.html">Documentation</a></li>
+                <li><a href="tutorials.html">Tutorials</a></li>
+                <li><a href="aboutus.html">About Us</a></li>
+            </ul>
+        </nav>
+        <h1><a href="index.html">fastrerandomize</a></h1>
+        <p>An R Package for Fast Rerandomization Using Accelerated Computing</p>
+        <button><a href = "https://cran.rstudio.com/web/packages/fastrerandomize/index.html"> Latest Release: fastrerandomize 1.0. View All Releases </a></button>
+    </header>
+    <main>
+        <section class="release-announcement">
+            <h2>fastrerandomize released!</h2>
+            <p>Read the accompanying package paper <a href="https://arxiv.org/abs/2501.07642"> here</a>.</p>
+            <p>2024-01-17</p>
+        </section>
+        <section class="features">
+            <div class="feature">
+                <h3><a href="documentation.html">Tools</a></h3>
+                <p>Employs JAX backend version 0.4.38, batched processing, and GPU acceleration to improve performance.</p>
+            </div>
+            <div class="feature">
+                <h3>Improvements</h3>
+                <p>Allows for use in cases where the sample size or number of covariates is very large.</p>
+            </div>
+            <div class="feature"> 
+                <h3>Open-Source</h3>
+                <p>Distributed under a <a href="https://github.com/cjerzak/fastrerandomize-software?tab=License-1-ov-file#readme">GPL-3 license</a>, fastrerandomize is developed and maintained publicly on <a href="https://github.com/cjerzak/fastrerandomize-software?tab=readme-ov-file">GitHub</a>.</p>
+            </div>
+            <div class="feature">
+                <h3>Balanced Assignment</h3>
+                <p>Generates pools of acceptable randomizations based on a given acceptance probability.</p>
+            </div>
+            <div class="feature">
+                <h3>Tests and Thresholds</h3>
+                <p>Conducts exact rerandomization tests and computes optimal rerandomization acceptance thresholds.</p>
+            </div>
+            <div class="feature">
+                <h3><a href="tutorials.html">Applications</a></h3>
+                <p>Speed ups in applications to economic and geographical experiments.</p>
+            </div>
+        </section>
+        <section class="prior-work">
+            <p>fastrerandomize was originally introduced in <a href="https://arxiv.org/abs/2310.00861"> Connor T. Jerzak, Rebecca Goldstein. "Degrees of Randomness in Rerandomization Procedures." (2023)</a>.</p>
+        </section>
+    </main>
+    <script src="search.js"></script>
+    <footer>
+        <p>&copy; 2025 fastrerandomize developers</p>
+    </footer>
+</body>
+</html>
