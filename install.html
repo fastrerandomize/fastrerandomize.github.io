@@ -1,104 +1,190 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Install</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        body {
-            font-family: Times New Roman, Times New Roman;
-            margin: 0;
-            padding: 0;
-            background-color: #F9FAFB; 
-            color: #111827; 
-        }
-        .highlight {
-            background-color: #C3C5C8;
-        }
-        header {
-            background-color: #1E293B;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            font-size: 20px;   
-        }
-        nav ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        nav ul li {
-            display: inline;
-            margin: 0 10px;
-        }
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            padding: 5px 10 px;
-            transition: background-color 0.3s, border-radius 0.3s;
-        }
-        nav ul li a:hover {
-            background-color: #2563EB;
-            padding: 5px;
-            border-radius: 5px;
-        }
-        main {
-            padding: 20px;
-        }
-        .install-box {
-            background-color: #F6F7F8;
-            border-radius: 10px;
-            padding: 40px;
-            margin: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .install-box h1, .install-box p {
-            margin: 0 0 20px;
-        }
-        footer {
-            clear: both;
-            background-color: #1E293B; 
-            color: white;
-            text-align: center;
-            padding: 10px;
-            margin-top: 20px;
-        }
-    </style>
-    </style>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Install | fastrerandomize</title>
+
+  <!-- Google Fonts (Inter) -->
+  <link rel="preconnect" href="https://fonts.gstatic.com"/>
+  <link 
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" 
+    rel="stylesheet"
+  />
+
+  <style>
+    /* 
+      Global Styles
+      -------------
+    */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", 
+                   "Roboto", "Helvetica Neue", Arial, sans-serif;
+      background-color: #F9FAFB;
+      color: #111827;
+      line-height: 1.6;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* 
+      Header + Navigation
+      -------------------
+    */
+    header {
+      background: linear-gradient(135deg, #1E293B 0%, #3B82F6 100%);
+      color: #FFF;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+    }
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+    nav ul {
+      list-style-type: none;
+      display: flex;
+      gap: 1rem;
+    }
+    nav ul li {
+      position: relative;
+    }
+    nav ul li a {
+      font-weight: 500;
+      padding: 0.5rem 0.75rem;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+      color: #FFF;
+    }
+    nav ul li a:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    /* Header Title */
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+    .logo a {
+      color: #FFF;
+    }
+
+    /*
+      Main Content
+      ------------
+    */
+    main {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    .install-box {
+      background-color: #FFFFFF;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      transition: transform 0.2s ease;
+    }
+    .install-box:hover {
+      transform: translateY(-2px);
+    }
+    .install-box h1 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+      color: #1E293B;
+    }
+    .install-box p,
+    .install-box li {
+      font-size: 0.95rem;
+      color: #374151;
+    }
+    .install-box ol {
+      margin-left: 1.25rem;
+    }
+    .install-box pre {
+      background-color: #F3F4F6;
+      padding: 1rem;
+      border-radius: 6px;
+      margin: 1rem 0;
+      overflow-x: auto;
+    }
+    .install-box code {
+      font-family: "Source Code Pro", Consolas, monospace;
+      color: #1E293B;
+      font-size: 0.9rem;
+    }
+
+    /*
+      Footer
+      ------
+    */
+    footer {
+      background-color: #1E293B;
+      color: #FFF;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+    }
+    footer p {
+      font-size: 0.9rem;
+      margin: 0;
+    }
+  </style>
 </head>
+
 <body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="install.html">Install</a></li>
-                <li><a href="documentation.html">Documentation</a></li>
-                <li><a href="tutorials.html">Tutorials</a></li>
-                <li><a href="aboutus.html">About Us</a></li>
-            </ul>
-        </nav>
-        <h1><a href="index.html">fastrerandomize</a></h1>
-    </header>
-    <main>
-        <div class="install-box">
-            <h1>Install fastrerandomize</h1>
-            <p>To install and load fastrerandomize, follow these steps:</p>
-            <ol>
-                <li>Open your terminal in your preferred R editor. </li>
-                <li>If you haven't installed devtools already, begin by doing so:</li>
-                    <pre><code>install.packages("devtools")</code></pre>
-                <li>Install the package from the GitHub:</li>
-                    <pre><code>devtools::install_github(repo = "cjerzak/fastrerandomize-software/fastrerandomize")</code></pre>
-                <li>Load the package:</li>
-                    <pre><code>library(fastrerandomize)</code></pre>
-                <li>When running code for the first time, create the computational environment:</li>
-                    <pre><code>fastrerandomize::build_backend()</code></pre>
-                <li>Rerandomize!</li>
-            </ol>
-        </div>
-    </main>
-    <footer>
-        <p>&copy; 2025 fastrerandomize developers</p> 
-    </footer>
+  <!-- Header + Navigation -->
+  <header>
+    <nav>
+      <div class="logo">
+        <a href="index.html">fastrerandomize</a>
+      </div>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="install.html">Install</a></li>
+        <li><a href="documentation.html">Documentation</a></li>
+        <li><a href="tutorials.html">Tutorials</a></li>
+        <li><a href="aboutus.html">About Us</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <div class="install-box">
+      <h1>Install fastrerandomize</h1>
+      <p>To install and load <strong>fastrerandomize</strong>, follow these steps:</p>
+      <ol>
+        <li>Open your terminal in your preferred R editor.</li>
+        <li>If you haven't installed devtools already, begin by doing so:</li>
+        <pre><code>install.packages("devtools")</code></pre>
+        <li>Install the package from GitHub:</li>
+        <pre><code>devtools::install_github(repo = "cjerzak/fastrerandomize-software/fastrerandomize")</code></pre>
+        <li>Load the package:</li>
+        <pre><code>library(fastrerandomize)</code></pre>
+        <li>When running code for the first time, create the computational environment:</li>
+        <pre><code>fastrerandomize::build_backend()</code></pre>
+        <li>Rerandomize!</li>
+      </ol>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 fastrerandomize developers</p>
+  </footer>
 </body>
 </html>
