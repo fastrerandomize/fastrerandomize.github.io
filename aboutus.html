@@ -7,8 +7,8 @@
   
   <!-- Google Fonts (Inter) -->
   <link rel="preconnect" href="https://fonts.gstatic.com"/>
-  <link 
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" 
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
     rel="stylesheet"
   />
 
@@ -23,7 +23,7 @@
       padding: 0;
     }
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", 
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI",
                    "Roboto", "Helvetica Neue", Arial, sans-serif;
       background-color: #F9FAFB;
       color: #111827;
@@ -62,6 +62,9 @@
       margin: 0 auto;
       padding: 1rem;
     }
+    .logo {
+      /* Use an h1 with link as in original */
+    }
     nav ul {
       list-style-type: none;
       display: flex;
@@ -81,6 +84,60 @@
       background-color: rgba(255, 255, 255, 0.1);
     }
 
+    /* 
+      Hamburger lines (hidden on larger screens)
+    */
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    .hamburger-line {
+      display: block;
+      width: 25px;
+      height: 3px;
+      background-color: #fff;
+      margin: 5px 0;
+      transition: 0.3s ease;
+    }
+
+    /* 
+      Show/hide menu on narrow screens 
+    */
+    @media (max-width: 768px) {
+      nav {
+        position: relative;
+      }
+      /* Show hamburger button */
+      .menu-toggle {
+        display: inline-block;
+      }
+      /* Hide the menu by default on mobile */
+      nav ul {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background-color: #1E293B;
+        flex-direction: column;
+        gap: 0;
+        width: 180px;
+        border-radius: 4px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      }
+      /* Full-width clickable items on mobile */
+      nav ul li a {
+        display: block;
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      /* Reveal the menu when nav has .open */
+      nav.open ul {
+        display: flex;
+      }
+    }
+
     /*
       Main Content
       ------------
@@ -93,7 +150,6 @@
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 2rem;
     }
-
     .feature-box {
       background-color: #FFFFFF;
       border-radius: 8px;
@@ -123,7 +179,6 @@
       font-size: 0.9rem;
       color: #374151;
     }
-    /* Make links in .feature-box stand out */
     .feature-box a {
       color: #2563EB;
       font-weight: 500;
@@ -158,6 +213,15 @@
       <div class="logo">
         <h1><a href="index.html">fastrerandomize</a></h1>
       </div>
+
+      <!-- HAMBURGER BUTTON -->
+      <button class="menu-toggle" aria-label="Toggle Menu">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+      <!-- /HAMBURGER BUTTON -->
+
       <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="install.html">Install</a></li>
@@ -203,109 +267,112 @@
       <p>Email: wzhu [at] college [dot] harvard [dot] edu</p>
     </div>
 
-<!-- BEGIN: Insanely Great Native Share Button -->
-<div style="text-align: left; margin: 1em 0;">
-  <button id="share-button" 
-          style="
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px; 
-            padding: 5px 10px;
-            font-size: 16px;
-            font-weight: normal;
-            color: #000;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            cursor: pointer;
-            box-shadow: 0 1.5px 0 #000;
-          ">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
-         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="18" cy="5" r="3"></circle>
-      <circle cx="6" cy="12" r="3"></circle>
-      <circle cx="18" cy="19" r="3"></circle>
-      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-    </svg>
-    <strong>Share</strong>
-  </button>
-</div>
-
-<script>
-(function() {
-  const shareBtn = document.getElementById('share-button');
-
-  // Reusable helper function to show a small “Copied!” message
-  function showCopyNotification() {
-    const notification = document.createElement('div');
-    notification.innerText = 'Copied to clipboard';
-    // Style as you like — here’s an example bottom-right “toast”
-    notification.style.position = 'fixed';
-    notification.style.bottom = '20px';
-    notification.style.right = '20px';
-    notification.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
-    notification.style.color = '#fff';
-    notification.style.padding = '8px 12px';
-    notification.style.borderRadius = '4px';
-    notification.style.zIndex = '9999';
-    document.body.appendChild(notification);
-
-    // Remove after 2 seconds
-    setTimeout(() => {
-      notification.remove();
-    }, 2000);
-  }
-
-  shareBtn.addEventListener('click', function() {
-    const currentURL = window.location.href;
-    const pageTitle  = document.title || 'Check this out!';
-
-    // If browser supports Web Share API
-    if (navigator.share) {
-      navigator.share({
-        title: pageTitle,
-        text: 'Thought you’d like this!',
-        url: currentURL
-      })
-      .catch((error) => {
-        console.log('Sharing failed', error);
-      });
-    } else {
-      // Fallback to copy the URL to the clipboard:
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(currentURL).then(() => {
-          // Instead of alert(), show a small notification
-          showCopyNotification();
-        }, (err) => {
-          console.error('Could not copy text: ', err);
-        });
-      } else {
-        // Double-fallback for very old browsers
-        const textArea = document.createElement('textarea');
-        textArea.value = currentURL;
-        document.body.appendChild(textArea);
-        textArea.select();
-        try {
-          document.execCommand('copy');
-          showCopyNotification(); // again, no alert()
-        } catch (err) {
-          alert('Please copy this link:\n' + currentURL);
-        }
-        document.body.removeChild(textArea);
-      }
-    }
-  });
-})();
-</script>
-<!-- END: Insanely Great Native Share Button -->
-    
+    <!-- BEGIN: Insanely Great Native Share Button -->
+    <div style="text-align: left; margin: 1em 0;">
+      <button id="share-button" 
+              style="
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px; 
+                padding: 5px 10px;
+                font-size: 16px;
+                font-weight: normal;
+                color: #000;
+                background-color: #fff;
+                border: 1px solid #ddd;
+                border-radius: 6px;
+                cursor: pointer;
+                box-shadow: 0 1.5px 0 #000;
+              ">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="18" cy="5" r="3"></circle>
+          <circle cx="6" cy="12" r="3"></circle>
+          <circle cx="18" cy="19" r="3"></circle>
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+        </svg>
+        <strong>Share</strong>
+      </button>
+    </div>
+    <!-- END: Insanely Great Native Share Button -->
   </main>
 
   <!-- Footer -->
   <footer>
     <p>&copy; 2025 fastrerandomize developers</p>
   </footer>
+
+  <!-- Scripts -->
+  <script>
+    // MENU TOGGLE LOGIC
+    const menuToggle = document.querySelector('.menu-toggle');
+    const nav = document.querySelector('nav');
+
+    menuToggle.addEventListener('click', () => {
+      nav.classList.toggle('open');
+    });
+
+    // SHARE BUTTON LOGIC (same as before)
+    (function() {
+      const shareBtn = document.getElementById('share-button');
+
+      function showCopyNotification() {
+        const notification = document.createElement('div');
+        notification.innerText = 'Copied to clipboard';
+        notification.style.position = 'fixed';
+        notification.style.bottom = '20px';
+        notification.style.right = '20px';
+        notification.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+        notification.style.color = '#fff';
+        notification.style.padding = '8px 12px';
+        notification.style.borderRadius = '4px';
+        notification.style.zIndex = '9999';
+        document.body.appendChild(notification);
+        setTimeout(() => {
+          notification.remove();
+        }, 2000);
+      }
+
+      shareBtn.addEventListener('click', function() {
+        const currentURL = window.location.href;
+        const pageTitle  = document.title || 'Check this out!';
+
+        // If browser supports Web Share API
+        if (navigator.share) {
+          navigator.share({
+            title: pageTitle,
+            text: '',
+            url: currentURL
+          })
+          .catch((error) => {
+            console.log('Sharing failed', error);
+          });
+        } else {
+          // Fallback: copy to clipboard
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(currentURL).then(() => {
+              showCopyNotification();
+            }, (err) => {
+              console.error('Could not copy text: ', err);
+            });
+          } else {
+            const textArea = document.createElement('textarea');
+            textArea.value = currentURL;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+              document.execCommand('copy');
+              showCopyNotification();
+            } catch (err) {
+              alert('Please copy this link:\n' + currentURL);
+            }
+            document.body.removeChild(textArea);
+          }
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
