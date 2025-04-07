@@ -11,21 +11,30 @@
 
   <style>
     /* 
-      Global Settings 
-      ---------------
+      Add a canvas behind everything for the "raining vectors" motif
     */
-    * {
-      box-sizing: border-box;
+    html, body {
       margin: 0;
       padding: 0;
-    }
-    body {
+      height: 100%;
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", 
                    "Roboto", "Helvetica Neue", Arial, sans-serif;
-      background-color: #F9FAFB;
       color: #111827;
       line-height: 1.6;
+      /* Remove background color so canvas shows */
+      background: transparent; 
+      /* Let page scroll while keeping canvas fixed */
     }
+    #background-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -999;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
     a {
       text-decoration: none;
       color: inherit;
@@ -262,6 +271,9 @@
 </head>
 
 <body>
+  <!-- Raining Vectors Background Canvas -->
+  <canvas id="background-canvas"></canvas>
+  
   <!-- Header + Navigation -->
   <header>
     <nav>
@@ -293,7 +305,6 @@
       <button>
         <a href="https://cran.rstudio.com/web/packages/fastrerandomize/index.html">
           Latest Release: fastrerandomize 1.0 <br/>
-          <span style="font-weight: 400;">View All Releases</span>
         </a>
       </button>
     </div>
@@ -302,11 +313,11 @@
   <!-- Main Content -->
   <main>
     <!-- Release Announcement -->
-    <section class="release-announcement">
-      <h2>fastrerandomize released!</h2>
-      <p>Read the accompanying package paper 
+    <section class="release-announcement" style="width:50%; margin: 1 auto;">
+        <h2>fastrerandomize released!</h2>
+        <p>Read the accompanying package paper 
         <a href="https://arxiv.org/abs/2501.07642">here</a>.
-      </p>
+    </p>
     </section>
 
     <!-- Features Section -->
@@ -468,6 +479,66 @@
         }
       });
     })();
+
+    /*
+      "Raining Vectors" Background
+      ----------------------------
+      A simple "Matrix rain"-like effect, but with math/technical symbols.
+    */
+    const canvas = document.getElementById('background-canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Some mathy / vector symbols
+    const symbols = ['∂','∇','λ','α','δ','θ','Σ','∫','×','→','±','β','μ','Ω','σ','Φ'];
+
+    let width, height;
+    let columns;       // Number of columns for the symbols
+    let drops = [];    // Y positions for the symbols in each column
+
+    // Resize canvas
+    function resizeCanvas() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+
+      columns = Math.floor(width / 20);  // 20px for each symbol
+      drops = [];
+      for (let i = 0; i < columns; i++) {
+        drops[i] = 1;
+      }
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function draw() {
+      // Semi-transparent background to give a trailing effect
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+      ctx.fillRect(0, 0, width, height);
+
+      ctx.fillStyle = '#3B82F6';  // Symbol color
+      ctx.font = '16px monospace';
+
+      for (let i = 0; i < drops.length; i++) {
+        // Pick a random symbol
+        const text = symbols[Math.floor(Math.random() * symbols.length)];
+        // x coordinate of the symbol
+        const x = i * 20;
+        // y coordinate is drops[i] * 20
+        const y = drops[i] * 20;
+        ctx.fillText(text, x, y);
+
+        // Randomly reset
+        if (y > height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+
+    // Draw loop
+    setInterval(draw, 50);
   </script>
 </body>
 </html>
