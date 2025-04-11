@@ -943,7 +943,30 @@
     .delay-200 { animation-delay: 200ms; }
     .delay-300 { animation-delay: 300ms; }
     .delay-400 { animation-delay: 400ms; }
-    .delay-500 { animation-delay: 500ms; }
+.delay-500 { animation-delay: 500ms; }
+
+
+/* Ensure canvas visibility throughout */
+#background-canvas {
+  z-index: -1;
+}
+
+main, footer, header, section {
+  background-color: transparent;
+  position: relative;
+  z-index: 1;
+}
+
+/* Adjust specific element backgrounds for transparency */
+.feature, 
+.usage-example, 
+.release-announcement, 
+.prior-work, 
+.demo-section {
+  background: rgba(255,255,255,0.02);
+  backdrop-filter: blur(10px);
+}
+
   </style>
 </head>
 
@@ -1252,7 +1275,7 @@ X <- <span class="code-keyword">matrix</span>(<span class="code-keyword">rnorm</
         <h4>Documentation</h4>
         <ul class="footer-links">
           <li><a href="install.html">Installation Guide</a></li>
-          <li><a href="documentation.html">API Reference</a></li>
+          <li><a href="https://github.com/cjerzak/fastrerandomize-software/blob/main/fastrerandomize.pdf?raw=true">API Reference</a></li>
           <li><a href="tutorials.html">Tutorials</a></li>
         </ul>
       </div>
@@ -1271,7 +1294,7 @@ X <- <span class="code-keyword">matrix</span>(<span class="code-keyword">rnorm</
         <h4>Resources</h4>
         <ul class="footer-links">
           <li><a href="https://arxiv.org/abs/2501.07642">Paper</a></li>
-          <li><a href="cite.html">How to Cite</a></li>
+          <li><a href="https://connorjerzak.com/wp-content/uploads/2025/01/FastReandomizeBib.txt">How to Cite</a></li>
           <li><a href="benchmarks.html">Benchmarks</a></li>
           <li><a href="examples.html">Examples</a></li>
         </ul>
@@ -1281,7 +1304,7 @@ X <- <span class="code-keyword">matrix</span>(<span class="code-keyword">rnorm</
         <h4>About</h4>
         <ul class="footer-links">
           <li><a href="aboutus.html">Team</a></li>
-          <li><a href="contact.html">Contact</a></li>
+          <li><a href="mailto:connor.jerzak@austin.utexas.edu">Contact</a></li>
           <li><a href="https://github.com/cjerzak/fastrerandomize-software?tab=License-1-ov-file#readme">License</a></li>
         </ul>
       </div>
