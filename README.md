@@ -12,7 +12,7 @@ An R package for hardware-accelerated rerandomization and exact randomization te
 - 🔢 Supports both exact enumeration and Monte Carlo sampling
 - 📉 Built-in balance metrics (Hotelling's T²) and custom threshold functions
 - 📈 Randomization-based inference with fiducial intervals
-- 💾 Memory-efficient batched processing for large experiments
+- 💾 Memory-efficient, key-based batched processing for large experiments
 
 ## Installation
 
