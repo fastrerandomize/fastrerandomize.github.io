@@ -3,28 +3,70 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>fastrerandomize</title>
+  <title>fastrerandomize - Fast Rerandomization Using Accelerated Computing</title>
   
-  <!-- Google Fonts: "Inter" as an example -->
+  <!-- Google Fonts: Manrope for headings, Inter for body text -->
   <link rel="preconnect" href="https://fonts.gstatic.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
 
   <style>
+    :root {
+      /* Color System */
+      --color-primary: #3B82F6;
+      --color-primary-dark: #1D4ED8;
+      --color-primary-light: #60A5FA;
+      --color-secondary: #10B981;
+      --color-accent: #8B5CF6;
+      --color-dark: #1E293B;
+      --color-darker: #0F172A;
+      --color-light: #F3F4F6;
+      --color-lighter: #F9FAFB;
+      
+      /* Spacing System */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2rem;
+      --space-xxl: 3rem;
+      
+      /* Shadow System */
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.08);
+      
+      /* Border Radius */
+      --radius-sm: 0.25rem;
+      --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;
+      --radius-xl: 1rem;
+      
+      /* Transitions */
+      --transition-fast: 150ms ease;
+      --transition-normal: 300ms ease;
+      --transition-slow: 500ms ease;
+    }
+
     /* 
-      Add a canvas behind everything for the "raining vectors" motif
+      Base Styles
+      -----------
     */
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", 
-                   "Roboto", "Helvetica Neue", Arial, sans-serif;
+                  "Roboto", "Helvetica Neue", Arial, sans-serif;
       color: #111827;
-      line-height: 1.6;
-      /* Remove background color so canvas shows */
-      background: transparent; 
-      /* Let page scroll while keeping canvas fixed */
+      line-height: 1.7;
+      background: transparent;
+      scroll-behavior: smooth;
     }
+    
     #background-canvas {
       position: fixed;
       top: 0;
@@ -33,24 +75,126 @@
       width: 100%;
       height: 100%;
       display: block;
+      background: linear-gradient(135deg, var(--color-darker) 0%, var(--color-dark) 100%);
     }
 
     a {
       text-decoration: none;
       color: inherit;
+      transition: color var(--transition-fast);
     }
-
+    
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Manrope', sans-serif;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-top: 0;
+    }
+    
+    .highlight {
+      color: var(--color-primary);
+      position: relative;
+      display: inline-block;
+    }
+    
+    .highlight::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background-color: rgba(59, 130, 246, 0.2);
+      border-radius: var(--radius-sm);
+      z-index: -1;
+    }
+    
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--space-md);
+    }
+    
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .badge-primary {
+      background-color: rgba(59, 130, 246, 0.15);
+      color: var(--color-primary);
+    }
+    
+    .badge-secondary {
+      background-color: rgba(16, 185, 129, 0.15);
+      color: var(--color-secondary);
+    }
+    
+    .badge-accent {
+      background-color: rgba(139, 92, 246, 0.15);
+      color: var(--color-accent);
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition-normal);
+    }
+    
+    .btn-primary {
+      background-color: var(--color-primary);
+      color: white;
+      box-shadow: 0 4px 6px rgba(59, 130, 246, 0.25);
+    }
+    
+    .btn-primary:hover {
+      background-color: var(--color-primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 8px rgba(59, 130, 246, 0.3);
+    }
+    
+    .btn-secondary {
+      background-color: white;
+      color: var(--color-dark);
+      border: 1px solid #E5E7EB;
+    }
+    
+    .btn-secondary:hover {
+      background-color: var(--color-light);
+      transform: translateY(-2px);
+    }
+    
+    .btn-lg {
+      padding: 0.875rem 2rem;
+      font-size: 1.125rem;
+    }
+    
     /* 
       Header + Navigation 
       --------------------
     */
     header {
-      background: linear-gradient(135deg, #1E293B 0%, #3B82F6 100%);
+      background: linear-gradient(135deg, var(--color-dark) 0%, var(--color-primary-dark) 100%);
       color: #FFF;
-      position: sticky; 
+      position: sticky;
       top: 0;
       z-index: 999;
+      box-shadow: var(--shadow-md);
     }
+    
     nav {
       display: flex;
       align-items: center;
@@ -58,27 +202,93 @@
       max-width: 1200px;
       margin: 0 auto;
       padding: 1rem;
+      position: relative;
     }
+    
     .logo {
-      font-size: 1.25rem;
-      font-weight: 700;
+      font-family: 'Manrope', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      transition: all var(--transition-normal);
     }
+    
+    .logo:hover {
+      transform: scale(1.05);
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+    
     nav ul {
       list-style-type: none;
       display: flex;
-      gap: 1rem;
+      gap: 1.25rem;
+      margin: 0;
+      padding: 0;
     }
+    
     nav ul li {
       position: relative;
     }
+    
     nav ul li a {
       font-weight: 500;
+      font-size: 0.95rem;
       padding: 0.5rem 0.75rem;
-      border-radius: 4px;
-      transition: background-color 0.3s ease;
+      border-radius: var(--radius-md);
+      transition: all var(--transition-normal);
+      position: relative;
     }
+    
+    nav ul li a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 2px;
+      background-color: white;
+      transition: width var(--transition-normal);
+    }
+    
     nav ul li a:hover {
       background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    nav ul li a:hover::after {
+      width: 80%;
+    }
+    
+    .search-container {
+      position: relative;
+      margin-left: var(--space-md);
+    }
+    
+    .search-input {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      padding: 0.5rem 0.75rem 0.5rem 2.25rem;
+      border-radius: var(--radius-md);
+      font-size: 0.875rem;
+      transition: all var(--transition-normal);
+      width: 150px;
+    }
+    
+    .search-input:focus {
+      outline: none;
+      background-color: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.3);
+      width: 200px;
+    }
+    
+    .search-icon {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.875rem;
     }
 
     /* Hamburger lines default hidden on large screens */
@@ -88,6 +298,7 @@
       border: none;
       cursor: pointer;
     }
+    
     .hamburger-line {
       display: block;
       width: 25px;
@@ -98,6 +309,12 @@
     }
 
     /* Show/hide logic on narrow screens */
+    @media (max-width: 992px) {
+      .search-container {
+        display: none;
+      }
+    }
+    
     @media (max-width: 768px) {
       nav {
         position: relative;
@@ -114,24 +331,34 @@
         position: absolute;
         top: 100%;
         right: 0;
-        background-color: #1E293B;
+        background-color: var(--color-dark);
         flex-direction: column;
         gap: 0;
-        width: 180px;
-        border-radius: 4px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        width: 220px;
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-lg);
+        overflow: hidden;
+        transform: translateY(10px);
+        opacity: 0;
+        transition: all var(--transition-normal);
       }
 
       /* Each nav item is full-width on mobile */
       nav ul li a {
         display: block;
-        padding: 0.75rem 1rem;
+        padding: 0.75rem 1.25rem;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      
+      nav ul li a::after {
+        display: none;
       }
       
       /* When nav has .open, reveal the menu */
       nav.open ul {
         display: flex;
+        transform: translateY(0);
+        opacity: 1;
       }
     }
 
@@ -141,36 +368,108 @@
     */
     .hero {
       text-align: center;
-      padding: 2rem 1rem;
-      max-width: 900px;
+      padding: 4rem 1rem 5rem;
+      background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.7));
+      position: relative;
+      margin-top: 0;
+    }
+    
+    .hero-content {
+      max-width: 800px;
       margin: 0 auto;
+      position: relative;
+      z-index: 2;
     }
+    
     .hero h1 {
-      font-size: 2.25rem;
-      margin-bottom: 0.5rem;
-      font-weight: 700;
+      font-size: 3.25rem;
+      margin-bottom: 0.75rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+      background: linear-gradient(135deg, #fff 0%, #a5c4fd 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
+    
     .hero p {
-      font-size: 1rem;
+      font-size: 1.25rem;
       font-weight: 400;
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      color: rgba(255, 255, 255, 0.9);
     }
-    .hero button {
-      background-color: #2563EB;
-      border: none;
-      border-radius: 4px;
-      padding: 0.75rem 1rem;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.2s ease;
+    
+    .hero-stats {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: var(--space-lg);
+      margin-bottom: var(--space-lg);
     }
-    .hero button:hover {
-      background-color: #1D4ED8;
-      transform: translateY(-2px);
+    
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
-    .hero button a {
-      color: #FFF;
+    
+    .stat-value {
+      font-family: 'Manrope', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--color-primary-light);
+      line-height: 1;
+    }
+    
+    .stat-label {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.7);
+      margin-top: var(--space-xs);
+    }
+    
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: var(--space-xl);
+    }
+    
+    .hero-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.15;
+    }
+    
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.25rem;
+      }
+      
+      .hero p {
+        font-size: 1rem;
+      }
+      
+      .hero-stats {
+        gap: 1rem;
+      }
+      
+      .stat-value {
+        font-size: 1.75rem;
+      }
+      
+      .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+      }
     }
 
     /*
@@ -179,78 +478,376 @@
     */
     main {
       max-width: 1200px;
-      margin: 2rem auto;
-      padding: 1rem;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+      position: relative;
+      z-index: 2;
     }
 
     /* Release Announcement Section */
     .release-announcement {
-      background-color: #F3F4F6;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius-lg);
       padding: 2rem;
-      border-radius: 8px;
-      margin-bottom: 2rem;
+      margin: 0 auto 3rem;
+      max-width: 800px;
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow-card);
+      transform: translateY(-50px);
+      position: relative;
+      overflow: hidden;
     }
+    
+    .release-announcement::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-accent) 100%);
+    }
+    
     .release-announcement h2 {
       margin-bottom: 1rem;
-      font-size: 1.5rem;
+      font-size: 1.75rem;
       font-weight: 700;
+      color: white;
+      position: relative;
     }
+    
     .release-announcement p {
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.1rem;
     }
+    
     .release-announcement a {
-      color: #2563EB;
+      color: var(--color-primary-light);
       font-weight: 500;
-      transition: color 0.3s ease;
+      transition: color var(--transition-normal);
+      position: relative;
     }
+    
+    .release-announcement a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background-color: var(--color-primary-light);
+      transform: scaleX(0);
+      transform-origin: right center;
+      transition: transform var(--transition-normal);
+    }
+    
     .release-announcement a:hover {
-      color: #1D4ED8;
+      color: var(--color-primary);
+    }
+    
+    .release-announcement a:hover::after {
+      transform: scaleX(1);
+      transform-origin: left center;
     }
 
     /* Features Section */
+    .features-title {
+      text-align: center;
+      margin-bottom: 3rem;
+      color: white;
+    }
+    
+    .features-title h2 {
+      font-size: 2.25rem;
+      margin-bottom: 1rem;
+    }
+    
+    .features-title p {
+      font-size: 1.125rem;
+      max-width: 600px;
+      margin: 0 auto;
+      color: rgba(255, 255, 255, 0.8);
+    }
+    
     .features {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
     }
+    
     .feature {
-      background-color: #FFFFFF;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
-      padding: 1.5rem;
-      transition: transform 0.2s ease;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      transition: all var(--transition-normal);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow-card);
+      position: relative;
+      overflow: hidden;
     }
+    
+    .feature::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-accent) 50%, var(--color-secondary) 100%);
+      opacity: 0;
+      transition: opacity var(--transition-normal);
+    }
+    
     .feature:hover {
-      transform: translateY(-2px);
+      transform: translateY(-10px);
+      box-shadow: var(--shadow-lg);
     }
+    
+    .feature:hover::before {
+      opacity: 1;
+    }
+    
+    .feature-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(29, 78, 216, 0.2) 100%);
+      margin-bottom: 1.25rem;
+      font-size: 1.5rem;
+      color: var(--color-primary-light);
+    }
+    
+    .feature:nth-child(2n) .feature-icon {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.2) 100%);
+      color: var(--color-secondary);
+    }
+    
+    .feature:nth-child(3n) .feature-icon {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(124, 58, 237, 0.2) 100%);
+      color: var(--color-accent);
+    }
+    
     .feature h3 {
       margin-bottom: 0.75rem;
-      font-weight: 600;
-      font-size: 1.125rem;
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: white;
     }
+    
     .feature p {
       font-weight: 400;
-      color: #374151;
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.7;
+      margin-bottom: 1.25rem;
     }
+    
     .feature a {
-      color: #2563EB;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      color: var(--color-primary-light);
       font-weight: 500;
+      font-size: 0.95rem;
     }
+    
     .feature a:hover {
-      text-decoration: underline;
+      color: white;
+    }
+    
+    /* Usage Example Section */
+    .usage-example {
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      margin-bottom: 3rem;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+    
+    .usage-example h3 {
+      color: white;
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+    }
+    
+    .code-tabs {
+      display: flex;
+      gap: 1px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-md) var(--radius-md) 0 0;
+      margin-bottom: 0;
+      overflow: hidden;
+    }
+    
+    .code-tab {
+      padding: 0.75rem 1.25rem;
+      background-color: rgba(0, 0, 0, 0.3);
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: all var(--transition-normal);
+      flex: 1;
+      text-align: center;
+    }
+    
+    .code-tab.active {
+      background-color: #1E1E1E;
+      color: white;
+    }
+    
+    .code-block {
+      background-color: #1E1E1E;
+      border-radius: 0 0 var(--radius-md) var(--radius-md);
+      overflow: hidden;
+      display: none;
+    }
+    
+    .code-block.active {
+      display: block;
+    }
+    
+    .code-content {
+      padding: 1.5rem;
+      font-family: 'Consolas', 'Monaco', 'Andale Mono', monospace;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #D4D4D4;
+      overflow-x: auto;
+      white-space: pre;
+    }
+    
+    .code-keyword {
+      color: #569CD6;
+    }
+    
+    .code-function {
+      color: #DCDCAA;
+    }
+    
+    .code-string {
+      color: #CE9178;
+    }
+    
+    .code-comment {
+      color: #6A9955;
+    }
+    
+    .code-number {
+      color: #B5CEA8;
     }
 
     /* Prior Work */
     .prior-work {
       margin-top: 2rem;
-      font-size: 0.95rem;
+      padding: 2rem;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
     }
+    
+    .prior-work h3 {
+      color: white;
+      margin-bottom: 1rem;
+    }
+    
+    .prior-work p {
+      color: rgba(255, 255, 255, 0.9);
+    }
+    
     .prior-work a {
-      color: #2563EB;
+      color: var(--color-primary-light);
       font-weight: 500;
+      position: relative;
     }
-    .prior-work a:hover {
-      text-decoration: underline;
+    
+    .prior-work a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background-color: var(--color-primary-light);
+      transform: scaleX(0);
+      transform-origin: right center;
+      transition: transform var(--transition-normal);
+    }
+    
+    .prior-work a:hover::after {
+      transform: scaleX(1);
+      transform-origin: left center;
+    }
+
+    /* Share Button Styles */
+    .share-container {
+      text-align: center;
+      margin: 2rem 0;
+    }
+    
+    #share-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.25rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: white;
+      background-color: var(--color-dark);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition-normal);
+    }
+    
+    #share-button:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    #share-button svg {
+      transition: transform var(--transition-normal);
+    }
+    
+    #share-button:hover svg {
+      transform: rotate(15deg);
+    }
+
+    /* Demo Section */
+    .demo-section {
+      margin-top: 3rem;
+      text-align: center;
+    }
+    
+    .demo-section h2 {
+      color: white;
+      margin-bottom: 1.5rem;
+      font-size: 1.75rem;
+    }
+    
+    .demo-frame {
+      width: 100%;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      background-color: rgba(255, 255, 255, 0.02);
+      transition: transform var(--transition-normal);
+      transform: scale(0.98);
+    }
+    
+    .demo-frame:hover {
+      transform: scale(1);
     }
 
     /*
@@ -258,15 +855,95 @@
       ------
     */
     footer {
-      background-color: #1E293B;
-      color: #FFF;
+      background: linear-gradient(to top, var(--color-darker) 0%, transparent 100%);
+      color: rgba(255, 255, 255, 0.8);
       text-align: center;
-      padding: 1rem;
+      padding: 3rem 1rem;
       margin-top: 3rem;
+      position: relative;
     }
-    footer p {
+    
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      text-align: left;
+    }
+    
+    .footer-column h4 {
+      color: white;
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+    }
+    
+    .footer-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .footer-links li {
+      margin-bottom: 0.75rem;
+    }
+    
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.6);
+      transition: color var(--transition-normal);
       font-size: 0.9rem;
     }
+    
+    .footer-links a:hover {
+      color: white;
+    }
+    
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: 2rem;
+      padding-top: 2rem;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.9rem;
+    }
+    
+    @media (max-width: 768px) {
+      .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      
+      .footer-column {
+        margin-bottom: 1.5rem;
+      }
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    .animate-fade-in {
+      animation: fadeIn 1s ease-out forwards;
+    }
+    
+    .animate-pulse {
+      animation: pulse 2s infinite ease-in-out;
+    }
+    
+    /* Delay classes for staggered animations */
+    .delay-100 { animation-delay: 100ms; }
+    .delay-200 { animation-delay: 200ms; }
+    .delay-300 { animation-delay: 300ms; }
+    .delay-400 { animation-delay: 400ms; }
+    .delay-500 { animation-delay: 500ms; }
   </style>
 </head>
 
@@ -296,41 +973,88 @@
         <li><a href="tutorials.html">Tutorials</a></li>
         <li><a href="aboutus.html">About Us</a></li>
       </ul>
+      
+      <div class="search-container">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" class="search-input" placeholder="Search docs...">
+      </div>
     </nav>
     
     <!-- Hero Section -->
     <div class="hero">
-      <h1>fastrerandomize</h1>
-      <p>An R Package for Fast Rerandomization Using Accelerated Computing</p>
-      <button>
-        <a href="https://cran.rstudio.com/web/packages/fastrerandomize/index.html">
-          Latest Release: fastrerandomize 1.0 <br/>
-        </a>
-      </button>
+      <canvas id="hero-canvas" class="hero-canvas"></canvas>
+      <div class="hero-content">
+        <h1 class="animate-fade-in">fastrerandomize</h1>
+        <p class="animate-fade-in delay-100">An R Package for <span class="highlight">Fast Rerandomization</span> Using Accelerated Computing</p>
+        
+        <div class="hero-stats animate-fade-in delay-200">
+          <div class="stat-item">
+            <div class="stat-value">50x</div>
+            <div class="stat-label">Faster Processing</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">100k+</div>
+            <div class="stat-label">Max Sample Size</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">GPU</div>
+            <div class="stat-label">Acceleration</div>
+          </div>
+        </div>
+        
+        <div class="hero-buttons animate-fade-in delay-300">
+          <a href="https://cran.rstudio.com/web/packages/fastrerandomize/index.html" class="btn btn-primary btn-lg">
+            <i class="fas fa-download"></i> Get Started: v1.0
+          </a>
+          <a href="https://github.com/cjerzak/fastrerandomize-software" class="btn btn-secondary">
+            <i class="fab fa-github"></i> View on GitHub
+          </a>
+        </div>
+      </div>
     </div>
   </header>
 
   <!-- Main Content -->
   <main>
     <!-- Release Announcement -->
-    <section class="release-announcement" style="width:45%; margin: 1 auto;">
-        <h2>fastrerandomize released!</h2>
-        <p>Read the accompanying package paper 
-        <a href="https://arxiv.org/abs/2501.07642">here</a>.
-    </p>
+    <section class="release-announcement animate-fade-in">
+      <h2>fastrerandomize <span class="badge badge-primary">Released!</span></h2>
+      <p>
+        Our new R package leverages GPU acceleration and parallel processing to make rerandomization 
+        feasible for large-scale experiments with complex balance requirements.
+      </p>
+      <p>Read the accompanying package paper <a href="https://arxiv.org/abs/2501.07642">here</a>.</p>
     </section>
 
     <!-- Features Section -->
+    <div class="features-title">
+      <h2>Features</h2>
+      <p>Designed to make rerandomization accessible for experimental
+    designs at any and all scales.</p>
+    </div>
+    
     <section class="features">
-      <div class="feature">
-        <h3><a href="documentation.html">Tools</a></h3>
-        <p>Employs JAX backend version 0.4.38, batched processing, and GPU acceleration to improve performance.</p>
+      <div class="feature animate-fade-in">
+        <div class="feature-icon">
+          <i class="fas fa-bolt"></i>
+        </div>
+        <h3>Accelerated Computation</h3>
+        <p>Employs batched processing, autovectorization, just-in-time-compilation, and (optionally) GPU acceleration to dramatically improve performance (>50x compared to traditional methods).</p>
+        <a href="documentation.html">Learn more <i class="fas fa-arrow-right"></i></a>
       </div>
-      <div class="feature">
-        <h3>Improvements</h3>
-        <p>Allows for use in cases where the sample size or number of covariates is very large.</p>
+      
+      <div class="feature animate-fade-in delay-100">
+        <div class="feature-icon">
+          <i class="fas fa-chart-bar"></i>
+        </div>
+        <h3>Scale to Any Size</h3>
+        <p>Allows for use in cases where the sample size or number of covariates is very large, making rerandomization practical for modern, large-scale experiments.</p>
       </div>
-      <div class="feature">
+      
+      <div class="feature animate-fade-in delay-200">
+        <div class="feature-icon">
+          <i class="fas fa-code-branch"></i>
+        </div>
         <h3>Open-Source</h3>
         <p>Distributed under a 
           <a href="https://github.com/cjerzak/fastrerandomize-software?tab=License-1-ov-file#readme">GPL-3 license</a>, 
@@ -338,46 +1062,163 @@
           <a href="https://github.com/cjerzak/fastrerandomize-software?tab=readme-ov-file">GitHub</a>.
         </p>
       </div>
-      <div class="feature">
+      
+      <div class="feature animate-fade-in delay-300">
+        <div class="feature-icon">
+          <i class="fas fa-balance-scale"></i>
+        </div>
         <h3>Balanced Assignment</h3>
-        <p>Generates pools of acceptable randomizations based on a given acceptance probability.</p>
+        <p>Generates pools of acceptable randomizations based on a given acceptance probability, ensuring optimal covariate balance across treatment groups.</p>
       </div>
-      <div class="feature">
+      
+      <div class="feature animate-fade-in delay-400">
+        <div class="feature-icon">
+          <i class="fas fa-vial"></i>
+        </div>
         <h3>Tests and Thresholds</h3>
-        <p>Conducts exact rerandomization tests and computes optimal rerandomization acceptance thresholds.</p>
+        <p>Conducts exact rerandomization tests and computes optimal rerandomization acceptance thresholds for reliable statistical inference.</p>
       </div>
-      <div class="feature">
-        <h3><a href="tutorials.html">Applications</a></h3>
-        <p>Speed ups in applications to economic and geographical experiments.</p>
+      
+      <div class="feature animate-fade-in delay-500">
+        <div class="feature-icon">
+          <i class="fas fa-globe"></i>
+        </div>
+        <h3>Real-world Applications</h3>
+        <p>Speed ups in applications to economic and geographical experiments, making complex designs accessible to practitioners.</p>
+        <a href="tutorials.html">View applications <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </section>
+    
+    <!-- Usage Example Section -->
+    <section class="usage-example animate-fade-in">
+      <h3>Quick Start Example</h3>
+      <div class="code-tabs">
+        <button class="code-tab active" data-tab="tab1">Setup & Basic Usage</button>
+        <button class="code-tab" data-tab="tab2">Monte Carlo Randomization</button>
+        <button class="code-tab" data-tab="tab3">Randomization Test</button>
+      </div>
+      <div class="code-block active" id="tab1">
+        <div class="code-content">
+<span class="code-comment"># Step 1: Set up the environment</span>
+<span class="code-keyword">library</span>(<span class="code-string">fastrerandomize</span>)
+
+<span class="code-comment"># Build the backend with Python dependencies</span>
+<span class="code-function">build_backend</span>(
+  conda_env = <span class="code-string">"fastrerandomize"</span>, 
+  conda = <span class="code-string">"auto"</span>
+)
+
+<span class="code-comment"># Step 2: Create some example covariate data</span>
+<span class="code-keyword">set.seed</span>(999L)
+n <- 1000
+X <- <span class="code-keyword">matrix</span>(<span class="code-keyword">rnorm</span>(n * 5), n, 5)
+
+<span class="code-comment"># Step 3: Generate balanced treatment assignments using the main function</span>
+<span class="code-keyword">result</span> <- <span class="code-function">generate_randomizations</span>(
+  n_units = n,
+  n_treated = n/2,    <span class="code-comment"># Number of treated units (50%)</span>
+  X = X,              <span class="code-comment"># Covariate matrix</span>
+  randomization_accept_prob = 0.01,  <span class="code-comment"># Acceptance probability</span>
+  randomization_type = <span class="code-string">"monte_carlo"</span>  <span class="code-comment"># Use Monte Carlo sampling</span>
+)
+
+<span class="code-comment"># Examine the results</span>
+<span class="code-keyword">head</span>(result$randomizations)  <span class="code-comment"># Treatment assignments</span>
+<span class="code-keyword">summary</span>(result$balance)      <span class="code-comment"># Balance statistics</span>
+<span class="code-keyword">plot</span>(result)                 <span class="code-comment"># Plot distribution of balance measures</span>
+        </div>
+      </div>
+      <div class="code-block" id="tab2">
+        <div class="code-content">
+<span class="code-comment"># Advanced Monte Carlo randomization</span>
+<span class="code-keyword">library</span>(<span class="code-string">fastrerandomize</span>)
+
+<span class="code-comment"># Create example data with many covariates</span>
+<span class="code-keyword">set.seed</span>(42)
+n <- 5000
+p <- 20
+X <- <span class="code-keyword">matrix</span>(<span class="code-keyword">rnorm</span>(n * p), n, p)
+
+<span class="code-comment"># For large datasets, use monte_carlo explicitly</span>
+<span class="code-keyword">result_mc</span> <- <span class="code-function">generate_randomizations_mc</span>(
+  n_units = n,
+  n_treated = n/2,
+  X = X,
+  randomization_accept_prob = 0.001,  <span class="code-comment"># Stricter balance criterion</span>
+  max_draws = 1e6,       <span class="code-comment"># Maximum number of randomizations to draw</span>
+  batch_size = 10000,    <span class="code-comment"># Process in batches for memory efficiency</span>
+  approximate_inv = TRUE <span class="code-comment"># Use diagonal approximation for speed</span>
+)
+
+<span class="code-comment"># For faster computation with GPU acceleration</span>
+<span class="code-comment"># Especially useful for large datasets</span>
+<span class="code-keyword">gpu_result</span> <- <span class="code-function">generate_randomizations</span>(
+  n_units = n,
+  n_treated = n/2,
+  X = X,
+  randomization_accept_prob = 0.0001,  <span class="code-comment"># Very stringent</span>
+  max_draws = 1e6,
+  batch_size = 10000,
+  randomization_type = <span class="code-string">"monte_carlo"</span>,
+  verbose = TRUE        <span class="code-comment"># Show progress information</span>
+)
+        </div>
+      </div>
+      <div class="code-block" id="tab3">
+        <div class="code-content">
+<span class="code-comment"># Using the randomization test functionality</span>
+<span class="code-keyword">library</span>(<span class="code-string">fastrerandomize</span>)
+
+<span class="code-comment"># 1. Generate covariates</span>
+<span class="code-keyword">set.seed</span>(123)
+n <- 100
+X <- <span class="code-keyword">matrix</span>(<span class="code-keyword">rnorm</span>(n * 3), n, 3)
+
+<span class="code-comment"># 2. Generate candidate randomizations</span>
+<span class="code-keyword">randomizations</span> <- <span class="code-function">generate_randomizations</span>(
+  n_units = n,
+  n_treated = n/2,
+  X = X,
+  randomization_accept_prob = 0.05,
+  randomization_type = <span class="code-string">"monte_carlo"</span>,
+  max_draws = 10000,
+  batch_size = 1000
+)
+
+<span class="code-comment"># 3. Generate a simulated outcome with known effect</span>
+<span class="code-keyword">obsW</span> <- randomizations$randomizations[1,]  <span class="code-comment"># Use first randomization</span>
+<span class="code-keyword">true_effect</span> <- 0.5                        <span class="code-comment"># True treatment effect</span>
+<span class="code-keyword">obsY</span> <- <span class="code-keyword">rnorm</span>(n) + obsW * true_effect
+
+<span class="code-comment"># 4. Conduct randomization test</span>
+<span class="code-keyword">test_result</span> <- <span class="code-function">randomization_test</span>(
+  obsW = obsW,
+  obsY = obsY,
+  X = X,
+  candidate_randomizations = randomizations$randomizations,
+  findFI = TRUE,   <span class="code-comment"># Calculate fiducial interval</span>
+  alpha = 0.05     <span class="code-comment"># Significance level</span>
+)
+
+<span class="code-comment"># 5. Examine test results</span>
+<span class="code-keyword">print</span>(test_result)
+<span class="code-keyword">plot</span>(test_result)  <span class="code-comment"># Visualize effect and fiducial interval</span>
+        </div>
       </div>
     </section>
 
-    <!-- Prior Work -->
-    <section class="prior-work">
-      <p style="color: white;">
-        For more information, see <a href="https://arxiv.org/abs/2501.07642" style="color: white;"> package paper:</a>
-          Connor T. Jerzak, Rebecca Goldstein, Aniket Kamat, Fucheng Warren Zhu. "fastrerandomize: An R Package for Fast Rerandomization Using Accelerated Computing," 2025.
+    <!-- Prior Work Section with citation -->
+    <section class="prior-work animate-fade-in">
+      <h3>Research & Citations</h3>
+      <p>
+        For more information, see the <a href="https://arxiv.org/abs/2501.07642">package paper</a>:
+        Connor T. Jerzak, Rebecca Goldstein, Aniket Kamat, Fucheng Warren Zhu. "fastrerandomize: An R Package for Fast Rerandomization Using Accelerated Computing," 2025.
       </p>
     </section>
 
-    <!-- BEGIN: Insanely Great Native Share Button -->
-    <div style="text-align: left; margin: 1em 0;">
-      <button id="share-button" 
-              style="
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                gap: 8px; 
-                padding: 5px 10px;
-                font-size: 16px;
-                font-weight: normal;
-                color: #000;
-                background-color: #fff;
-                border: 1px solid #ddd;
-                border-radius: 6px;
-                cursor: pointer;
-                box-shadow: 0 1.5px 0 #000;
-              ">
+    <!-- Share Button -->
+    <div class="share-container">
+      <button id="share-button">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="18" cy="5" r="3"></circle>
@@ -389,26 +1230,66 @@
         <strong>Share</strong>
       </button>
     </div>
-    <!-- END: Insanely Great Native Share Button -->
 
-   <!-- hf space discussion -->
-    <section class="illustration">
-      <h2 style="color: white;">Try out fastrerandomize below:</h2>
+    <!-- Demo Section -->
+    <section class="demo-section">
+      <h2>Try fastrerandomize:</h2>
+      <iframe
+        class="demo-frame"
+        src="https://cjerzak-fastrerandomize.hf.space"
+        frameborder="0"
+        width="100%"
+        height="500"
+      ></iframe>
     </section>
-
-    <!-- Embed Hugging Face Space -->
-    <iframe
-      src="https://cjerzak-fastrerandomize.hf.space"
-      frameborder="0"
-      width="1050"
-      height="450"
-    ></iframe>
     
   </main>
 
   <!-- Footer -->
   <footer>
-    <p>&copy; 2025 fastrerandomize developers</p>
+    <div class="footer-content">
+      <div class="footer-column">
+        <h4>Documentation</h4>
+        <ul class="footer-links">
+          <li><a href="install.html">Installation Guide</a></li>
+          <li><a href="documentation.html">API Reference</a></li>
+          <li><a href="tutorials.html">Tutorials</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h4>Community</h4>
+        <ul class="footer-links">
+          <li><a href="https://github.com/cjerzak/fastrerandomize-software">GitHub</a></li>
+          <li><a href="https://github.com/cjerzak/fastrerandomize-software/issues">Issue Tracker</a></li>
+          <li><a href="https://cran.r-project.org/package=fastrerandomize">CRAN</a></li>
+          <li><a href="changelog.html">Changelog</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h4>Resources</h4>
+        <ul class="footer-links">
+          <li><a href="https://arxiv.org/abs/2501.07642">Paper</a></li>
+          <li><a href="cite.html">How to Cite</a></li>
+          <li><a href="benchmarks.html">Benchmarks</a></li>
+          <li><a href="examples.html">Examples</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h4>About</h4>
+        <ul class="footer-links">
+          <li><a href="aboutus.html">Team</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="https://github.com/cjerzak/fastrerandomize-software?tab=License-1-ov-file#readme">License</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p>&copy; 2025 fastrerandomize developers. All rights reserved.</p>
+    </div>
   </footer>
 
   <!-- Scripts -->
@@ -419,6 +1300,24 @@
 
     menuToggle.addEventListener('click', () => {
       nav.classList.toggle('open');
+    });
+
+    // CODE TABS LOGIC
+    const codeTabs = document.querySelectorAll('.code-tab');
+    const codeBlocks = document.querySelectorAll('.code-block');
+    
+    codeTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        // Remove active class from all tabs
+        codeTabs.forEach(t => t.classList.remove('active'));
+        // Add active class to clicked tab
+        tab.classList.add('active');
+        
+        // Hide all code blocks
+        codeBlocks.forEach(block => block.classList.remove('active'));
+        // Show the selected code block
+        document.getElementById(tab.dataset.tab).classList.add('active');
+      });
     });
 
     // SHARE BUTTON LOGIC
@@ -445,12 +1344,12 @@
 
       shareBtn.addEventListener('click', function() {
         const currentURL = window.location.href;
-        const pageTitle  = document.title || 'Check this out!';
+        const pageTitle  = document.title || 'fastrerandomize - Fast Rerandomization Using Accelerated Computing';
 
         if (navigator.share) {
           navigator.share({
             title: pageTitle,
-            text: '',
+            text: 'Check out fastrerandomize - an R package for fast rerandomization using accelerated computing',
             url: currentURL
           })
           .catch((error) => {
@@ -481,19 +1380,27 @@
     })();
 
     /*
-      "Raining Vectors" Background
-      ----------------------------
-      A simple "Matrix rain"-like effect, but with math/technical symbols.
+      "Raining Vectors" Background - Enhanced Version
+      ----------------------------------------------
+      A more sophisticated version with color gradients and varying sizes
     */
     const canvas = document.getElementById('background-canvas');
     const ctx = canvas.getContext('2d');
 
-    // Some mathy / vector symbols
-    const symbols = ['∂','∇','λ','α','δ','θ','Σ','∫','×','→','±','β','μ','Ω','σ','Φ'];
+    // Expanded set of mathy / vector / stats symbols
+    const symbols = [
+      '∂','∇','λ','α','δ','θ','Σ','∫','×','→','±','β','μ','Ω','σ','Φ',
+      '∞','π','ξ','ζ','γ','ε','∛','∝','∠','∧','∨','∩','∪','≈','≠','≤','≥',
+      '≡','∈','∉','⊂','⊃','⊆','⊇','⊕','⊗','⊥','Z','P','R','N'
+    ];
 
     let width, height;
     let columns;       // Number of columns for the symbols
     let drops = [];    // Y positions for the symbols in each column
+    let sizes = [];    // Font size for each column
+    let speeds = [];   // Speed for each column
+    let opacities = []; // Opacity for each column
+    let hues = [];     // Hue for each column
 
     // Resize canvas
     function resizeCanvas() {
@@ -503,9 +1410,20 @@
       canvas.height = height;
 
       columns = Math.floor(width / 20);  // 20px for each symbol
+      
+      // Reset all arrays
       drops = [];
+      sizes = [];
+      speeds = [];
+      opacities = [];
+      hues = [];
+      
       for (let i = 0; i < columns; i++) {
-        drops[i] = 1;
+        drops[i] = Math.random() * -100; // Start at different positions above the canvas
+        sizes[i] = 12 + Math.floor(Math.random() * 12); // Font sizes between 12px and 24px
+        speeds[i] = 0.1 + Math.random() * 0.3; // Different speeds
+        opacities[i] = 0.1 + Math.random() * 0.3; // Different opacities
+        hues[i] = 200 + Math.random() * 40; // Different hues in blue range
       }
     }
 
@@ -514,11 +1432,8 @@
 
     function draw() {
       // Semi-transparent background to give a trailing effect
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
       ctx.fillRect(0, 0, width, height);
-
-      ctx.fillStyle = '#3B82F6';  // Symbol color
-      ctx.font = '16px monospace';
 
       for (let i = 0; i < drops.length; i++) {
         // Pick a random symbol
@@ -527,18 +1442,190 @@
         const x = i * 20;
         // y coordinate is drops[i] * 20
         const y = drops[i] * 20;
+        
+        // Set font size
+        ctx.font = `${sizes[i]}px monospace`;
+        
+        // Set color based on hue with saturation and lightness
+        ctx.fillStyle = `hsla(${hues[i]}, 80%, 60%, ${opacities[i]})`;
+        
+        // Draw the symbol
         ctx.fillText(text, x, y);
 
-        // Randomly reset
-        if (y > height && Math.random() > 0.975) {
-          drops[i] = 0;
+        // Move drops down by their specific speed
+        drops[i] += speeds[i];
+        
+        // Randomly reset when they go off screen
+        if (y > height && Math.random() > 0.99) {
+          drops[i] = -1;
+          // Maybe change other properties when resetting
+          speeds[i] = 0.1 + Math.random() * 0.3;
+          opacities[i] = 0.1 + Math.random() * 0.3;
         }
-        drops[i]++;
       }
     }
 
     // Draw loop
-    setInterval(draw, 50);
+    setInterval(draw, 33); // ~30fps for smoother animation
+
+    /*
+      Hero Animation - Randomization Visualization
+      -------------------------------------------
+      Visual representation of randomization algorithm
+    */
+    const heroCanvas = document.getElementById('hero-canvas');
+    const heroCtx = heroCanvas.getContext('2d');
+    
+    let heroWidth, heroHeight;
+    let points = [];
+    const numPoints = 100;
+    const groups = ['A', 'B']; // Treatment groups
+    
+    function resizeHeroCanvas() {
+      const heroSection = document.querySelector('.hero');
+      heroWidth = heroSection.offsetWidth;
+      heroHeight = heroSection.offsetHeight;
+      heroCanvas.width = heroWidth;
+      heroCanvas.height = heroHeight;
+      
+      initPoints();
+    }
+    
+    function initPoints() {
+      points = [];
+      
+      // Create random points
+      for (let i = 0; i < numPoints; i++) {
+        points.push({
+          x: Math.random() * heroWidth,
+          y: Math.random() * heroHeight,
+          radius: 2 + Math.random() * 2,
+          group: null, // Initially no group
+          targetX: null,
+          targetY: null,
+          speed: 0.02 + Math.random() * 0.04,
+          progress: 0
+        });
+      }
+    }
+    
+    function randomizePoints() {
+      // Assign random groups
+      points.forEach(point => {
+        point.group = groups[Math.floor(Math.random() * groups.length)];
+        point.progress = 0;
+        
+        // Set target positions based on group (group A on left, group B on right)
+        if (point.group === 'A') {
+          point.targetX = Math.random() * (heroWidth / 2 - 100);
+          point.targetY = 100 + Math.random() * (heroHeight - 200);
+        } else {
+          point.targetX = (heroWidth / 2 + 100) + Math.random() * (heroWidth / 2 - 100);
+          point.targetY = 100 + Math.random() * (heroHeight - 200);
+        }
+      });
+    }
+    
+    function drawHeroAnimation() {
+      heroCtx.clearRect(0, 0, heroWidth, heroHeight);
+      
+      // Draw connecting lines between points in same group
+      heroCtx.beginPath();
+      for (let i = 0; i < points.length; i++) {
+        for (let j = i + 1; j < points.length; j++) {
+          if (points[i].group === points[j].group) {
+            const dx = points[i].x - points[j].x;
+            const dy = points[i].y - points[j].y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            if (distance < 100) {
+              heroCtx.moveTo(points[i].x, points[i].y);
+              heroCtx.lineTo(points[j].x, points[j].y);
+            }
+          }
+        }
+      }
+      
+      heroCtx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+      heroCtx.stroke();
+      
+      // Draw points
+      points.forEach(point => {
+        if (point.group) {
+          // Update position if there's a target
+          if (point.targetX !== null && point.progress < 1) {
+            point.progress += point.speed;
+            
+            // Ease-in-out function
+            const easeProgress = point.progress < 0.5
+              ? 2 * point.progress * point.progress
+              : -1 + (4 - 2 * point.progress) * point.progress;
+            
+            const startX = point.x;
+            const startY = point.y;
+            
+            point.x = startX + (point.targetX - startX) * easeProgress;
+            point.y = startY + (point.targetY - startY) * easeProgress;
+          }
+          
+          heroCtx.beginPath();
+          heroCtx.arc(point.x, point.y, point.radius, 0, Math.PI * 2);
+          
+          if (point.group === 'A') {
+            heroCtx.fillStyle = 'rgba(59, 130, 246, 0.7)'; // Blue for group A
+          } else {
+            heroCtx.fillStyle = 'rgba(139, 92, 246, 0.7)'; // Purple for group B
+          }
+          
+          heroCtx.fill();
+        } else {
+          // Points without groups
+          heroCtx.beginPath();
+          heroCtx.arc(point.x, point.y, point.radius, 0, Math.PI * 2);
+          heroCtx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+          heroCtx.fill();
+        }
+      });
+      
+      // Check if all points have reached their targets
+      const allSettled = points.every(point => !point.group || point.progress >= 1);
+      
+      if (allSettled) {
+        // Wait a moment before re-randomizing
+        setTimeout(randomizePoints, 2000);
+      }
+    }
+    
+    window.addEventListener('resize', resizeHeroCanvas);
+    resizeHeroCanvas();
+    
+    // Start animation loop
+    setInterval(drawHeroAnimation, 16); // ~60fps
+    
+    // Initial randomization after a delay
+    setTimeout(randomizePoints, 1000);
+    
+    // Add scroll reveal animation for features
+    window.addEventListener('scroll', revealOnScroll);
+    
+    function revealOnScroll() {
+      const elements = document.querySelectorAll('.feature, .animate-fade-in');
+      
+      elements.forEach(element => {
+        const elementTop = element.getBoundingClientRect().top;
+        const elementBottom = element.getBoundingClientRect().bottom;
+        
+        // If element is in viewport
+        if (elementTop < window.innerHeight - 50 && elementBottom > 0) {
+          element.classList.add('visible');
+          element.style.opacity = '1';
+          element.style.transform = 'translateY(0)';
+        }
+      });
+    }
+    
+    // Initial check for elements in view
+    revealOnScroll();
   </script>
 </body>
 </html>
