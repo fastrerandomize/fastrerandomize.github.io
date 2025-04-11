@@ -259,11 +259,19 @@
       width: 80%;
     }
     
+    /* Search Container Styling */
     .search-container {
       position: relative;
       margin-left: var(--space-md);
     }
-    
+
+    .search-container form {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+    }
+
     .search-input {
       background-color: rgba(255, 255, 255, 0.1);
       border: 1px solid rgba(255, 255, 255, 0.2);
@@ -274,14 +282,14 @@
       transition: all var(--transition-normal);
       width: 150px;
     }
-    
+
     .search-input:focus {
       outline: none;
       background-color: rgba(255, 255, 255, 0.15);
       border-color: rgba(255, 255, 255, 0.3);
       width: 200px;
     }
-    
+
     .search-icon {
       position: absolute;
       left: 0.75rem;
@@ -289,8 +297,60 @@
       transform: translateY(-50%);
       color: rgba(255, 255, 255, 0.7);
       font-size: 0.875rem;
+      pointer-events: none;
     }
 
+    /* Search Results Styling */
+    .search-results {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      width: 300px;
+      max-height: 400px;
+      overflow-y: auto;
+      background-color: var(--color-dark);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      z-index: 1000;
+      margin-top: 0.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: none;
+      padding: 0.5rem 0;
+      scroll-behavior: smooth;
+    }
+
+    .search-result-item {
+      display: block;
+      padding: 0.75rem 1rem;
+      color: white;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      transition: background-color var(--transition-normal);
+    }
+
+    .search-result-item:last-child {
+      border-bottom: none;
+    }
+
+    .search-result-item:hover,
+    .search-result-item:focus {
+      background-color: rgba(255, 255, 255, 0.1);
+      outline: none;
+    }
+
+    .search-result-item:focus-visible {
+      box-shadow: 0 0 0 2px var(--color-primary) inset;
+    }
+
+    /* Handle small screens */
+    @media (max-width: 992px) {
+      .search-results {
+        width: 100%;
+        left: 0;
+        right: auto;
+      }
+    }
+    
     /* Hamburger lines default hidden on large screens */
     .menu-toggle {
       display: none;
@@ -331,12 +391,13 @@
         position: absolute;
         top: 100%;
         right: 0;
-        background-color: var(--color-dark);
+        background-color: #1E293B; /* Completely opaque background, no transparency */
+        border: 1px solid rgba(255, 255, 255, 0.1);
         flex-direction: column;
         gap: 0;
         width: 220px;
         border-radius: var(--radius-md);
-        box-shadow: var(--shadow-lg);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Stronger shadow */
         overflow: hidden;
         transform: translateY(10px);
         opacity: 0;
@@ -348,6 +409,9 @@
         display: block;
         padding: 0.75rem 1.25rem;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        color: white;
+        font-weight: 600;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
       }
       
       nav ul li a::after {
@@ -359,6 +423,7 @@
         display: flex;
         transform: translateY(0);
         opacity: 1;
+        z-index: 1000; /* Ensure menu is above other elements */
       }
     }
 
@@ -943,7 +1008,7 @@
     .delay-200 { animation-delay: 200ms; }
     .delay-300 { animation-delay: 300ms; }
     .delay-400 { animation-delay: 400ms; }
-.delay-500 { animation-delay: 500ms; }
+    .delay-500 { animation-delay: 500ms; }
 
 
 /* Ensure canvas visibility throughout */
@@ -1023,328 +1088,6 @@ main, footer, header, section {
   animation: shine-bg 5s infinite linear;
   opacity: 0.6;
 }
-
-// Search functionality
-(function() {
-  // Content to search through - this would ideally be generated from your page content
-  const searchableContent = [
-    {
-      title: "Installation Guide",
-      description: "How to install and set up fastrerandomize package",
-      url: "install.html"
-    },
-    {
-      title: "Documentation",
-      description: "API reference and comprehensive documentation",
-      url: "https://github.com/cjerzak/fastrerandomize-software/blob/main/fastrerandomize.pdf?raw=true"
-    },
-    {
-      title: "Tutorials",
-      description: "Step-by-step guides for using fastrerandomize",
-      url: "tutorials.html"
-    },
-    {
-      title: "Monte Carlo Randomization",
-      description: "How to use Monte Carlo methods for randomization",
-      url: "#tab2"
-    },
-    {
-      title: "Randomization Test",
-      description: "Performing statistical tests with rerandomization",
-      url: "#tab3"
-    },
-    {
-      title: "About Us",
-      description: "Information about the developers and contributors",
-      url: "aboutus.html"
-    },
-    {
-      title: "GitHub Repository",
-      description: "Source code and development resources",
-      url: "https://github.com/cjerzak/fastrerandomize-software"
-    },
-    {
-      title: "CRAN Package",
-      description: "Official R package distribution",
-      url: "https://cran.rstudio.com/web/packages/fastrerandomize/index.html"
-    },
-    {
-      title: "GPU Acceleration",
-      description: "Using GPU for faster computation",
-      url: "#"
-    },
-    {
-      title: "Benchmarks",
-      description: "Performance comparisons and metrics",
-      url: "benchmarks.html"
-    }
-  ];
-
-  // DOM elements
-  const searchInput = document.querySelector('.search-input');
-  const nav = document.querySelector('nav');
-  
-  // Create search results container
-  const searchResults = document.createElement('div');
-  searchResults.className = 'search-results';
-  searchResults.style.position = 'absolute';
-  searchResults.style.top = '100%';
-  searchResults.style.right = '0';
-  searchResults.style.width = '300px';
-  searchResults.style.maxHeight = '400px';
-  searchResults.style.overflowY = 'auto';
-  searchResults.style.backgroundColor = 'var(--color-dark)';
-  searchResults.style.borderRadius = 'var(--radius-md)';
-  searchResults.style.boxShadow = 'var(--shadow-lg)';
-  searchResults.style.zIndex = '1000';
-  searchResults.style.display = 'none';
-  searchResults.style.padding = '0.5rem 0';
-  
-  // Add search results to the navigation
-  const searchContainer = document.querySelector('.search-container');
-  searchContainer.style.position = 'relative';
-  searchContainer.appendChild(searchResults);
-  
-  // Search function
-  function performSearch(query) {
-    // Clear previous results
-    searchResults.innerHTML = '';
-    
-    if (!query.trim()) {
-      searchResults.style.display = 'none';
-      return;
-    }
-    
-    // Convert query to lowercase for case-insensitive matching
-    const lowercaseQuery = query.toLowerCase();
-    
-    // Filter content based on query
-    const filteredResults = searchableContent.filter(item => {
-      return (
-        item.title.toLowerCase().includes(lowercaseQuery) ||
-        item.description.toLowerCase().includes(lowercaseQuery)
-      );
-    });
-    
-    // Show or hide results container
-    if (filteredResults.length > 0) {
-      searchResults.style.display = 'block';
-      
-      // Create results HTML
-      filteredResults.forEach(result => {
-        const resultItem = document.createElement('a');
-        resultItem.href = result.url;
-        resultItem.className = 'search-result-item';
-        resultItem.style.display = 'block';
-        resultItem.style.padding = '0.75rem 1rem';
-        resultItem.style.color = 'white';
-        resultItem.style.textDecoration = 'none';
-        resultItem.style.borderBottom = '1px solid rgba(255, 255, 255, 0.1)';
-        resultItem.style.transition = 'background-color var(--transition-normal)';
-        
-        resultItem.innerHTML = `
-          <div style="font-weight: 600; margin-bottom: 0.25rem;">${result.title}</div>
-          <div style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.7);">${result.description}</div>
-        `;
-        
-        resultItem.addEventListener('mouseover', () => {
-          resultItem.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
-        });
-        
-        resultItem.addEventListener('mouseout', () => {
-          resultItem.style.backgroundColor = 'transparent';
-        });
-        
-        searchResults.appendChild(resultItem);
-      });
-    } else {
-      // Show "no results" message
-      searchResults.style.display = 'block';
-      searchResults.innerHTML = `
-        <div style="padding: 1rem; color: rgba(255, 255, 255, 0.7); text-align: center;">
-          No results found for "${query}"
-        </div>
-      `;
-    }
-  }
-  
-  // Event listeners
-  searchInput.addEventListener('input', (e) => {
-    performSearch(e.target.value);
-  });
-  
-  searchInput.addEventListener('focus', () => {
-    if (searchInput.value.trim()) {
-      performSearch(searchInput.value);
-    }
-  });
-  
-  // Close search results when clicking outside
-  document.addEventListener('click', (e) => {
-    if (!searchContainer.contains(e.target)) {
-      searchResults.style.display = 'none';
-    }
-  });
-  
-  // Handle form submission (prevent default and perform search)
-  const searchForm = searchInput.closest('form');
-  if (searchForm) {
-    searchForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      performSearch(searchInput.value);
-    });
-  }
-  
-  // Add keyboard navigation for search results
-  searchInput.addEventListener('keydown', (e) => {
-    const results = searchResults.querySelectorAll('.search-result-item');
-    
-    if (results.length === 0) return;
-    
-    const activeElement = document.activeElement;
-    const isResultFocused = activeElement.classList.contains('search-result-item');
-    const currentIndex = isResultFocused ? 
-      Array.from(results).indexOf(activeElement) : -1;
-    
-    // Down arrow
-    if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      if (currentIndex < results.length - 1) {
-        results[currentIndex + 1].focus();
-      } else {
-        results[0].focus();
-      }
-    }
-    
-    // Up arrow
-    else if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      if (currentIndex > 0) {
-        results[currentIndex - 1].focus();
-      } else {
-        results[results.length - 1].focus();
-      }
-    }
-    
-    // Enter key - already handled by the browser for links
-    
-    // Escape key
-    else if (e.key === 'Escape') {
-      searchResults.style.display = 'none';
-      searchInput.blur();
-    }
-  });
-
-  // Make search input form (if it doesn't already exist)
-  if (!searchInput.closest('form')) {
-    const searchInputParent = searchInput.parentNode;
-    const form = document.createElement('form');
-    
-    // Move the search icon and input into the form
-    searchInputParent.insertBefore(form, searchInput);
-    form.appendChild(searchInputParent.querySelector('.search-icon'));
-    form.appendChild(searchInput);
-    
-    // Add form submit listener
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      performSearch(searchInput.value);
-    });
-  }
-})();
-
-/* Search Container Styling */
-.search-container {
-  position: relative;
-  margin-left: var(--space-md);
-}
-
-.search-container form {
-  margin: 0;
-  padding: 0;
-  display: flex;
-  align-items: center;
-}
-
-.search-input {
-  background-color: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white;
-  padding: 0.5rem 0.75rem 0.5rem 2.25rem;
-  border-radius: var(--radius-md);
-  font-size: 0.875rem;
-  transition: all var(--transition-normal);
-  width: 150px;
-}
-
-.search-input:focus {
-  outline: none;
-  background-color: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.3);
-  width: 200px;
-}
-
-.search-icon {
-  position: absolute;
-  left: 0.75rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 0.875rem;
-  pointer-events: none;
-}
-
-/* Search Results Styling */
-.search-results {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  width: 300px;
-  max-height: 400px;
-  overflow-y: auto;
-  background-color: var(--color-dark);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-lg);
-  z-index: 1000;
-  margin-top: 0.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  display: none;
-  padding: 0.5rem 0;
-  scroll-behavior: smooth;
-}
-
-.search-result-item {
-  display: block;
-  padding: 0.75rem 1rem;
-  color: white;
-  text-decoration: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  transition: background-color var(--transition-normal);
-}
-
-.search-result-item:last-child {
-  border-bottom: none;
-}
-
-.search-result-item:hover,
-.search-result-item:focus {
-  background-color: rgba(255, 255, 255, 0.1);
-  outline: none;
-}
-
-.search-result-item:focus-visible {
-  box-shadow: 0 0 0 2px var(--color-primary) inset;
-}
-
-/* Handle small screens */
-@media (max-width: 992px) {
-  .search-results {
-    width: 100%;
-    left: 0;
-    right: auto;
-  }
-}
-
   </style>
 </head>
 
@@ -2032,6 +1775,189 @@ X <- <span class="code-keyword">matrix</span>(<span class="code-keyword">rnorm</
     
     // Initial check for elements in view
     revealOnScroll();
+
+    // SEARCH FUNCTIONALITY
+    (function() {
+      // Content to search through - this would ideally be generated from your page content
+      const searchableContent = [
+        {
+          title: "Installation Guide",
+          description: "How to install and set up fastrerandomize package",
+          url: "install.html"
+        },
+        {
+          title: "Documentation",
+          description: "API reference and comprehensive documentation",
+          url: "https://github.com/cjerzak/fastrerandomize-software/blob/main/fastrerandomize.pdf?raw=true"
+        },
+        {
+          title: "Tutorials",
+          description: "Step-by-step guides for using fastrerandomize",
+          url: "tutorials.html"
+        },
+        {
+          title: "Monte Carlo Randomization",
+          description: "How to use Monte Carlo methods for randomization",
+          url: "#tab2"
+        },
+        {
+          title: "Randomization Test",
+          description: "Performing statistical tests with rerandomization",
+          url: "#tab3"
+        },
+        {
+          title: "About Us",
+          description: "Information about the developers and contributors",
+          url: "aboutus.html"
+        },
+        {
+          title: "GitHub Repository",
+          description: "Source code and development resources",
+          url: "https://github.com/cjerzak/fastrerandomize-software"
+        },
+        {
+          title: "CRAN Package",
+          description: "Official R package distribution",
+          url: "https://cran.rstudio.com/web/packages/fastrerandomize/index.html"
+        },
+        {
+          title: "GPU Acceleration",
+          description: "Using GPU for faster computation",
+          url: "#"
+        },
+        {
+          title: "Benchmarks",
+          description: "Performance comparisons and metrics",
+          url: "benchmarks.html"
+        }
+      ];
+
+      // DOM elements
+      const searchInput = document.querySelector('.search-input');
+      const nav = document.querySelector('nav');
+      
+      // Create search results container
+      const searchResults = document.createElement('div');
+      searchResults.className = 'search-results';
+      
+      // Add search results to the navigation
+      const searchContainer = document.querySelector('.search-container');
+      searchContainer.appendChild(searchResults);
+      
+      // Search function
+      function performSearch(query) {
+        // Clear previous results
+        searchResults.innerHTML = '';
+        
+        if (!query.trim()) {
+          searchResults.style.display = 'none';
+          return;
+        }
+        
+        // Convert query to lowercase for case-insensitive matching
+        const lowercaseQuery = query.toLowerCase();
+        
+        // Filter content based on query
+        const filteredResults = searchableContent.filter(item => {
+          return (
+            item.title.toLowerCase().includes(lowercaseQuery) ||
+            item.description.toLowerCase().includes(lowercaseQuery)
+          );
+        });
+        
+        // Show or hide results container
+        if (filteredResults.length > 0) {
+          searchResults.style.display = 'block';
+          
+          // Create results HTML
+          filteredResults.forEach(result => {
+            const resultItem = document.createElement('a');
+            resultItem.href = result.url;
+            resultItem.className = 'search-result-item';
+            
+            resultItem.innerHTML = `
+              <div style="font-weight: 600; margin-bottom: 0.25rem;">${result.title}</div>
+              <div style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.7);">${result.description}</div>
+            `;
+            
+            searchResults.appendChild(resultItem);
+          });
+        } else {
+          // Show "no results" message
+          searchResults.style.display = 'block';
+          searchResults.innerHTML = `
+            <div style="padding: 1rem; color: rgba(255, 255, 255, 0.7); text-align: center;">
+              No results found for "${query}"
+            </div>
+          `;
+        }
+      }
+      
+      // Event listeners
+      searchInput.addEventListener('input', (e) => {
+        performSearch(e.target.value);
+      });
+      
+      searchInput.addEventListener('focus', () => {
+        if (searchInput.value.trim()) {
+          performSearch(searchInput.value);
+        }
+      });
+      
+      // Close search results when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!searchContainer.contains(e.target)) {
+          searchResults.style.display = 'none';
+        }
+      });
+      
+      // Handle form submission
+      const searchForm = searchInput.closest('form');
+      if (searchForm) {
+        searchForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          performSearch(searchInput.value);
+        });
+      }
+      
+      // Add keyboard navigation for search results
+      searchInput.addEventListener('keydown', (e) => {
+        const results = searchResults.querySelectorAll('.search-result-item');
+        
+        if (results.length === 0) return;
+        
+        const activeElement = document.activeElement;
+        const isResultFocused = activeElement.classList.contains('search-result-item');
+        const currentIndex = isResultFocused ? 
+          Array.from(results).indexOf(activeElement) : -1;
+        
+        // Down arrow
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          if (currentIndex < results.length - 1) {
+            results[currentIndex + 1].focus();
+          } else {
+            results[0].focus();
+          }
+        }
+        
+        // Up arrow
+        else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          if (currentIndex > 0) {
+            results[currentIndex - 1].focus();
+          } else {
+            results[results.length - 1].focus();
+          }
+        }
+        
+        // Escape key
+        else if (e.key === 'Escape') {
+          searchResults.style.display = 'none';
+          searchInput.blur();
+        }
+      });
+    })();
   </script>
 </body>
 </html>
