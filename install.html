@@ -1,50 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Install | fastrerandomize</title>
-
-  <!-- Google Fonts (Inter) -->
+  
+  <!-- Google Fonts: Manrope for headings, Inter for body text -->
   <link rel="preconnect" href="https://fonts.gstatic.com"/>
-  <link 
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" 
-    rel="stylesheet"
-  />
-
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+  
   <style>
-    /* 
-      Global Styles
-      -------------
+    :root {
+      /* Color System */
+      --color-primary: #3B82F6;
+      --color-primary-dark: #1D4ED8;
+      --color-primary-light: #60A5FA;
+      --color-secondary: #10B981;
+      --color-accent: #8B5CF6;
+      --color-dark: #1E293B;
+      --color-darker: #0F172A;
+      --color-light: #F3F4F6;
+      --color-lighter: #F9FAFB;
+      
+      /* Spacing System */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2rem;
+      --space-xxl: 3rem;
+      
+      /* Shadow System */
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.08);
+      
+      /* Border Radius */
+      --radius-sm: 0.25rem;
+      --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;
+      --radius-xl: 1rem;
+      
+      /* Transitions */
+      --transition-fast: 150ms ease;
+      --transition-normal: 300ms ease;
+      --transition-slow: 500ms ease;
+    }
+    
+    /*
+      Base Styles
+      -----------
     */
-    * {
-      box-sizing: border-box;
+    html, body {
       margin: 0;
       padding: 0;
-    }
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", 
+      height: 100%;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI",
                    "Roboto", "Helvetica Neue", Arial, sans-serif;
-      background-color: #F9FAFB;
       color: #111827;
-      line-height: 1.6;
+      line-height: 1.7;
+      background: transparent;
+      scroll-behavior: smooth;
     }
+    
+    #background-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -999;
+      width: 100%;
+      height: 100%;
+      display: block;
+      background: linear-gradient(135deg, var(--color-darker) 0%, var(--color-dark) 100%);
+    }
+    
     a {
       text-decoration: none;
       color: inherit;
+      transition: color var(--transition-fast);
     }
-
-    /* 
+    
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Manrope', sans-serif;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-top: 0;
+    }
+    
+    .highlight {
+      color: var(--color-primary);
+      position: relative;
+      display: inline-block;
+    }
+    
+    .highlight::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background-color: rgba(59, 130, 246, 0.2);
+      border-radius: var(--radius-sm);
+      z-index: -1;
+    }
+    
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--space-md);
+    }
+    
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .badge-primary {
+      background-color: rgba(59, 130, 246, 0.15);
+      color: var(--color-primary);
+    }
+    
+    .badge-secondary {
+      background-color: rgba(16, 185, 129, 0.15);
+      color: var(--color-secondary);
+    }
+    
+    .badge-accent {
+      background-color: rgba(139, 92, 246, 0.15);
+      color: var(--color-accent);
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition-normal);
+    }
+    
+    .btn-primary {
+      background-color: var(--color-primary);
+      color: white;
+      box-shadow: 0 4px 6px rgba(59, 130, 246, 0.25);
+    }
+    
+    .btn-primary:hover {
+      background-color: var(--color-primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 8px rgba(59, 130, 246, 0.3);
+    }
+    
+    .btn-secondary {
+      background-color: white;
+      color: var(--color-dark);
+      border: 1px solid #E5E7EB;
+    }
+    
+    .btn-secondary:hover {
+      background-color: var(--color-light);
+      transform: translateY(-2px);
+    }
+    
+    .btn-lg {
+      padding: 0.875rem 2rem;
+      font-size: 1.125rem;
+    }
+    
+    /*
       Header + Navigation
-      -------------------
+      --------------------
     */
     header {
-      background: linear-gradient(135deg, #1E293B 0%, #3B82F6 100%);
+      background: linear-gradient(135deg, var(--color-dark) 0%, var(--color-primary-dark) 100%);
       color: #FFF;
       position: sticky;
       top: 0;
       z-index: 999;
+      box-shadow: var(--shadow-md);
     }
+    
     nav {
       display: flex;
       align-items: center;
@@ -52,41 +202,163 @@
       max-width: 1200px;
       margin: 0 auto;
       padding: 1rem;
+      position: relative;
     }
+    
+    .logo {
+      font-family: 'Manrope', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      transition: all var(--transition-normal);
+    }
+    
+    .logo:hover {
+      transform: scale(1.05);
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+    
     nav ul {
       list-style-type: none;
       display: flex;
-      gap: 1rem;
+      gap: 1.25rem;
+      margin: 0;
+      padding: 0;
     }
+    
     nav ul li {
       position: relative;
     }
+    
     nav ul li a {
       font-weight: 500;
+      font-size: 0.95rem;
       padding: 0.5rem 0.75rem;
-      border-radius: 4px;
-      transition: background-color 0.3s ease;
-      color: #FFF;
+      border-radius: var(--radius-md);
+      transition: all var(--transition-normal);
+      position: relative;
     }
+    
+    nav ul li a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 2px;
+      background-color: white;
+      transition: width var(--transition-normal);
+    }
+    
     nav ul li a:hover {
       background-color: rgba(255, 255, 255, 0.1);
     }
-    /* Header Title */
-    .logo {
-      font-size: 1.25rem;
-      font-weight: 700;
+    
+    nav ul li a:hover::after {
+      width: 80%;
     }
-    .logo a {
-      color: #FFF;
+    
+    /* Search Container Styling */
+    .search-container {
+      position: relative;
+      margin-left: var(--space-md);
     }
-
-    /* Hamburger Button (hidden on larger screens, shown on mobile) */
+    
+    .search-container form {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+    }
+    
+    .search-input {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      padding: 0.5rem 0.75rem 0.5rem 2.25rem;
+      border-radius: var(--radius-md);
+      font-size: 0.875rem;
+      transition: all var(--transition-normal);
+      width: 150px;
+    }
+    
+    .search-input:focus {
+      outline: none;
+      background-color: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.3);
+      width: 200px;
+    }
+    
+    .search-icon {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.875rem;
+      pointer-events: none;
+    }
+    
+    /* Search Results Styling */
+    .search-results {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      width: 300px;
+      max-height: 400px;
+      overflow-y: auto;
+      background-color: var(--color-dark);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      z-index: 1000;
+      margin-top: 0.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: none;
+      padding: 0.5rem 0;
+      scroll-behavior: smooth;
+    }
+    
+    .search-result-item {
+      display: block;
+      padding: 0.75rem 1rem;
+      color: white;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      transition: background-color var(--transition-normal);
+    }
+    
+    .search-result-item:last-child {
+      border-bottom: none;
+    }
+    
+    .search-result-item:hover,
+    .search-result-item:focus {
+      background-color: rgba(255, 255, 255, 0.1);
+      outline: none;
+    }
+    
+    .search-result-item:focus-visible {
+      box-shadow: 0 0 0 2px var(--color-primary) inset;
+    }
+    
+    /* Handle small screens */
+    @media (max-width: 992px) {
+      .search-results {
+        width: 100%;
+        left: 0;
+        right: auto;
+      }
+    }
+    
+    /* Hamburger lines default hidden on large screens */
     .menu-toggle {
       display: none;
       background: none;
       border: none;
       cursor: pointer;
     }
+    
     .hamburger-line {
       display: block;
       width: 25px;
@@ -95,126 +367,493 @@
       margin: 5px 0;
       transition: 0.3s ease;
     }
-
-    /* Responsive Nav Logic */
+    
+    /* Show/hide logic on narrow screens */
+    @media (max-width: 992px) {
+      .search-container {
+        display: none;
+      }
+    }
+    
     @media (max-width: 768px) {
       nav {
         position: relative;
       }
       
-      /* Show the hamburger on mobile screens */
+      /* Show the hamburger button */
       .menu-toggle {
         display: inline-block;
       }
-
+      
       /* Hide the menu by default on mobile */
       nav ul {
         display: none;
         position: absolute;
         top: 100%;
         right: 0;
-        background-color: #1E293B;
+        background-color: #1E293B; /* Completely opaque background, no transparency */
+        border: 1px solid rgba(255, 255, 255, 0.1);
         flex-direction: column;
         gap: 0;
-        width: 180px;
-        border-radius: 4px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        width: 220px;
+        border-radius: var(--radius-md);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Stronger shadow */
+        overflow: hidden;
+        transform: translateY(10px);
+        opacity: 0;
+        transition: all var(--transition-normal);
       }
-
-      /* Make nav items full-width on mobile */
+      
+      /* Each nav item is full-width on mobile */
       nav ul li a {
         display: block;
-        padding: 0.75rem 1rem;
+        padding: 0.75rem 1.25rem;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        color: white;
+        font-weight: 600;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+      }
+      
+      nav ul li a::after {
+        display: none;
       }
       
       /* When nav has .open, reveal the menu */
       nav.open ul {
         display: flex;
+        transform: translateY(0);
+        opacity: 1;
+        z-index: 1000; /* Ensure menu is above other elements */
       }
     }
-
+    
     /*
-      Main Content
-      ------------
+      Install Page Specific Styles
+      ---------------------------
     */
-    main {
-      max-width: 1200px;
-      margin: 2rem auto;
+    .install-section {
+      max-width: 900px;
+      margin: 2rem auto 4rem;
       padding: 0 1rem;
+      position: relative;
+      z-index: 2;
     }
-    .install-box {
-      background-color: #FFFFFF;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+    
+    .install-card {
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius-lg);
       padding: 2rem;
-      margin-bottom: 2rem;
-      transition: transform 0.2s ease;
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow-card);
+      position: relative;
+      overflow: hidden;
     }
-    .install-box:hover {
-      transform: translateY(-2px);
+    
+    .install-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-accent) 100%);
     }
-    .install-box h1 {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
+    
+    .install-card h1 {
+      margin-bottom: 1.5rem;
+      font-size: 2rem;
       font-weight: 700;
-      color: #1E293B;
+      color: white;
+      position: relative;
     }
-    .install-box p,
-    .install-box li {
-      font-size: 0.95rem;
-      color: #374151;
+    
+    .install-card p {
+      margin-bottom: 1.5rem;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.1rem;
     }
-    .install-box ol {
-      margin-left: 1.25rem;
+    
+    .install-card ol {
+      margin-left: 1.5rem;
+      margin-bottom: 2rem;
+      counter-reset: item;
     }
-    .install-box pre {
-      background-color: #F3F4F6;
-      padding: 1rem;
-      border-radius: 6px;
-      margin: 1rem 0;
+    
+    .install-card li {
+      margin-bottom: 1.5rem;
+      color: rgba(255, 255, 255, 0.9);
+      position: relative;
+    }
+    
+    .code-block {
+      background-color: #1E1E1E;
+      border-radius: var(--radius-md);
+      margin: 1rem 0 1.5rem;
+      position: relative;
+    }
+    
+    .code-content {
+      padding: 1.25rem;
+      font-family: 'Consolas', 'Monaco', 'Andale Mono', monospace;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #D4D4D4;
       overflow-x: auto;
     }
-    .install-box code {
-      font-family: "Source Code Pro", Consolas, monospace;
-      color: #1E293B;
-      font-size: 0.9rem;
+    
+    .copy-button {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background-color: rgba(255, 255, 255, 0.1);
+      border: none;
+      border-radius: var(--radius-sm);
+      color: rgba(255, 255, 255, 0.7);
+      padding: 0.25rem 0.5rem;
+      font-size: 0.7rem;
+      cursor: pointer;
+      transition: all var(--transition-fast);
     }
-
+    
+    .copy-button:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+    
+    /* Share Button Styles */
+    .share-container {
+      text-align: center;
+      margin: 2rem 0;
+    }
+    
+    #share-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.25rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: white;
+      background-color: var(--color-dark);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition-normal);
+    }
+    
+    #share-button:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    #share-button svg {
+      transition: transform var(--transition-normal);
+    }
+    
+    #share-button:hover svg {
+      transform: rotate(15deg);
+    }
+    
+    /* Hero Section for Install Page */
+    .hero-slim {
+      text-align: center;
+      padding: 2rem 1rem 3rem;
+      background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.5));
+      position: relative;
+      margin-top: 0;
+    }
+    
+    .hero-slim h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.75rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+      background: linear-gradient(135deg, #fff 0%, #a5c4fd 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .hero-slim p {
+      font-size: 1.15rem;
+      font-weight: 400;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      color: rgba(255, 255, 255, 0.9);
+    }
+    
+    /* 
+      Main Content Additions
+      ---------------------
+    */
+    .tips-card {
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin: 2rem 0;
+      backdrop-filter: blur(10px);
+    }
+    
+    .tips-card h3 {
+      color: white;
+      margin-bottom: 1rem;
+      font-size: 1.25rem;
+    }
+    
+    .tips-card ul {
+      margin-left: 1.25rem;
+      color: rgba(255, 255, 255, 0.9);
+    }
+    
+    .tips-card li {
+      margin-bottom: 0.75rem;
+    }
+    
+    .next-steps {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    
+    .next-step-card {
+      flex: 1;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0.01) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      transition: transform var(--transition-normal);
+    }
+    
+    .next-step-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .next-step-card h4 {
+      color: white;
+      margin-bottom: 0.75rem;
+      font-size: 1.15rem;
+    }
+    
+    .next-step-card p {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+    
+    .next-step-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(59, 130, 246, 0.15);
+      margin-bottom: 1rem;
+      font-size: 1.25rem;
+      color: var(--color-primary-light);
+    }
+    
+    @media (max-width: 768px) {
+      .next-steps {
+        flex-direction: column;
+      }
+    }
+    
     /*
       Footer
       ------
     */
     footer {
-      background-color: #1E293B;
-      color: #FFF;
+      background: linear-gradient(to top, var(--color-darker) 0%, transparent 100%);
+      color: rgba(255, 255, 255, 0.8);
       text-align: center;
-      padding: 1rem;
-      margin-top: 2rem;
+      padding: 3rem 1rem;
+      margin-top: 3rem;
+      position: relative;
     }
-    footer p {
-      font-size: 0.9rem;
+    
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      text-align: left;
+    }
+    
+    .footer-column h4 {
+      color: white;
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+    }
+    
+    .footer-links {
+      list-style: none;
+      padding: 0;
       margin: 0;
+    }
+    
+    .footer-links li {
+      margin-bottom: 0.75rem;
+    }
+    
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.6);
+      transition: color var(--transition-normal);
+      font-size: 0.9rem;
+    }
+    
+    .footer-links a:hover {
+      color: white;
+    }
+    
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: 2rem;
+      padding-top: 2rem;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.9rem;
+    }
+    
+    @media (max-width: 768px) {
+      .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      
+      .footer-column {
+        margin-bottom: 1.5rem;
+      }
+    }
+    
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    .animate-fade-in {
+      animation: fadeIn 1s ease-out forwards;
+    }
+    
+    .animate-pulse {
+      animation: pulse 2s infinite ease-in-out;
+    }
+    
+    /* Delay classes for staggered animations */
+    .delay-100 { animation-delay: 100ms; }
+    .delay-200 { animation-delay: 200ms; }
+    .delay-300 { animation-delay: 300ms; }
+    .delay-400 { animation-delay: 400ms; }
+    .delay-500 { animation-delay: 500ms; }
+    
+    /* Ensure canvas visibility throughout */
+    #background-canvas {
+      z-index: -1;
+    }
+    
+    main, footer, header, section {
+      background-color: transparent;
+      position: relative;
+      z-index: 1;
+    }
+    
+    /* Adjust specific element backgrounds for transparency */
+    .install-card,
+    .tips-card,
+    .next-step-card {
+      background: rgba(255,255,255,0.02);
+      backdrop-filter: blur(10px);
+    }
+    
+    @keyframes shine-bg {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    @keyframes glow {
+      0% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
+      50% { box-shadow: 0 0 20px rgba(255, 165, 0, 0.8); }
+      100% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
+    }
+    
+    .highlight {
+      background: linear-gradient(90deg, #ffd700, #ff8c00, #ff4500, #ffa500, #ffd700);
+      background-size: 400% 100%;
+      animation: 
+        shine-bg 3s infinite ease-in-out,
+        pulse 2s infinite ease-in-out,
+        glow 3s infinite ease-in-out;
+      padding: 2px 10px;
+      border-radius: 6px;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+      font-weight: bold;
+      display: inline-block;
+      position: relative;
+      color: #fff;
+      letter-spacing: 0.5px;
+      border: 1px solid rgba(255, 165, 0, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .highlight:hover {
+      transform: translateY(-2px) scale(1.05);
+      text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+    }
+    
+    .highlight::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      border-radius: 8px;
+      background: linear-gradient(45deg, #ffd700, transparent, #ffa500, transparent, #ffd700);
+      background-size: 400% 400%;
+      z-index: -1;
+      animation: shine-bg 5s infinite linear;
+      opacity: 0.6;
     }
   </style>
 </head>
 
 <body>
+  <!-- Raining Vectors Background Canvas -->
+  <canvas id="background-canvas"></canvas>
+  
   <!-- Header + Navigation -->
   <header>
     <nav>
       <div class="logo">
         <a href="index.html">fastrerandomize</a>
       </div>
-
-      <!-- Hamburger button for mobile -->
+      
+      <!-- HAMBURGER BUTTON -->
       <button class="menu-toggle" aria-label="Toggle Menu">
         <span class="hamburger-line"></span>
         <span class="hamburger-line"></span>
         <span class="hamburger-line"></span>
       </button>
-      <!-- /Hamburger button -->
-
+      <!-- /HAMBURGER BUTTON -->
+      
       <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="install.html">Install</a></li>
@@ -222,29 +861,31 @@
         <li><a href="tutorials.html">Tutorials</a></li>
         <li><a href="aboutus.html">About Us</a></li>
       </ul>
+      
+      <!-- Update the search container in your HTML -->
+      <div class="search-container">
+        <form onsubmit="return false;">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" class="search-input" placeholder="Search docs..." aria-label="Search documentation">
+        </form>
+        <!-- The search results will be automatically inserted by JavaScript -->
+      </div>
     </nav>
+    
+    <!-- Hero Section (Slimmer version for install page) -->
+    <div class="hero-slim">
+      <div class="hero-content animate-fade-in">
+        <h1>Install fastrerandomize</h1>
+        <p>Get set up with the <span class="highlight">Fast Rerandomization</span> package in just a few simple steps</p>
+      </div>
+    </div>
   </header>
-
+  
   <!-- Main Content -->
   <main>
-    <!-- BEGIN: Insanely Great Native Share Button -->
-    <div style="text-align: left; margin: 1em 0;">
-      <button id="share-button" 
-              style="
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                gap: 8px; 
-                padding: 5px 10px;
-                font-size: 16px;
-                font-weight: normal;
-                color: #000;
-                background-color: #fff;
-                border: 1px solid #ddd;
-                border-radius: 6px;
-                cursor: pointer;
-                box-shadow: 0 1.5px 0 #000;
-              ">
+    <!-- Share Button -->
+    <div class="share-container">
+      <button id="share-button">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="18" cy="5" r="3"></circle>
@@ -256,105 +897,130 @@
         <strong>Share</strong>
       </button>
     </div>
-
-    <div class="install-box">
-      <h1>Install fastrerandomize</h1>
-      <p>To install and load <strong>fastrerandomize</strong>, follow these steps:</p>
-      <ol>
-        <li>Open your terminal in your preferred R editor.</li>
-        <li>If you haven't installed devtools already, begin by doing so:</li>
-        <pre><code>install.packages("devtools")</code></pre>
-        <li>Install the package from GitHub:</li>
-        <pre><code>devtools::install_github(repo = "cjerzak/fastrerandomize-software/fastrerandomize")</code></pre>
-        <li>Load the package:</li>
-        <pre><code>library(fastrerandomize)</code></pre>
-        <li>When running code for the first time, create the computational environment:</li>
-        <pre><code>fastrerandomize::build_backend()</code></pre>
-        <li>Rerandomize!</li>
-      </ol>
-    </div>
+    
+    <!-- Installation Instructions Section -->
+    <section class="install-section">
+      <div class="install-card animate-fade-in">
+        <h1>Install fastrerandomize</h1>
+        <p>To install and load <strong>fastrerandomize</strong>, follow these steps:</p>
+        
+        <ol>
+          <li>
+            <p>Open your terminal in your preferred R editor.</p>
+          </li>
+          <li>
+            <p>If you haven't installed devtools already, begin by doing so:</p>
+            <div class="code-block">
+              <div class="code-content">install.packages("devtools")</div>
+              <button class="copy-button" aria-label="Copy code">Copy</button>
+            </div>
+          </li>
+          <li>
+            <p>Install the package from GitHub:</p>
+            <div class="code-block">
+              <div class="code-content">devtools::install_github(repo = "cjerzak/fastrerandomize-software/fastrerandomize")</div>
+              <button class="copy-button" aria-label="Copy code">Copy</button>
+            </div>
+          </li>
+          <li>
+            <p>Load the package:</p>
+            <div class="code-block">
+              <div class="code-content">library(fastrerandomize)</div>
+              <button class="copy-button" aria-label="Copy code">Copy</button>
+            </div>
+          </li>
+          <li>
+            <p>When running code for the first time, create the computational environment:</p>
+            <div class="code-block">
+              <div class="code-content">fastrerandomize::build_backend()</div>
+              <button class="copy-button" aria-label="Copy code">Copy</button>
+            </div>
+          </li>
+          <li>
+            <p>Rerandomize!</p>
+          </li>
+        </ol>
+        
+        <!-- Tips Card -->
+        <div class="tips-card">
+          <h3><i class="fas fa-lightbulb"></i> Installation Tips</h3>
+          <ul>
+            <li>Ensure you have R version 4.0 or higher installed.</li>
+            <li>The package setup requires Python dependencies which will be automatically installed.</li>
+            <li>If you encounter any errors during installation, check our <a href="troubleshooting.html">troubleshooting guide</a>.</li>
+            <li>For GPU acceleration, make sure you have appropriate CUDA drivers installed.</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- Next Steps Section -->
+      <h2 style="color: white; margin: 3rem 0 1.5rem; text-align: center;">What's Next?</h2>
+      <div class="next-steps">
+        <div class="next-step-card">
+          <div class="next-step-icon">
+            <i class="fas fa-book"></i>
+          </div>
+          <h4>Read Documentation</h4>
+          <p>Explore the comprehensive documentation to learn about all the features and functions available.</p>
+          <a href="https://github.com/cjerzak/fastrerandomize-software/blob/main/fastrerandomize.pdf?raw=true" class="btn btn-secondary">View Docs</a>
+        </div>
+        
+        <div class="next-step-card">
+          <div class="next-step-icon">
+            <i class="fas fa-graduation-cap"></i>
+          </div>
+          <h4>Follow Tutorials</h4>
+          <p>Work through our step-by-step tutorials to get familiar with rerandomization techniques.</p>
+          <a href="tutorials.html" class="btn btn-secondary">Start Learning</a>
+        </div>
+        
+        <div class="next-step-card">
+          <div class="next-step-icon">
+            <i class="fas fa-code"></i>
+          </div>
+          <h4>View Examples</h4>
+          <p>Check out example code snippets and real-world applications to jumpstart your projects.</p>
+          <a href="examples.html" class="btn btn-secondary">See Examples</a>
+        </div>
+      </div>
+    </section>
   </main>
-
+  
   <!-- Footer -->
   <footer>
-    <p>&copy; 2025 fastrerandomize developers</p>
-  </footer>
-
-  <!-- Scripts -->
-  <script>
-    // MENU TOGGLE LOGIC
-    const menuToggle = document.querySelector('.menu-toggle');
-    const nav = document.querySelector('nav');
-
-    menuToggle.addEventListener('click', () => {
-      nav.classList.toggle('open');
-    });
-
-    // SHARE BUTTON LOGIC
-    (function() {
-      const shareBtn = document.getElementById('share-button');
-
-      // Reusable helper function to show a small “Copied!” message
-      function showCopyNotification() {
-        const notification = document.createElement('div');
-        notification.innerText = 'Copied to clipboard';
-        // Style as you like — here’s an example bottom-right “toast”
-        notification.style.position = 'fixed';
-        notification.style.bottom = '20px';
-        notification.style.right = '20px';
-        notification.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
-        notification.style.color = '#fff';
-        notification.style.padding = '8px 12px';
-        notification.style.borderRadius = '4px';
-        notification.style.zIndex = '9999';
-        document.body.appendChild(notification);
-
-        // Remove after 2 seconds
-        setTimeout(() => {
-          notification.remove();
-        }, 2000);
-      }
-
-      shareBtn.addEventListener('click', function() {
-        const currentURL = window.location.href;
-        const pageTitle  = document.title || 'Check this out!';
-
-        // If browser supports Web Share API
-        if (navigator.share) {
-          navigator.share({
-            title: pageTitle,
-            text: '',
-            url: currentURL
-          })
-          .catch((error) => {
-            console.log('Sharing failed', error);
-          });
-        } else {
-          // Fallback to copy the URL to the clipboard:
-          if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(currentURL).then(() => {
-              // Instead of alert(), show a small notification
-              showCopyNotification();
-            }, (err) => {
-              console.error('Could not copy text: ', err);
-            });
-          } else {
-            // Double-fallback for very old browsers
-            const textArea = document.createElement('textarea');
-            textArea.value = currentURL;
-            document.body.appendChild(textArea);
-            textArea.select();
-            try {
-              document.execCommand('copy');
-              showCopyNotification();
-            } catch (err) {
-              alert('Please copy this link:\n' + currentURL);
-            }
-            document.body.removeChild(textArea);
-          }
-        }
-      });
-    })();
-  </script>
-</body>
-</html>
+    <div class="footer-content">
+      <div class="footer-column">
+        <h4>Documentation</h4>
+        <ul class="footer-links">
+          <li><a href="install.html">Installation Guide</a></li>
+          <li><a href="https://github.com/cjerzak/fastrerandomize-software/blob/main/fastrerandomize.pdf?raw=true">API Reference</a></li>
+          <li><a href="tutorials.html">Tutorials</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h4>Community</h4>
+        <ul class="footer-links">
+          <li><a href="https://github.com/cjerzak/fastrerandomize-software">GitHub</a></li>
+          <li><a href="https://github.com/cjerzak/fastrerandomize-software/issues">Issue Tracker</a></li>
+          <li><a href="https://cran.r-project.org/package=fastrerandomize">CRAN</a></li>
+          <li><a href="changelog.html">Changelog</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h4>Resources</h4>
+        <ul class="footer-links">
+          <li><a href="https://arxiv.org/abs/2501.07642">Paper</a></li>
+          <li><a href="https://connorjerzak.com/wp-content/uploads/2025/01/FastReandomizeBib.txt">How to Cite</a></li>
+          <li><a href="benchmarks.html">Benchmarks</a></li>
+          <li><a href="examples.html">Examples</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h4>About</h4>
+        <ul class="footer-links">
+          <li><a href="aboutus.html">Team</a></li>
+          <li><a href="mailto:connor.jerzak@austin.utexas.edu">Contact</a></li>
+          <li><a href="https://github.com/
