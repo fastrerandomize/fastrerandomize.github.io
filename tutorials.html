@@ -8,11 +8,17 @@
   <meta name="date" content="2025-01-22" />
   <title>Tutorials | fastrerandomize</title>
 
-  <!-- Google Fonts (Inter) -->
+  <!-- Google Fonts: Manrope for headings, Inter for body text -->
   <link rel="preconnect" href="https://fonts.gstatic.com"/>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+  <link 
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
     rel="stylesheet"
+  />
+
+  <!-- Font Awesome Icons (optional - if using icons) -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
   />
 
   <!-- Pandoc header-attribute fix -->
@@ -30,38 +36,104 @@
   </script>
 
   <style>
-    /* --------------------------
-       Global & Layout
-       -------------------------- */
-    * {
-      box-sizing: border-box;
+    /* 
+      ----------------------------------------------------------
+      Shared styling / color system (matching index.html)
+      ----------------------------------------------------------
+    */
+    :root {
+      /* Color System */
+      --color-primary: #3B82F6;       /* primary: Tailwind's "blue-500" */
+      --color-primary-dark: #1D4ED8;  /* "blue-700" */
+      --color-primary-light: #60A5FA; /* "blue-400" */
+      --color-secondary: #10B981;     /* "emerald-500" */
+      --color-accent: #8B5CF6;        /* "violet-500" */
+      --color-dark: #1E293B;         /* "gray-800" or "slate-800" */
+      --color-darker: #0F172A;       /* "gray-900" or "slate-900" */
+      --color-light: #F3F4F6;        /* "gray-100" or "slate-100" */
+      --color-lighter: #F9FAFB;      /* "gray-50"  or "slate-50" */
+
+      /* Spacing System */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2rem;
+      --space-xxl: 3rem;
+
+      /* Shadow System */
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+                   0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+                   0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.08);
+
+      /* Border Radius */
+      --radius-sm: 0.25rem;
+      --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;
+      --radius-xl: 1rem;
+
+      /* Transitions */
+      --transition-fast: 150ms ease;
+      --transition-normal: 300ms ease;
+      --transition-slow: 500ms ease;
+    }
+
+    /*
+      Base Styles
+    */
+    html, body {
       margin: 0;
       padding: 0;
-    }
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI",
-                   "Roboto", "Helvetica Neue", Arial, sans-serif;
-      background-color: #F9FAFB;
-      color: #111827;
+      height: 100%;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 
+                   "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
+      color: #111827; /* near-black text */
       line-height: 1.6;
+      background: transparent; /* We'll use a background-canvas below */
+      scroll-behavior: smooth;
     }
+
     a {
       text-decoration: none;
       color: inherit;
+      transition: color var(--transition-fast);
+    }
+    
+    /* Canvas behind everything */
+    #background-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -999;
+      width: 100%;
+      height: 100%;
+      display: block;
+      background: linear-gradient(
+        135deg,
+        var(--color-darker) 0%,
+        var(--color-dark) 100%
+      );
     }
 
-    /* --------------------------
-       Header & Navigation
-       (Merged with hamburger menu logic)
-       -------------------------- */
+    /* 
+      Header + Nav
+    */
     header {
-      background: linear-gradient(135deg, #1E293B 0%, #3B82F6 100%);
-      color: #FFF;
+      background: linear-gradient(
+        135deg,
+        var(--color-dark) 0%,
+        var(--color-primary-dark) 100%
+      );
+      color: #fff;
       position: sticky;
       top: 0;
       z-index: 999;
-      padding: 0;
+      box-shadow: var(--shadow-md);
     }
+
     nav {
       display: flex;
       align-items: center;
@@ -69,38 +141,45 @@
       max-width: 1200px;
       margin: 0 auto;
       padding: 1rem;
+      position: relative;
     }
 
-    /* Use .logo so it's consistent with the second script's structure */
     .logo {
-      font-size: 1.25rem;
-      font-weight: 700;
+      font-family: 'Manrope', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      transition: all var(--transition-normal);
     }
     .logo a {
-      color: #FFF;
+      color: #fff;
+    }
+    .logo:hover {
+      transform: scale(1.05);
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
     }
 
-    /* Nav Menu (Desktop) */
     nav ul {
       list-style-type: none;
       display: flex;
-      gap: 1rem;
-    }
-    nav ul li {
-      position: relative;
+      gap: 1.25rem;
+      margin: 0;
+      padding: 0;
     }
     nav ul li a {
       font-weight: 500;
-      color: #FFF;
+      font-size: 0.95rem;
       padding: 0.5rem 0.75rem;
-      border-radius: 4px;
-      transition: background-color 0.3s ease;
+      border-radius: var(--radius-md);
+      transition: all var(--transition-normal);
+      position: relative;
+      color: #fff; /* Light text on dark background */
     }
     nav ul li a:hover {
       background-color: rgba(255, 255, 255, 0.1);
     }
 
-    /* Hamburger lines (hidden on large screens) */
+    /* Hamburger lines default hidden on large screens */
     .menu-toggle {
       display: none;
       background: none;
@@ -116,73 +195,254 @@
       transition: 0.3s ease;
     }
 
-    /* Mobile Menu: show/hide logic */
+    /* Search Container (as in index) */
+    .search-container {
+      position: relative;
+      margin-left: var(--space-md);
+    }
+    .search-container form {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+    }
+    .search-input {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      padding: 0.5rem 0.75rem 0.5rem 2.25rem;
+      border-radius: var(--radius-md);
+      font-size: 0.875rem;
+      transition: all var(--transition-normal);
+      width: 150px;
+    }
+    .search-input:focus {
+      outline: none;
+      background-color: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.3);
+      width: 200px;
+    }
+    .search-icon {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.875rem;
+      pointer-events: none;
+    }
+
+    .search-results {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      width: 300px;
+      max-height: 400px;
+      overflow-y: auto;
+      background-color: var(--color-dark);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      z-index: 1000;
+      margin-top: 0.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: none;
+      padding: 0.5rem 0;
+    }
+    .search-result-item {
+      display: block;
+      padding: 0.75rem 1rem;
+      color: white;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      transition: background-color var(--transition-normal);
+    }
+    .search-result-item:hover,
+    .search-result-item:focus {
+      background-color: rgba(255, 255, 255, 0.1);
+      outline: none;
+    }
+
+    @media (max-width: 992px) {
+      .search-container {
+        display: none;
+      }
+    }
     @media (max-width: 768px) {
-      /* Show the hamburger button; hide the main menu by default. */
+      nav {
+        position: relative;
+      }
+      /* Show the hamburger button */
       .menu-toggle {
         display: inline-block;
       }
-
+      /* Hide the menu by default on mobile */
       nav ul {
         display: none;
         position: absolute;
         top: 100%;
         right: 0;
         background-color: #1E293B;
+        border: 1px solid rgba(255, 255, 255, 0.1);
         flex-direction: column;
         gap: 0;
-        width: 180px;
-        border-radius: 4px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        width: 220px;
+        border-radius: var(--radius-md);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+        transform: translateY(10px);
+        opacity: 0;
+        transition: all var(--transition-normal);
       }
       nav ul li a {
         display: block;
-        padding: 0.75rem 1rem;
+        padding: 0.75rem 1.25rem;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        color: white;
+        font-weight: 600;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
       }
-
-      /* When nav has .open, reveal the menu */
       nav.open ul {
         display: flex;
+        transform: translateY(0);
+        opacity: 1;
+        z-index: 1000;
       }
     }
 
-    /* --------------------------
-       Main Content
-       -------------------------- */
+    /*
+      Main Content
+    */
     main {
       max-width: 1200px;
       margin: 2rem auto;
       padding: 0 1rem;
+      position: relative;
+      z-index: 2; /* So it appears above the #background-canvas */
+      color: #fff;  /* We'll use light text to match the dark background */
     }
+
     .tutorial-content {
-      background-color: #FFFFFF;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+      background: rgba(255, 255, 255, 0.02);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
       padding: 2rem;
       margin-bottom: 2rem;
     }
 
-    /* --------------------------
-       Footer
-       -------------------------- */
+    /*
+      Footer
+    */
     footer {
-      background-color: #1E293B;
-      color: #FFF;
+      background: linear-gradient(
+        to top,
+        var(--color-darker) 0%,
+        transparent 100%
+      );
+      color: rgba(255, 255, 255, 0.8);
       text-align: center;
       padding: 1rem;
       margin-top: 2rem;
-    }
-    footer p {
+      position: relative;
+      z-index: 2;
       font-size: 0.9rem;
-      margin: 0;
     }
 
-    /* --------------------------
-       Pandoc & Code Block Styles
-       -------------------------- */
+    footer p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    /*
+      Pandoc & Code Block Styles
+      (Merged from original tutorial styling + site theme)
+    */
+
+    /* Let headings use Manrope for consistency with index page */
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Manrope', sans-serif;
+      color: #fff;
+      margin-top: 1.5rem;
+      margin-bottom: 0.75rem;
+    }
+    /* Title and date specifically from Pandoc output */
+    h1.title {
+      font-size: 2rem !important;
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    h4.date {
+      font-size: 0.95rem;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 1rem;
+    }
+    h2 {
+      font-size: 1.375rem;
+      font-weight: 700;
+      border-bottom: 2px solid rgba(255,255,255,0.1);
+      padding-bottom: 0.25rem;
+    }
+    h3 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    p {
+      margin-bottom: 1rem;
+      color: rgba(255, 255, 255, 0.9);
+    }
+    ul {
+      margin: 0.5rem 1.5rem;
+      list-style: disc;
+      color: rgba(255, 255, 255, 0.9);
+    }
+    ul li {
+      margin-bottom: 0.5rem;
+    }
+    blockquote {
+      background-color: rgba(255, 255, 255, 0.05);
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-md);
+      margin: 1rem 0;
+      border-left: 4px solid #9CA3AF;
+    }
+    table {
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      width: 100%;
+      color: #fff;
+    }
+    table th, table td {
+      border: 1px solid #DDDDDD;
+      padding: 0.75rem;
+    }
+    table thead {
+      background-color: rgba(255,255,255,0.1);
+    }
+    hr {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      margin: 2rem 0;
+    }
+
+    /* Code blocks matching the “index” dark style but preserving pandoc classes */
     code {
-      white-space: pre-wrap;
+      font-family: "Source Code Pro", Consolas, monospace;
+      font-size: 0.9rem;
+      background-color: #1E1E1E;
+      color: #D4D4D4;
+      border-radius: 3px;
+      padding: 0.1rem 0.3rem;
+    }
+    pre {
+      background-color: #1E1E1E;
+      color: #D4D4D4;
+      padding: 1rem;
+      margin: 1em 0;
+      border-radius: var(--radius-md);
+      overflow-x: auto;
     }
     pre > code.sourceCode {
       white-space: pre;
@@ -195,109 +455,43 @@
     pre > code.sourceCode > span:empty {
       height: 1.2em;
     }
-    .sourceCode {
-      overflow: visible;
-    }
-    div.sourceCode {
-      margin: 1em 0;
-    }
-    pre.sourceCode {
-      margin: 0;
-      border-radius: 4px;
-      background-color: #F3F4F6;
-      padding: 1rem;
-      overflow-x: auto;
-    }
-    code {
-      font-family: "Source Code Pro", Consolas, monospace;
-      background-color: #F3F4F6;
-      color: #1E293B;
-      border-radius: 3px;
-      font-size: 0.9rem;
-    }
-    pre {
-      background-color: #F3F4F6;
-      padding: 1rem;
-      margin: 1em 0;
-      border-radius: 4px;
-    }
     .highlight {
       background-color: #C3C5C8;
     }
 
-    /* Adjust headings from Pandoc defaults */
-    h1.title {
-      font-size: 2rem !important;
-      margin-top: 1rem;
-      margin-bottom: 0.5rem;
-      color: #1E293B;
+    /*
+      Keyframes for background effects, etc.
+      (Same as index)
+    */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-    h4.date {
-      font-size: 0.95rem;
-      font-weight: 400;
-      color: #6B7280;
-      margin-bottom: 1rem;
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
     }
-    h2 {
-      margin-top: 2rem;
-      margin-bottom: 0.5rem;
-      padding-bottom: 0.25rem;
-      border-bottom: 2px solid #F3F4F6;
-      font-size: 1.375rem;
-      font-weight: 600;
-      color: #1E293B;
+    @keyframes shine-bg {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
-    h3 {
-      margin-top: 1.5rem;
-      margin-bottom: 0.5rem;
-      font-size: 1.125rem;
-      border-bottom: 1px solid #F3F4F6;
-      font-weight: 600;
-      color: #1E293B;
+    @keyframes glow {
+      0% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
+      50% { box-shadow: 0 0 20px rgba(255, 165, 0, 0.8); }
+      100% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
     }
-    h4, h5, h6 {
-      margin-top: 1rem;
-      margin-bottom: 0.25rem;
-      font-weight: 600;
-      color: #1E293B;
-    }
-    p {
-      margin-bottom: 1rem;
-    }
-    ul {
-      margin: 0.5rem 1.5rem;
-      list-style: disc;
-    }
-    ul li {
-      margin-bottom: 0.5rem;
-    }
-    blockquote {
-      background-color: #F3F4F6;
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
-      margin: 1rem 0;
-      border-left: 4px solid #9CA3AF;
-    }
-    table {
-      border-collapse: collapse;
-      margin: 1.5rem 0;
-      width: 100%;
-    }
-    table th, table td {
-      border: 1px solid #DDDDDD;
-      padding: 0.75rem;
-    }
-    table thead {
-      background-color: #F3F4F6;
-    }
-    hr {
-      border: none;
-      border-top: 1px solid #E5E7EB;
-      margin: 2rem 0;
+
+    /* Simple fade/pulse for .animate-fade-in if needed */
+    .animate-fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeIn 1s ease-out forwards;
     }
   </style>
 
-  <!-- Dynamically load MathJax -->
+  <!-- Dynamically load MathJax (if needed) -->
   <script>
     (function () {
       var script = document.createElement("script");
@@ -309,10 +503,12 @@
 </head>
 
 <body>
-  <!-- Header + Navigation with Hamburger Button -->
+  <!-- Background Canvas (raining vectors) -->
+  <canvas id="background-canvas"></canvas>
+
+  <!-- Header + Navigation -->
   <header>
     <nav>
-      <!-- Replacing <h1 class="site-title"> with a .logo div for consistency -->
       <div class="logo">
         <a href="index.html">fastrerandomize</a>
       </div>
@@ -333,16 +529,30 @@
             Documentation
           </a>
         </li>
-        <li><a href="tutorials.html">Tutorials</a></li>
+        <li><a href="tutorials.html" style="background-color: rgba(255,255,255,0.2)">Tutorials</a></li>
         <li><a href="aboutus.html">About Us</a></li>
       </ul>
+
+      <!-- Search Container (Same logic as index) -->
+      <div class="search-container">
+        <form onsubmit="return false;">
+          <i class="fas fa-search search-icon"></i>
+          <input
+            type="text"
+            class="search-input"
+            placeholder="Search docs..."
+            aria-label="Search documentation"
+          />
+        </form>
+        <!-- The search results will be inserted by JavaScript -->
+        <div class="search-results"></div>
+      </div>
     </nav>
   </header>
 
   <!-- Main Content -->
   <main>
-    <div class="tutorial-content">
-
+    <div class="tutorial-content animate-fade-in">
       <!-- Pandoc-generated Title & Date -->
       <h1 class="title toc-ignore">FastRerandomize Package Tutorial</h1>
       <h4 class="date">2025-01-22</h4>
@@ -443,25 +653,32 @@
       <!-- Introduction -->
       <div id="introduction" class="section level2">
         <h2>Introduction</h2>
-        <p>This vignette demonstrates how to use the fastrerandomize package for
-        generating and testing experimental designs in an agricultural study
-        setting based on:</p>
+        <p>
+          This vignette demonstrates how to use the fastrerandomize package for
+          generating and testing experimental designs in an agricultural study
+          setting based on:
+        </p>
         <ul>
-          <li>Burchardi, K.B., Gulesci, S., Lerva, B. and Sulaiman, M., 2019.
-          Moral hazard: Experimental Evidence from Tenancy Contracts. The
-          Quarterly Journal of Economics, 134(1), pp.281-347.</li>
+          <li>
+            Burchardi, K.B., Gulesci, S., Lerva, B. and Sulaiman, M., 2019.
+            Moral hazard: Experimental Evidence from Tenancy Contracts. The
+            Quarterly Journal of Economics, 134(1), pp.281-347.
+          </li>
         </ul>
         <p>We will walk through:</p>
         <ul>
           <li>Generating synthetic covariate data</li>
           <li>Creating candidate randomizations</li>
-          <li>Exploring the S3 methods for printing, summarizing, and plotting
-          randomization objects</li>
+          <li>
+            Exploring the S3 methods for printing, summarizing, and plotting
+            randomization objects
+          </li>
           <li>Conducting a randomization-based inference test</li>
         </ul>
-        <p>Note: This tutorial assumes you have installed the fastrerandomize
-        package, either from source or via GitHub:</p>
-
+        <p>
+          Note: This tutorial assumes you have installed the fastrerandomize
+          package, either from source or via GitHub:
+        </p>
         <div class="sourceCode" id="cb1">
           <pre class="sourceCode r"><code class="sourceCode r">
 # If you haven't installed or set up the package:
@@ -479,9 +696,10 @@
       <!-- Covariate Data -->
       <div id="obtain-pre-treatment-covariate-data" class="section level2">
         <h2>1. Obtain Pre-treatment Covariate Data</h2>
-        <p>For illustration, we use several pre-treatment covariates from the
-        original experiment.</p>
-
+        <p>
+          For illustration, we use several pre-treatment covariates from the
+          original experiment.
+        </p>
         <div class="sourceCode" id="cb2">
           <pre class="sourceCode r"><code class="sourceCode r">
 library(fastrerandomize)
@@ -502,15 +720,18 @@ n_treated <- round(nrow(X)/2)
       <!-- Generate Randomizations -->
       <div id="generate-randomizations" class="section level2">
         <h2>2. Generate Randomizations</h2>
-        <p>We now create our candidate randomizations using the function
-        <code>generate_randomizations()</code> from fastrerandomize. Depending
-        on the scale and complexity of your experiment, you may choose either
-        exact enumeration (“exact”) or Monte Carlo (“monte_carlo”)
-        randomization.</p>
-        <p>In this example, we’ll use the Monte Carlo approach. Note that
-        <code>randomization_accept_prob</code> is set very low (0.0001) purely
-        for demonstration.</p>
-
+        <p>
+          We now create our candidate randomizations using the function
+          <code>generate_randomizations()</code> from fastrerandomize. Depending
+          on the scale and complexity of your experiment, you may choose either
+          exact enumeration (“exact”) or Monte Carlo (“monte_carlo”)
+          randomization.
+        </p>
+        <p>
+          In this example, we’ll use the Monte Carlo approach. Note that
+          <code>randomization_accept_prob</code> is set very low (0.0001) purely
+          for demonstration.
+        </p>
         <div class="sourceCode" id="cb3">
           <pre class="sourceCode r"><code class="sourceCode r">
 RunMainAnalysis <- (!is.null(check_jax_availability()))
@@ -540,11 +761,12 @@ if(RunMainAnalysis){
       <!-- S3 Methods -->
       <div id="s3-methods-print-summary-and-plot" class="section level2">
         <h2>4. S3 Methods: Print, Summary, and Plot</h2>
-        <p><code>generate_randomizations()</code> returns an S3 object of class
-        <code>fastrerandomize_randomizations</code>. We can use its associated
-        print, summary, and plot methods to inspect the candidate
-        randomizations.</p>
-
+        <p>
+          <code>generate_randomizations()</code> returns an S3 object of class
+          <code>fastrerandomize_randomizations</code>. We can use its associated
+          print, summary, and plot methods to inspect the candidate
+          randomizations.
+        </p>
         <div class="sourceCode" id="cb107">
           <pre class="sourceCode r"><code class="sourceCode r">
 if(RunMainAnalysis){
@@ -559,7 +781,6 @@ if(RunMainAnalysis){
 }
           </code></pre>
         </div>
-
         <pre><code>## Object of class 'fastrerandomize_randomizations'
 ## 
 ## Call:
@@ -580,16 +801,19 @@ if(RunMainAnalysis){
       <!-- Randomization Test -->
       <div id="randomization-test" class="section level2">
         <h2>3. Randomization Test</h2>
-        <p>Next, we showcase a randomization-based inference procedure using
-        fastrerandomize.</p>
+        <p>
+          Next, we showcase a randomization-based inference procedure using
+          fastrerandomize.
+        </p>
 
         <div id="a.-setup-simulated-outcomes" class="section level3">
           <h3>3a. Setup Simulated Outcomes</h3>
-          <p>We simulate an outcome <code>Y</code> that depends on our covariates
-          <code>X</code>, the chosen randomization, and some true treatment
-          effect τ. We pick the first acceptable randomization from our set as
-          our “observed” assignment <code>Wobs</code>.</p>
-
+          <p>
+            We simulate an outcome <code>Y</code> that depends on our covariates
+            <code>X</code>, the chosen randomization, and some true treatment
+            effect τ. We pick the first acceptable randomization from our set as
+            our “observed” assignment <code>Wobs</code>.
+          </p>
           <div class="sourceCode" id="cb109">
             <pre class="sourceCode r"><code class="sourceCode r">
 if(RunMainAnalysis){
@@ -607,18 +831,22 @@ if(RunMainAnalysis){
 
         <div id="b.-run-the-randomization-test" class="section level3">
           <h3>3b. Run the Randomization Test</h3>
-          <p>We pass our observed treatment assignment (<code>obsW</code>),
-          observed outcomes (<code>obsY</code>), and the full matrix of candidate
-          randomizations (<code>candidate_randomizations</code>) to
-          <code>randomization_test()</code>. This test:</p>
+          <p>
+            We pass our observed treatment assignment (<code>obsW</code>),
+            observed outcomes (<code>obsY</code>), and the full matrix of
+            candidate randomizations
+            (<code>candidate_randomizations</code>) to
+            <code>randomization_test()</code>. This test:
+          </p>
           <ul>
             <li>Computes the observed difference in means</li>
             <li>Permutes the treatment assignment across our candidate
             randomizations</li>
-            <li>Estimates the p-value by comparing the observed statistic to its
-            permutation distribution</li>
+            <li>
+              Estimates the p-value by comparing the observed statistic to its
+              permutation distribution
+            </li>
           </ul>
-
           <div class="sourceCode" id="cb110">
             <pre class="sourceCode r"><code class="sourceCode r">
 if(RunMainAnalysis){
@@ -636,7 +864,6 @@ if(RunMainAnalysis){
 }
             </code></pre>
           </div>
-
           <pre><code>## Object of class 'fastrerandomize_test'
 ## 
 ## Call:
@@ -660,29 +887,37 @@ if(RunMainAnalysis){
 ## 
 ## Fiducial Interval:
 ##   [-547.2352, 498.731]</code></pre>
-
-          <p>The <code>findFI = TRUE</code> flag attempts to locate a fiducial
-          interval (FI) for the treatment effect.</p>
+          <p>
+            The <code>findFI = TRUE</code> flag attempts to locate a fiducial
+            interval (FI) for the treatment effect.
+          </p>
         </div>
       </div>
 
       <!-- Conclusion -->
       <div id="conclusion" class="section level2">
         <h2>Conclusion</h2>
-        <p>This tutorial demonstrated a basic workflow with fastrerandomize:</p>
+        <p>
+          This tutorial demonstrated a basic workflow with fastrerandomize:
+        </p>
         <ul>
           <li>Generating synthetic or real covariate data</li>
-          <li>Producing a set of acceptable treatment assignments via
-          randomization</li>
+          <li>
+            Producing a set of acceptable treatment assignments via
+            randomization
+          </li>
           <li>Visualizing and summarizing these assignments</li>
-          <li>Testing for treatment effects with a randomization-based
-          approach</li>
+          <li>
+            Testing for treatment effects with a randomization-based approach
+          </li>
         </ul>
-        <p>We encourage you to consult the package documentation for more
-        advanced functionalities, including GPU-accelerated computations via
-        JAX and flexible definitions of balance criteria.</p>
+        <p>
+          We encourage you to consult the package documentation for more
+          advanced functionalities, including GPU-accelerated computations via
+          JAX and flexible definitions of balance criteria.
+        </p>
       </div>
-    </div><!-- .tutorial-content -->
+    </div> <!-- .tutorial-content -->
   </main>
 
   <!-- Footer -->
@@ -690,17 +925,196 @@ if(RunMainAnalysis){
     <p>&copy; 2025 fastrerandomize developers</p>
   </footer>
 
-  <!-- SCRIPTS -->
+  <!-- Scripts -->
   <script>
-    // 1) MENU TOGGLE LOGIC (from second script)
+    // 1) MENU TOGGLE LOGIC
     const menuToggle = document.querySelector('.menu-toggle');
     const nav = document.querySelector('nav');
-
     menuToggle.addEventListener('click', () => {
       nav.classList.toggle('open');
     });
 
-    // 2) (Share button logic is already included inline above)
+    // 2) "Raining Vectors" background (same as index)
+    const canvas = document.getElementById('background-canvas');
+    const ctx = canvas.getContext('2d');
+
+    const symbols = [
+      '∂','∇','λ','α','δ','θ','Σ','∫','×','→','±','β','μ','Ω','σ','Φ',
+      '∞','π','ξ','ζ','γ','ε','∛','∝','∠','∧','∨','∩','∪','≈','≠','≤','≥',
+      '≡','∈','∉','⊂','⊃','⊆','⊇','⊕','⊗','⊥','Z','P','R','N'
+    ];
+
+    let width, height, columns;
+    let drops = [], sizes = [], speeds = [], opacities = [], hues = [];
+
+    function resizeCanvas() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+
+      columns = Math.floor(width / 20);
+      drops = [];
+      sizes = [];
+      speeds = [];
+      opacities = [];
+      hues = [];
+      for (let i = 0; i < columns; i++) {
+        drops[i] = Math.random() * -100;
+        sizes[i] = 12 + Math.floor(Math.random() * 12);
+        speeds[i] = 0.1 + Math.random() * 0.3;
+        opacities[i] = 0.1 + Math.random() * 0.3;
+        hues[i] = 200 + Math.random() * 40;
+      }
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function draw() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillRect(0, 0, width, height);
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = symbols[Math.floor(Math.random() * symbols.length)];
+        const x = i * 20;
+        const y = drops[i] * 20;
+        ctx.font = `${sizes[i]}px monospace`;
+        ctx.fillStyle = `hsla(${hues[i]}, 80%, 60%, ${opacities[i]})`;
+        ctx.fillText(text, x, y);
+        drops[i] += speeds[i];
+        if (y > height && Math.random() > 0.99) {
+          drops[i] = -1;
+          speeds[i] = 0.1 + Math.random() * 0.3;
+          opacities[i] = 0.1 + Math.random() * 0.3;
+        }
+      }
+    }
+    setInterval(draw, 33);
+
+    // 3) SEARCH FUNCTIONALITY
+    (function() {
+      const searchableContent = [
+        {
+          title: "Installation Guide",
+          description: "How to install and set up fastrerandomize package",
+          url: "install.html"
+        },
+        {
+          title: "Documentation",
+          description: "API reference and comprehensive documentation",
+          url: "https://github.com/cjerzak/fastrerandomize-software/blob/main/fastrerandomize.pdf?raw=true"
+        },
+        {
+          title: "Tutorials",
+          description: "Step-by-step guides for using fastrerandomize",
+          url: "tutorials.html"
+        },
+        {
+          title: "About Us",
+          description: "Information about the developers and contributors",
+          url: "aboutus.html"
+        },
+        {
+          title: "GitHub Repository",
+          description: "Source code and development resources",
+          url: "https://github.com/cjerzak/fastrerandomize-software"
+        },
+        {
+          title: "CRAN Package",
+          description: "Official R package distribution",
+          url: "https://cran.rstudio.com/web/packages/fastrerandomize/index.html"
+        }
+      ];
+
+      const searchContainer = document.querySelector('.search-container');
+      const searchInput = document.querySelector('.search-input');
+      const searchResults = searchContainer.querySelector('.search-results');
+
+      function performSearch(query) {
+        searchResults.innerHTML = '';
+        if (!query.trim()) {
+          searchResults.style.display = 'none';
+          return;
+        }
+        const lowercaseQuery = query.toLowerCase();
+        const filteredResults = searchableContent.filter(item => {
+          return (
+            item.title.toLowerCase().includes(lowercaseQuery) ||
+            item.description.toLowerCase().includes(lowercaseQuery)
+          );
+        });
+        if (filteredResults.length > 0) {
+          searchResults.style.display = 'block';
+          filteredResults.forEach(result => {
+            const resultItem = document.createElement('a');
+            resultItem.href = result.url;
+            resultItem.className = 'search-result-item';
+            resultItem.innerHTML = `
+              <div style="font-weight: 600; margin-bottom: 0.25rem;">${result.title}</div>
+              <div style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.7);">
+                ${result.description}
+              </div>
+            `;
+            searchResults.appendChild(resultItem);
+          });
+        } else {
+          searchResults.style.display = 'block';
+          searchResults.innerHTML = `
+            <div style="padding: 1rem; color: rgba(255, 255, 255, 0.7); text-align: center;">
+              No results found for "${query}"
+            </div>
+          `;
+        }
+      }
+
+      searchInput.addEventListener('input', (e) => {
+        performSearch(e.target.value);
+      });
+      searchInput.addEventListener('focus', () => {
+        if (searchInput.value.trim()) {
+          performSearch(searchInput.value);
+        }
+      });
+      document.addEventListener('click', (e) => {
+        if (!searchContainer.contains(e.target)) {
+          searchResults.style.display = 'none';
+        }
+      });
+      const searchForm = searchInput.closest('form');
+      if (searchForm) {
+        searchForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          performSearch(searchInput.value);
+        });
+      }
+      searchInput.addEventListener('keydown', (e) => {
+        const results = searchResults.querySelectorAll('.search-result-item');
+        if (results.length === 0) return;
+        const activeElement = document.activeElement;
+        const isResultFocused = activeElement.classList.contains('search-result-item');
+        const currentIndex = isResultFocused 
+          ? Array.from(results).indexOf(activeElement)
+          : -1;
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          if (currentIndex < results.length - 1) {
+            results[currentIndex + 1].focus();
+          } else {
+            results[0].focus();
+          }
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          if (currentIndex > 0) {
+            results[currentIndex - 1].focus();
+          } else {
+            results[results.length - 1].focus();
+          }
+        } else if (e.key === 'Escape') {
+          searchResults.style.display = 'none';
+          searchInput.blur();
+        }
+      });
+    })();
   </script>
 </body>
 </html>
