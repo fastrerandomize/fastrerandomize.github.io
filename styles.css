@@ -96,7 +96,7 @@ a:hover {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: "Space Grotesk", "IBM Plex Sans", sans-serif;
+  font-family: "IBM Plex Sans", sans-serif;
   font-weight: 600;
   letter-spacing: -0.02em;
   margin: 0 0 var(--space-sm);
@@ -428,7 +428,7 @@ nav ul li a[aria-current="page"] {
 }
 
 .stat-value {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "IBM Plex Sans", sans-serif;
   font-size: 1.6rem;
   font-weight: 600;
   color: var(--ink);
