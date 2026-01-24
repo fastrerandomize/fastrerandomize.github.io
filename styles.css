@@ -1012,6 +1012,100 @@ img[src*="#gh-dark-mode-only"] {
   }
 }
 
+/* Concept explainer boxes for educational content */
+.concept-explainer,
+.workflow-note,
+.concept-box,
+.guidance-box,
+.checklist,
+.note-box,
+.reporting-guide {
+  background: var(--accent-soft);
+  border: 1px solid var(--accent);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  margin: var(--space-lg) 0;
+}
+
+.concept-explainer h4,
+.workflow-note h4,
+.concept-box h3,
+.guidance-box h4,
+.checklist h4,
+.note-box h4,
+.reporting-guide h4 {
+  margin-top: 0;
+  margin-bottom: var(--space-sm);
+  color: var(--accent-dark);
+  font-size: 1.1rem;
+}
+
+.concept-explainer p,
+.workflow-note p,
+.concept-box p,
+.guidance-box p,
+.note-box p {
+  margin-bottom: var(--space-xs);
+  color: var(--ink);
+}
+
+.concept-explainer p:last-child,
+.workflow-note p:last-child,
+.concept-box p:last-child,
+.guidance-box p:last-child,
+.note-box p:last-child {
+  margin-bottom: 0;
+}
+
+.workflow-note ol,
+.concept-box ul,
+.guidance-box ul,
+.checklist ul,
+.reporting-guide ul {
+  margin: var(--space-sm) 0 0;
+  padding-left: 1.5rem;
+  color: var(--ink);
+}
+
+.workflow-note ol li,
+.concept-box ul li,
+.guidance-box ul li,
+.checklist ul li,
+.reporting-guide ul li {
+  margin-bottom: var(--space-xs);
+  color: var(--ink);
+}
+
+.benchmark-note {
+  background: rgba(16, 18, 23, 0.04);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  margin-top: var(--space-md);
+  font-size: 0.9rem;
+  color: var(--ink-muted);
+}
+
+@media (prefers-color-scheme: dark) {
+  .benchmark-note {
+    background: rgba(244, 246, 248, 0.04);
+  }
+}
+
+.new-to-rerandomization {
+  background: var(--accent-soft);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-md);
+  margin-bottom: var(--space-md);
+  font-size: 0.95rem;
+}
+
+.new-to-rerandomization a {
+  color: var(--accent-dark);
+  font-weight: 500;
+}
+
 #background-canvas {
   position: fixed;
   inset: 0;

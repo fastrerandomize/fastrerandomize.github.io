@@ -60,9 +60,25 @@
       <div class="hero-content">
         <p class="eyebrow animate-fade-in">Rerandomization, accelerated</p>
         <h1 class="animate-fade-in delay-100">FastRerandomize</h1>
-        <p class="animate-fade-in delay-200">Batched candidate generation, key-only storage, and design-respecting inference—FastRerandomize combines them in a minimal, accelerated workflow. That structure drives order‑of‑magnitude speedups. It enables greater degrees of covariate balance in high-dimensional data, thereby enabling causal precision previously unobtainable.</p>
-        
-        <div class="hero-stats animate-fade-in delay-300">
+        <p class="animate-fade-in delay-200">Batched candidate generation, key-only storage, and design-respecting inference—FastRerandomize combines them in a minimal, accelerated workflow. That structure drives order‑of‑magnitude speedups. It enables greater degrees of covariate balance in high-dimensional data. Precision gains come from reducing covariate imbalance at the design stage; they are largest when covariates strongly predict outcomes (high R²) and you can afford a stringent q.</p>
+
+        <div class="concept-explainer animate-fade-in delay-250">
+          <h4>What is rerandomization?</h4>
+          <p>Rerandomization is a <em>design-stage</em> procedure: repeatedly draw treatment assignments and <strong>keep only</strong> those that meet a pre-specified covariate-balance rule.</p>
+          <p>The default rule accepts an assignment when the <strong>Mahalanobis distance</strong> between treatment and control covariate means is below a cutoff: <strong>accept if M ≤ a</strong>.</p>
+          <p>The <strong>acceptance probability q</strong> is the fraction of random assignments that would pass this rule; <strong>smaller q</strong> means more stringent balance.</p>
+        </div>
+
+        <div class="workflow-note animate-fade-in delay-300">
+          <p><strong>Design changes the randomization distribution—so inference must match the design.</strong></p>
+          <ol>
+            <li><strong>Design:</strong> choose covariates + a balance rule (e.g., M ≤ a, equivalently q).</li>
+            <li><strong>Generate:</strong> draw many candidate assignments and keep the accepted set.</li>
+            <li><strong>Infer:</strong> randomization tests must resample <em>from the accepted set</em>, not from all possible assignments.</li>
+          </ol>
+        </div>
+
+        <div class="hero-stats animate-fade-in delay-400">
           <div class="stat-item">
             <div class="stat-value">>50x</div>
             <div class="stat-label">Speedup</div>
@@ -77,7 +93,7 @@
           </div>
         </div>
         
-        <div class="hero-buttons animate-fade-in delay-400">
+        <div class="hero-buttons animate-fade-in delay-500">
           <a href="https://cran.r-project.org/package=fastrerandomize" class="btn btn-primary btn-lg">
             <i class="fas fa-download"></i> Install from CRAN
           </a>
@@ -119,7 +135,7 @@
           <i class="fas fa-sliders"></i>
         </div>
         <h3>Sharper balance, better precision</h3>
-        <p>Rerandomization lets you enforce tighter covariate balance so estimates are more precise without changing your study design.</p>
+        <p>Keep only assignments passing a balance threshold (M ≤ a), improving precision when covariates predict outcomes. The stronger the covariate–outcome relationship (higher R²), the larger the precision gain.</p>
       </div>
       
       <div class="feature animate-fade-in delay-100">
@@ -135,7 +151,7 @@
           <i class="fas fa-bolt"></i>
         </div>
         <h3>Accelerated balance checks</h3>
-        <p>Batched, auto-vectorized kernels with just-in-time compilation, plus optional GPU/TPU execution via JAX/XLA.</p>
+        <p>Evaluate balance for large batches efficiently (CPU/GPU/TPU) via batched, auto-vectorized kernels with just-in-time compilation. This makes stringent q (very selective acceptance) feasible even at large scale.</p>
         <a href="https://arxiv.org/abs/2501.07642">Technical details <i class="fas fa-arrow-right"></i></a>
       </div>
       
@@ -144,7 +160,7 @@
           <i class="fas fa-key"></i>
         </div>
         <h3>Key-only storage</h3>
-        <p>Stores compact PRNG keys instead of full assignment matrices, allowing massive pools without memory blowups.</p>
+        <p>Store compact PRNG keys and regenerate full assignments on demand—dramatically reducing memory. This allows massive accepted pools without memory blowups.</p>
       </div>
     </section>
 
@@ -159,6 +175,9 @@
         GPU time drops from about 91 s (CPU) to about 7 s (GPU), a ~96% reduction, and peak speedups reach ~42x
         in high-dimensional, stringent settings.
       </p>
+      <div class="benchmark-note">
+        <strong>Benchmark note:</strong> Speedups depend on N, covariate dimension d, acceptance probability q, number of draws, and hardware. See <a href="https://arxiv.org/abs/2501.07642">the paper</a> for exact configurations.
+      </div>
       <div class="performance-grid">
         <figure class="figure-card">
           <a href="https://arxiv.org/abs/2501.07642">
@@ -181,12 +200,16 @@
     <section class="usage-example animate-fade-in">
       <h3>Minimal API example</h3>
       <p>
-        Acceptance probability q sets stringency (how selective the acceptance rule is; lower q is more stringent);
-        holding q fixed, more draws mainly increase the accepted pool
-        (lowering the minimum attainable randomization-test p-value) without improving expected balance. At
-        q = 1%, 1e5 draws yields about 1,000 accepted assignments (min p about 0.0010), while 2e5 draws yields
+        Acceptance probability q sets stringency (how selective the acceptance rule is; lower q is more stringent).
+        Holding q fixed, drawing more candidates does <strong>not</strong> change expected balance (the rule hasn't changed).
+        It mainly (i) increases the size of the <strong>accepted pool</strong> used for design-respecting inference and
+        (ii) yields <strong>finer p-value resolution</strong> because randomization-test p-values are discrete when based
+        on a finite accepted set.
+      </p>
+      <p>
+        At q = 1%, 1e5 draws yields about 1,000 accepted assignments (min p about 0.0010), while 2e5 draws yields
         about 2,000 accepted (min p about 0.0005). Use <code>diagnose_rerandomization()</code> to choose q based
-        on n, d, R^2, sigma, and a target effect size.
+        on n, d, R², σ, and a target effect size.
       </p>
       <div class="code-tabs">
         <button class="code-tab active" data-tab="tab1">Setup & Basic Usage</button>

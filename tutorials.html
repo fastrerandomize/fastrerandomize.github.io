@@ -195,13 +195,24 @@
           </li>
           <li>Conducting a randomization-based inference test</li>
         </ul>
+        <div id="key-concepts" class="concept-box">
+          <h3>Key Concepts (2 minutes)</h3>
+          <ul>
+            <li><strong>Balance statistic M:</strong> Mahalanobis distance between treatment and control covariate mean vectors. Smaller M = better balance.</li>
+            <li><strong>Acceptance rule:</strong> keep an assignment if <strong>M ≤ a</strong> for a chosen cutoff a.</li>
+            <li><strong>Acceptance probability q:</strong> q = P(M ≤ a) under complete randomization. Smaller q = stricter balance.</li>
+            <li><strong>Accepted set:</strong> assignments that pass the rule; inference resamples from this set.</li>
+            <li><strong>Shrinkage factor:</strong> how much rerandomization reduces covariate imbalance variance; larger reduction yields more precision when covariates predict outcomes.</li>
+          </ul>
+        </div>
+
         <p>
           Stringency refers to how selective the acceptance rule is, typically expressed by the acceptance
           probability q (lower q means more stringent). The shrinkage factor is the scalar reduction in covariate
           imbalance variance when conditioning on acceptance. In the paper's diagnostics, acceptance at q = 1%
           yields a shrinkage factor of about 0.45 at d = 30 but about 0.88 at d = 1000, so stringency has
           diminishing returns in very high-dimensional settings. In the
-          same illustrative setup (n_T = n_C = 500, R^2 = 0.5), that corresponds to about 15% RMSE reduction at
+          same illustrative setup (n<sub>T</sub> = n<sub>C</sub> = 500, R² = 0.5), that corresponds to about 15% RMSE reduction at
           d = 30 versus about 3% at d = 1000.
         </p>
         <p>
@@ -225,6 +236,16 @@
       <!-- Covariate Data -->
       <div id="obtain-pre-treatment-covariate-data" class="section level2">
         <h2>1. Obtain Pre-treatment Covariate Data</h2>
+
+        <div class="checklist">
+          <h4>Covariate prep checklist</h4>
+          <ul>
+            <li>Use <strong>pre-treatment covariates only</strong>—never condition on post-treatment variables</li>
+            <li>Standardize/scale when appropriate (especially if covariates have very different units)</li>
+            <li>Avoid severe collinearity (Mahalanobis distance relies on the covariance matrix being invertible)</li>
+          </ul>
+        </div>
+
         <p>
           For illustration, we use several pre-treatment covariates from the
           original experiment.
@@ -253,18 +274,29 @@ n_treated <- round(nrow(X)/2)
           We now create our candidate randomizations using the function
           <code>generate_randomizations()</code> from fastrerandomize. Depending
           on the scale and complexity of your experiment, you may choose either
-          exact enumeration (“exact”) or Monte Carlo (“monte_carlo”)
+          exact enumeration ("exact") or Monte Carlo ("monte_carlo")
           randomization.
         </p>
+
+        <div class="guidance-box">
+          <h4>Choosing stringency (q) in practice</h4>
+          <ul>
+            <li>Start with a target acceptance probability (common: <strong>q = 0.01</strong> for moderate, <strong>q = 0.001</strong> for high stringency).</li>
+            <li>Use <code>diagnose_rerandomization()</code> to check implied balance improvement and computational implications.</li>
+            <li>Plan candidate draws for a sufficiently large accepted pool (aim for thousands of accepted assignments for stable inference).</li>
+            <li>Remember: smaller q → better balance, but more draws needed and diminishing returns in high dimensions.</li>
+          </ul>
+        </div>
+
         <p>
-          In this example, we’ll use the Monte Carlo approach. Note that
+          In this example, we'll use the Monte Carlo approach. Note that
           <code>randomization_accept_prob</code> is set very low (0.0001) purely
           for demonstration.
         </p>
         <p>
           In high-dimensional planning, diagnostics can recommend extremely small q values. For example, in the
-          paper's illustrative case (d = 1000, n_T = n_C = 500, R^2 = 0.4, sigma = 1, |tau| = 0.2), the diagnostic
-          inversion implies q* approx 0.000012 (about 1.2e-5), or roughly 81,226 draws per accepted assignment. Holding
+          paper's illustrative case (d = 1000, n<sub>T</sub> = n<sub>C</sub> = 500, R² = 0.4, σ = 1, |τ| = 0.2), the diagnostic
+          inversion implies q* ≈ 0.000012 (about 1.2e-5), or roughly 81,226 draws per accepted assignment. Holding
           q fixed, more draws mainly increase the accepted pool (lowering the minimum attainable p-value) without
           changing expected balance.
         </p>
@@ -341,6 +373,12 @@ if(RunMainAnalysis){
           Next, we showcase a randomization-based inference procedure using
           fastrerandomize.
         </p>
+
+        <div class="note-box">
+          <h4>Why the randomization test conditions on acceptance</h4>
+          <p>Under rerandomization, treatment was assigned from the subset of assignments that passed the balance rule. To keep p-values calibrated, the randomization test must resample <strong>only from assignments that would also pass the same rule</strong>. This is what "design-respecting inference" means.</p>
+        </div>
+
         <p>
           Randomization tests are conditioned on the accepted assignments: the observed statistic is compared to
           its distribution over the accepted pool. As a result, p-values are lower-bounded by 1 / M_accept, and
@@ -433,6 +471,23 @@ if(RunMainAnalysis){
             interval (FI) for the treatment effect.
           </p>
         </div>
+      </div>
+
+      <!-- What to Report -->
+      <div id="what-to-report" class="section level2">
+        <h2>5. What to Report</h2>
+        <div class="reporting-guide">
+          <h4>Recommended reporting checklist</h4>
+          <ul>
+            <li><strong>Covariates used</strong> in the balance check and balance statistic (e.g., Mahalanobis M)</li>
+            <li><strong>Acceptance rule</strong> (M ≤ a) and either a or the implied acceptance probability q</li>
+            <li><strong>Number of candidate draws</strong> and the resulting accepted pool size</li>
+            <li><strong>That inference was conducted conditional on the acceptance rule</strong> (design-respecting inference)</li>
+          </ul>
+        </div>
+        <p>
+          Transparent reporting helps readers understand how the design affects inference and enables replication.
+        </p>
       </div>
 
       <!-- Conclusion -->
