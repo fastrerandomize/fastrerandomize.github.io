@@ -1010,6 +1010,11 @@ img[src*="#gh-dark-mode-only"] {
     background: var(--paper-strong);
     color: var(--ink);
   }
+
+  .concept-pair .concept-explainer h4,
+  .concept-pair .workflow-note h4 {
+    color: #ffffff;
+  }
 }
 
 /* Concept explainer boxes for educational content */
