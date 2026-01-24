@@ -959,6 +959,7 @@ footer {
     gap: 0;
     min-width: 200px;
     box-shadow: var(--shadow-md);
+    z-index: 20;
     overflow: hidden;
   }
 
