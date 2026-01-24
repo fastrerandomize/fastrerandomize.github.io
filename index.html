@@ -110,9 +110,9 @@
     <div class="concept-pair">
       <div class="concept-explainer animate-fade-in delay-250">
         <h4>What is rerandomization?</h4>
-        <p>Rerandomization is a <em>design-stage</em> procedure: repeatedly draw treatment assignments and <strong>keep only</strong> those that meet a pre-specified covariate-balance rule.</p>
-        <p>The default rule accepts an assignment when the <strong>Mahalanobis distance</strong> between treatment and control covariate means is below a cutoff: <strong>accept if M ≤ a</strong>.</p>
-        <p>The <strong>acceptance probability q</strong> is the fraction of random assignments that would pass this rule; <strong>smaller q</strong> means more stringent balance.</p>
+        <p>Rerandomization is a <em>design-stage</em> procedure: repeatedly draw treatment assignments and keep only those that meet a pre-specified covariate-balance rule.</p>
+        <p>The default rule accepts an assignment when the Mahalanobis distance between treatment and control covariate means is below a cutoff: accept if M ≤ a.</p>
+        <p>The acceptance probability q is the fraction of random assignments that would pass this rule; smaller q means more stringent balance.</p>
       </div>
 
       <div class="workflow-note animate-fade-in delay-300">
@@ -179,7 +179,7 @@
         in high-dimensional, stringent settings.
       </p>
       <div class="benchmark-note">
-        <strong>Benchmark note:</strong> Speedups depend on N, covariate dimension d, acceptance probability q, number of draws, and hardware. See <a href="https://arxiv.org/abs/2501.07642">the paper</a> for exact configurations.
+        Benchmark note: Speedups depend on N, covariate dimension d, acceptance probability q, number of draws, and hardware. See <a href="https://arxiv.org/abs/2501.07642">the paper</a> for exact configurations.
       </div>
       <div class="performance-grid">
         <figure class="figure-card">
@@ -204,9 +204,9 @@
       <h3>Minimal API example</h3>
       <p>
         Acceptance probability q sets stringency (how selective the acceptance rule is; lower q is more stringent).
-        Holding q fixed, drawing more candidates does <strong>not</strong> change expected balance (the rule hasn't changed).
-        It mainly (i) increases the size of the <strong>accepted pool</strong> used for design-respecting inference and
-        (ii) yields <strong>finer p-value resolution</strong> because randomization-test p-values are discrete when based
+        Holding q fixed, drawing more candidates does not change expected balance (the rule hasn't changed).
+        It mainly (i) increases the size of the accepted pool used for design-respecting inference and
+        (ii) yields finer p-value resolution because randomization-test p-values are discrete when based
         on a finite accepted set.
       </p>
       <p>
@@ -360,7 +360,7 @@ X <- <span class="code-keyword">matrix</span>(<span class="code-keyword">rnorm</
           <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
           <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
         </svg>
-        <strong>Share</strong>
+        Share
       </button>
     </div>
 

@@ -100,19 +100,19 @@
       <h1 class="title toc-ignore">FastRerandomize Package Tutorial</h1>
       <h4 class="date">2026-01-24</h4>
 
-      <div class="share-container">
-        <button id="share-button">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="18" cy="5" r="3"></circle>
-            <circle cx="6" cy="12" r="3"></circle>
-            <circle cx="18" cy="19" r="3"></circle>
-            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-          </svg>
-          <strong>Share</strong>
-        </button>
-      </div>
+        <div class="share-container">
+          <button id="share-button">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="18" cy="5" r="3"></circle>
+              <circle cx="6" cy="12" r="3"></circle>
+              <circle cx="18" cy="19" r="3"></circle>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+            </svg>
+            Share
+          </button>
+        </div>
 
       <script>
       (function() {
@@ -199,7 +199,7 @@
           <h3>Key Concepts</h3>
           <ul>
             <li><strong>Balance statistic M:</strong> Mahalanobis distance between treatment and control covariate mean vectors. Smaller M = better balance.</li>
-            <li><strong>Acceptance rule:</strong> keep an assignment if <strong>M ≤ a</strong> for a chosen cutoff a.</li>
+            <li><strong>Acceptance rule:</strong> keep an assignment if <code>M ≤ a</code> for a chosen cutoff a.</li>
             <li><strong>Acceptance probability q:</strong> q = P(M ≤ a) under complete randomization. Smaller q = stricter balance.</li>
             <li><strong>Accepted set:</strong> assignments that pass the rule; inference resamples from this set.</li>
             <li><strong>Shrinkage factor:</strong> how much rerandomization reduces covariate imbalance variance; larger reduction yields more precision when covariates predict outcomes.</li>
@@ -240,7 +240,7 @@
         <div class="checklist">
           <h4>Covariate prep checklist</h4>
           <ul>
-            <li>Use <strong>pre-treatment covariates only</strong>—never condition on post-treatment variables</li>
+            <li>Use pre-treatment covariates only—never condition on post-treatment variables</li>
             <li>Standardize/scale when appropriate (especially if covariates have very different units)</li>
             <li>Avoid severe collinearity (Mahalanobis distance relies on the covariance matrix being invertible)</li>
           </ul>
@@ -281,7 +281,7 @@ n_treated <- round(nrow(X)/2)
         <div class="guidance-box">
           <h4>Choosing stringency (q) in practice</h4>
           <ul>
-            <li>Start with a target acceptance probability (common: <strong>q = 0.01</strong> for moderate, <strong>q = 0.001</strong> for high stringency).</li>
+            <li>Start with a target acceptance probability (common: <code>q = 0.01</code> for moderate, <code>q = 0.001</code> for high stringency).</li>
             <li>Use <code>diagnose_rerandomization()</code> to check implied balance improvement and computational implications.</li>
             <li>Plan candidate draws for a sufficiently large accepted pool (aim for thousands of accepted assignments for stable inference).</li>
             <li>Remember: smaller q → better balance, but more draws needed and diminishing returns in high dimensions.</li>
@@ -376,7 +376,7 @@ if(RunMainAnalysis){
 
         <div class="note-box">
           <h4>Why the randomization test conditions on acceptance</h4>
-          <p>Under rerandomization, treatment was assigned from the subset of assignments that passed the balance rule. To keep p-values calibrated, the randomization test must resample <strong>only from assignments that would also pass the same rule</strong>. This is what "design-respecting inference" means.</p>
+          <p>Under rerandomization, treatment was assigned from the subset of assignments that passed the balance rule. To keep p-values calibrated, the randomization test must resample only from assignments that would also pass the same rule. This is what "design-respecting inference" means.</p>
         </div>
 
         <p>
