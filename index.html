@@ -60,7 +60,7 @@
       <div class="hero-content">
         <p class="eyebrow animate-fade-in">Rerandomization, accelerated</p>
         <h1 class="animate-fade-in delay-100">FastRerandomize</h1>
-        <p class="animate-fade-in delay-200">Batched candidate generation, key-only storage, and design-respecting inference—FastRerandomize combines them in a minimal, accelerated workflow. That structure drives order‑of‑magnitude speedups. It enables greater degrees of covariate balance in high-dimensional data. Precision gains come from reducing covariate imbalance at the design stage; they are largest when covariates strongly predict outcomes (high R²) and you can afford a stringent q.</p>
+        <p class="animate-fade-in delay-200">Batched candidate generation, key-only storage, and design-respecting inference—FastRerandomize combines them in a minimal, accelerated workflow. That structure drives order‑of‑magnitude speedups. It enables greater degrees of covariate balance in high-dimensional data. Better precision comes from selecting assignments with stronger covariate balance; the gains are biggest when those covariates are highly predictive of outcomes and when you can afford to be very selective. In high-dimensional settings, that selectivity often needs to be even stricter to see the same gains.</p>
 
         <div class="concept-explainer animate-fade-in delay-250">
           <h4>What is rerandomization?</h4>
@@ -160,7 +160,7 @@
           <i class="fas fa-key"></i>
         </div>
         <h3>Key-only storage</h3>
-        <p>Store compact PRNG keys and regenerate full assignments on demand—dramatically reducing memory. This allows massive accepted pools without memory blowups.</p>
+        <p>Store compact PRNG keys and regenerate full assignments on demand—dramatically reducing memory requirements. This allows massive accepted pools without memory blowups.</p>
       </div>
     </section>
 
