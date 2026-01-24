@@ -5,501 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>About - fastrerandomize</title>
   
-  <!-- Google Fonts: Manrope for headings, Inter for body text -->
+    <!-- Google Fonts: Space Grotesk + IBM Plex Sans + IBM Plex Mono -->
   <link rel="preconnect" href="https://fonts.gstatic.com"/>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+
 
   <!-- Font Awesome Icons -->
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
   />
+  <link rel="stylesheet" href="styles.css"/>
 
-  <style>
-    :root {
-      /* Color System */
-      --color-primary: #3B82F6;
-      --color-primary-dark: #1D4ED8;
-      --color-primary-light: #60A5FA;
-      --color-secondary: #10B981;
-      --color-accent: #8B5CF6;
-      --color-dark: #1E293B;
-      --color-darker: #0F172A;
-      --color-light: #F3F4F6;
-      --color-lighter: #F9FAFB;
-      
-      /* Spacing System */
-      --space-xs: 0.25rem;
-      --space-sm: 0.5rem;
-      --space-md: 1rem;
-      --space-lg: 1.5rem;
-      --space-xl: 2rem;
-      --space-xxl: 3rem;
-      
-      /* Shadow System */
-      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-      --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.08);
-      
-      /* Border Radius */
-      --radius-sm: 0.25rem;
-      --radius-md: 0.5rem;
-      --radius-lg: 0.75rem;
-      --radius-xl: 1rem;
-      
-      /* Transitions */
-      --transition-fast: 150ms ease;
-      --transition-normal: 300ms ease;
-      --transition-slow: 500ms ease;
-    }
-
-    /* 
-      Base Styles
-      -----------
-    */
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", 
-                  "Roboto", "Helvetica Neue", Arial, sans-serif;
-      color: #111827;
-      line-height: 1.7;
-      background: transparent;
-      scroll-behavior: smooth;
-    }
-    
-    #background-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: -999;
-      width: 100%;
-      height: 100%;
-      display: block;
-      background: linear-gradient(135deg, var(--color-darker) 0%, var(--color-dark) 100%);
-    }
-
-    a {
-      text-decoration: none;
-      color: inherit;
-      transition: color var(--transition-fast);
-    }
-
-    h1, h2, h3, h4, h5, h6 {
-      font-family: 'Manrope', sans-serif;
-      font-weight: 700;
-      line-height: 1.3;
-      margin-top: 0;
-      color: #fff; /* Headings on dark background */
-    }
-
-    .container {
-      width: 100%;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 var(--space-md);
-    }
-
-    /*
-      Header + Navigation 
-      --------------------
-    */
-    header {
-      background: linear-gradient(135deg, var(--color-dark) 0%, var(--color-primary-dark) 100%);
-      color: #FFF;
-      position: sticky;
-      top: 0;
-      z-index: 999;
-      box-shadow: var(--shadow-md);
-    }
-    
-    nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 1rem;
-      position: relative;
-    }
-    
-    .logo {
-      font-family: 'Manrope', sans-serif;
-      font-size: 1.4rem;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      transition: all var(--transition-normal);
-    }
-    
-    .logo:hover {
-      transform: scale(1.05);
-      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-    }
-    
-    nav ul {
-      list-style-type: none;
-      display: flex;
-      gap: 1.25rem;
-      margin: 0;
-      padding: 0;
-    }
-    
-    nav ul li {
-      position: relative;
-    }
-    
-    nav ul li a {
-      font-weight: 500;
-      font-size: 0.95rem;
-      padding: 0.5rem 0.75rem;
-      border-radius: var(--radius-md);
-      transition: all var(--transition-normal);
-      position: relative;
-      color: #fff; /* Link color */
-    }
-    
-    nav ul li a::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 0;
-      height: 2px;
-      background-color: white;
-      transition: width var(--transition-normal);
-    }
-    
-    nav ul li a:hover {
-      background-color: rgba(255, 255, 255, 0.1);
-    }
-    
-    nav ul li a:hover::after {
-      width: 80%;
-    }
-
-    /* Hamburger lines (hidden on larger screens) */
-    .menu-toggle {
-      display: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-    }
-    .hamburger-line {
-      display: block;
-      width: 25px;
-      height: 3px;
-      background-color: #fff;
-      margin: 5px 0;
-      transition: 0.3s ease;
-    }
-
-    /* Show/hide menu on narrow screens */
-    @media (max-width: 768px) {
-      nav {
-        position: relative;
-      }
-      .menu-toggle {
-        display: inline-block;
-      }
-      nav ul {
-        display: none;
-        position: absolute;
-        top: 100%;
-        right: 0;
-        background-color: #1E293B;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        flex-direction: column;
-        gap: 0;
-        width: 220px;
-        border-radius: var(--radius-md);
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        overflow: hidden;
-        transform: translateY(10px);
-        opacity: 0;
-        transition: all var(--transition-normal);
-      }
-
-      nav ul li a {
-        display: block;
-        color: #fff;
-        padding: 0.75rem 1.25rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      }
-      
-      nav.open ul {
-        display: flex;
-        transform: translateY(0);
-        opacity: 1;
-        z-index: 1000;
-      }
-    }
-
-    /* Search Container (optional, matching index page) */
-    .search-container {
-      position: relative;
-      margin-left: var(--space-md);
-    }
-
-    .search-container form {
-      margin: 0;
-      padding: 0;
-      display: flex;
-      align-items: center;
-    }
-
-    .search-input {
-      background-color: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: white;
-      padding: 0.5rem 0.75rem 0.5rem 2.25rem;
-      border-radius: var(--radius-md);
-      font-size: 0.875rem;
-      transition: all var(--transition-normal);
-      width: 150px;
-    }
-
-    .search-input:focus {
-      outline: none;
-      background-color: rgba(255, 255, 255, 0.15);
-      border-color: rgba(255, 255, 255, 0.3);
-      width: 200px;
-    }
-
-    .search-icon {
-      position: absolute;
-      left: 0.75rem;
-      top: 50%;
-      transform: translateY(-50%);
-      color: rgba(255, 255, 255, 0.7);
-      font-size: 0.875rem;
-      pointer-events: none;
-    }
-
-    .search-results {
-      position: absolute;
-      top: 100%;
-      right: 0;
-      width: 300px;
-      max-height: 400px;
-      overflow-y: auto;
-      background-color: var(--color-dark);
-      border-radius: var(--radius-md);
-      box-shadow: var(--shadow-lg);
-      z-index: 1000;
-      margin-top: 0.5rem;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      display: none;
-      padding: 0.5rem 0;
-      scroll-behavior: smooth;
-    }
-
-    .search-result-item {
-      display: block;
-      padding: 0.75rem 1rem;
-      color: white;
-      text-decoration: none;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      transition: background-color var(--transition-normal);
-    }
-
-    .search-result-item:last-child {
-      border-bottom: none;
-    }
-
-    .search-result-item:hover,
-    .search-result-item:focus {
-      background-color: rgba(255, 255, 255, 0.1);
-      outline: none;
-    }
-
-    /* Main Content */
-    main {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 2rem 1rem;
-      position: relative;
-      z-index: 2;
-    }
-
-    .page-title {
-      text-align: center;
-      margin-bottom: 1.5rem;
-    }
-    .page-title h2 {
-      font-size: 2rem;
-      color: #fff;
-      margin-bottom: 0.5rem;
-    }
-    .page-title p {
-      font-size: 1rem;
-      color: rgba(255, 255, 255, 0.8);
-    }
-
-    /* About Grid (similar to "features" section from index) */
-    .about-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-      margin-bottom: 3rem;
-    }
-    .about-member {
-      background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: var(--radius-lg);
-      padding: 1.5rem;
-      transition: all var(--transition-normal);
-      backdrop-filter: blur(10px);
-      box-shadow: var(--shadow-card);
-      text-align: center;
-      overflow: hidden;
-    }
-    .about-member:hover {
-      transform: translateY(-10px);
-      box-shadow: var(--shadow-lg);
-    }
-    .about-member img {
-      width: 120px;
-      height: 160px;
-      object-fit: cover;
-      border-radius: var(--radius-md);
-      margin-bottom: 1rem;
-    }
-    .about-member h3 {
-      font-size: 1.125rem;
-      margin-bottom: 0.5rem;
-      color: #fff;
-      font-weight: 600;
-    }
-    .about-member p {
-      color: rgba(255, 255, 255, 0.8);
-      font-size: 0.9rem;
-      margin-bottom: 0.25rem;
-    }
-    .about-member a {
-      color: var(--color-primary-light);
-      text-decoration: underline;
-      font-weight: 500;
-    }
-    .about-member a:hover {
-      color: #fff;
-    }
-
-    /* Share Button (matching index page style) */
-    .share-container {
-      text-align: center;
-      margin: 2rem 0;
-    }
-    #share-button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      padding: 0.75rem 1.25rem;
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: white;
-      background-color: var(--color-dark);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: var(--radius-md);
-      cursor: pointer;
-      transition: all var(--transition-normal);
-    }
-    #share-button:hover {
-      background-color: rgba(255, 255, 255, 0.1);
-    }
-    #share-button svg {
-      transition: transform var(--transition-normal);
-    }
-    #share-button:hover svg {
-      transform: rotate(15deg);
-    }
-
-    /*
-      Footer
-    */
-    footer {
-      background: linear-gradient(to top, var(--color-darker) 0%, transparent 100%);
-      color: rgba(255, 255, 255, 0.8);
-      text-align: center;
-      padding: 3rem 1rem;
-      margin-top: 3rem;
-      position: relative;
-    }
-    
-    .footer-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 2rem;
-      text-align: left;
-    }
-    
-    .footer-column h4 {
-      color: white;
-      margin-bottom: 1rem;
-      font-size: 1.1rem;
-    }
-    
-    .footer-links {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    
-    .footer-links li {
-      margin-bottom: 0.75rem;
-    }
-    
-    .footer-links a {
-      color: rgba(255, 255, 255, 0.6);
-      transition: color var(--transition-normal);
-      font-size: 0.9rem;
-    }
-    
-    .footer-links a:hover {
-      color: white;
-    }
-    
-    .footer-bottom {
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      margin-top: 2rem;
-      padding-top: 2rem;
-      text-align: center;
-      color: rgba(255, 255, 255, 0.6);
-      font-size: 0.9rem;
-    }
-
-    /* Raining Vectors Background from index */
-    #background-canvas {
-      z-index: -1;
-    }
-    main, footer, header, section {
-      background-color: transparent;
-      position: relative;
-      z-index: 1;
-    }
-
-    /* Animations for background and minor transitions can remain the same */
-    @keyframes shine-bg {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
-    }
-
-  </style>
 </head>
 
 <body>
@@ -526,7 +43,7 @@
         <li><a href="install.html">Install</a></li>
         <li><a href="https://github.com/cjerzak/fastrerandomize-software/blob/main/fastrerandomize.pdf?raw=true">Documentation</a></li>
         <li><a href="tutorials.html">Tutorials</a></li>
-        <li><a href="aboutus.html">About Us</a></li>
+        <li><a href="aboutus.html" class="active" aria-current="page">About</a></li>
       </ul>
 
       <!-- Optional Search Container -->
@@ -549,9 +66,11 @@
   <!-- Main Content -->
   <main>
     <div class="page-title">
-      <h2>About Us</h2>
-      <p> The team behind <strong>fastrerandomize</strong>. 
-        Our goal is to push the boundaries of fast, accelerated rerandomization to serve even the largest experimental designs.
+      <p class="eyebrow">About</p>
+      <h2>The FastRerandomize team</h2>
+      <p>
+        We build hardware-aware software for fast rerandomization, pairing accelerated compute with a minimal interface.
+        Our SoftwareX 2026 paper documents the approach and benchmarks.
       </p>
     </div>
 
@@ -590,6 +109,23 @@
         <h3>Fucheng Warren Zhu</h3>
         <p>Student at Harvard University</p>
         <p>Email: wzhu [at] college [dot] harvard [dot] edu</p>
+      </div>
+    </section>
+
+    <section class="section-card animate-fade-in">
+      <p class="eyebrow">Citation</p>
+      <h3>FastRerandomize in SoftwareX (2026)</h3>
+      <p>
+        Connor T. Jerzak, Rebecca Goldstein, Aniket Kamat, and Fucheng Warren Zhu.
+        FastRerandomize: An R Package for Fast Rerandomization Using Accelerated Computing.
+      </p>
+      <div class="citation-card">
+        <pre><code>@article{jerzak2025fastrerandomize,
+  title={FastRerandomize: An R Package for Fast Rerandomization Using Accelerated Computing},
+  author={Jerzak, Connor T. and Rebecca Goldstein and Aniket Kamat and Fucheng Warren Zhu},
+  journal={SoftwareX},
+  year={2026}
+}</code></pre>
       </div>
     </section>
 
@@ -669,7 +205,7 @@
     </div>
     
     <div class="footer-bottom">
-      <p>&copy; 2025 fastrerandomize developers</p>
+      <p>&copy; 2026 fastrerandomize developers</p>
     </div>
   </footer>
 
@@ -689,15 +225,8 @@
 
       function showCopyNotification() {
         const notification = document.createElement('div');
+        notification.className = 'copy-notification';
         notification.innerText = 'Copied to clipboard';
-        notification.style.position = 'fixed';
-        notification.style.bottom = '20px';
-        notification.style.right = '20px';
-        notification.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
-        notification.style.color = '#fff';
-        notification.style.padding = '8px 12px';
-        notification.style.borderRadius = '4px';
-        notification.style.zIndex = '9999';
         document.body.appendChild(notification);
         setTimeout(() => {
           notification.remove();
@@ -755,6 +284,7 @@
       '∞','π','ξ','ζ','γ','ε','∛','∝','∠','∧','∨','∩','∪','≈','≠','≤','≥',
       '≡','∈','∉','⊂','⊃','⊆','⊇','⊕','⊗','⊥','Z','P','R','N'
     ];
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     let width, height;
     let columns;
     let drops = [];
@@ -778,17 +308,17 @@
 
       for (let i = 0; i < columns; i++) {
         drops[i] = Math.random() * -100;
-        sizes[i] = 12 + Math.floor(Math.random() * 12);
-        speeds[i] = 0.1 + Math.random() * 0.3;
-        opacities[i] = 0.1 + Math.random() * 0.3;
-        hues[i] = 200 + Math.random() * 40;
+        sizes[i] = 10 + Math.floor(Math.random() * 10);
+        speeds[i] = 0.05 + Math.random() * 0.2;
+        opacities[i] = 0.04 + Math.random() * 0.1;
+        hues[i] = 210 + Math.random() * 20;
       }
     }
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
     function draw() {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillStyle = prefersDark ? 'rgba(12, 13, 16, 0.12)' : 'rgba(247, 246, 242, 0.08)';
       ctx.fillRect(0, 0, width, height);
 
       for (let i = 0; i < drops.length; i++) {
@@ -797,18 +327,19 @@
         const y = drops[i] * 20;
 
         ctx.font = `${sizes[i]}px monospace`;
-        ctx.fillStyle = `hsla(${hues[i]}, 80%, 60%, ${opacities[i]})`;
+        const lightness = prefersDark ? 70 : 30;
+        ctx.fillStyle = `hsla(${hues[i]}, 40%, ${lightness}%, ${opacities[i]})`;
         ctx.fillText(text, x, y);
 
         drops[i] += speeds[i];
         if (y > height && Math.random() > 0.99) {
           drops[i] = -1;
-          speeds[i] = 0.1 + Math.random() * 0.3;
-          opacities[i] = 0.1 + Math.random() * 0.3;
+          speeds[i] = 0.05 + Math.random() * 0.2;
+          opacities[i] = 0.04 + Math.random() * 0.1;
         }
       }
     }
-    setInterval(draw, 33);
+    setInterval(draw, 60);
 
     // Basic search functionality (optional)
     (function() {
@@ -829,7 +360,7 @@
           url: "tutorials.html"
         },
         {
-          title: "About Us",
+          title: "About",
           description: "Information about the developers and contributors",
           url: "aboutus.html"
         },
@@ -841,17 +372,17 @@
         {
           title: "CRAN Package",
           description: "Official R package distribution",
-          url: "https://cran.rstudio.com/web/packages/fastrerandomize/index.html"
+          url: "https://cran.r-project.org/package=fastrerandomize"
         },
         {
-          title: "Benchmarks",
-          description: "Performance comparisons and metrics",
-          url: "figures/benchmarks.png"
+          title: "Performance",
+          description: "CPU vs GPU benchmarks and scaling results",
+          url: "index.html#performance"
         },
         {
-          title: "Examples",
-          description: "Usage examples and demos",
-          url: "tutorials.html"
+          title: "Citation",
+          description: "SoftwareX reference and BibTeX entry",
+          url: "index.html#citation"
         }
       ];
 
@@ -879,17 +410,15 @@
             resultItem.href = result.url;
             resultItem.className = 'search-result-item';
             resultItem.innerHTML = `
-              <div style="font-weight: 600; margin-bottom: 0.25rem;">${result.title}</div>
-              <div style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.7);">${result.description}</div>
+              <div class="search-result-title">${result.title}</div>
+              <div class="search-result-desc">${result.description}</div>
             `;
             searchResults.appendChild(resultItem);
           });
         } else {
           searchResults.style.display = 'block';
           searchResults.innerHTML = `
-            <div style="padding: 1rem; color: rgba(255, 255, 255, 0.7); text-align: center;">
-              No results found for "${query}"
-            </div>
+            <div class="search-empty">No results found for "${query}"</div>
           `;
         }
       }

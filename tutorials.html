@@ -5,15 +5,13 @@
   <meta name="generator" content="pandoc" />
   <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="date" content="2025-01-22" />
+  <meta name="date" content="2026-01-24" />
   <title>Tutorials | fastrerandomize</title>
 
-  <!-- Google Fonts: Manrope for headings, Inter for body text -->
+    <!-- Google Fonts: Space Grotesk + IBM Plex Sans + IBM Plex Mono -->
   <link rel="preconnect" href="https://fonts.gstatic.com"/>
-  <link 
-    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+
 
   <!-- Font Awesome Icons (optional - if using icons) -->
   <link
@@ -34,464 +32,9 @@
       }
     });
   </script>
+  <link rel="stylesheet" href="styles.css"/>
 
-  <style>
-    /* 
-      ----------------------------------------------------------
-      Shared styling / color system (matching index.html)
-      ----------------------------------------------------------
-    */
-    :root {
-      /* Color System */
-      --color-primary: #3B82F6;       /* primary: Tailwind's "blue-500" */
-      --color-primary-dark: #1D4ED8;  /* "blue-700" */
-      --color-primary-light: #60A5FA; /* "blue-400" */
-      --color-secondary: #10B981;     /* "emerald-500" */
-      --color-accent: #8B5CF6;        /* "violet-500" */
-      --color-dark: #1E293B;         /* "gray-800" or "slate-800" */
-      --color-darker: #0F172A;       /* "gray-900" or "slate-900" */
-      --color-light: #F3F4F6;        /* "gray-100" or "slate-100" */
-      --color-lighter: #F9FAFB;      /* "gray-50"  or "slate-50" */
-
-      /* Spacing System */
-      --space-xs: 0.25rem;
-      --space-sm: 0.5rem;
-      --space-md: 1rem;
-      --space-lg: 1.5rem;
-      --space-xl: 2rem;
-      --space-xxl: 3rem;
-
-      /* Shadow System */
-      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-                   0 2px 4px -1px rgba(0, 0, 0, 0.06);
-      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
-                   0 4px 6px -2px rgba(0, 0, 0, 0.05);
-      --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.08);
-
-      /* Border Radius */
-      --radius-sm: 0.25rem;
-      --radius-md: 0.5rem;
-      --radius-lg: 0.75rem;
-      --radius-xl: 1rem;
-
-      /* Transitions */
-      --transition-fast: 150ms ease;
-      --transition-normal: 300ms ease;
-      --transition-slow: 500ms ease;
-    }
-
-    /*
-      Base Styles
-    */
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 
-                   "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
-      color: #111827; /* near-black text */
-      line-height: 1.6;
-      background: transparent; /* We'll use a background-canvas below */
-      scroll-behavior: smooth;
-    }
-
-    a {
-      text-decoration: none;
-      color: inherit;
-      transition: color var(--transition-fast);
-    }
-    
-    /* Canvas behind everything */
-    #background-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: -999;
-      width: 100%;
-      height: 100%;
-      display: block;
-      background: linear-gradient(
-        135deg,
-        var(--color-darker) 0%,
-        var(--color-dark) 100%
-      );
-    }
-
-    /* 
-      Header + Nav
-    */
-    header {
-      background: linear-gradient(
-        135deg,
-        var(--color-dark) 0%,
-        var(--color-primary-dark) 100%
-      );
-      color: #fff;
-      position: sticky;
-      top: 0;
-      z-index: 999;
-      box-shadow: var(--shadow-md);
-    }
-
-    nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 1rem;
-      position: relative;
-    }
-
-    .logo {
-      font-family: 'Manrope', sans-serif;
-      font-size: 1.4rem;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      transition: all var(--transition-normal);
-    }
-    .logo a {
-      color: #fff;
-    }
-    .logo:hover {
-      transform: scale(1.05);
-      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-    }
-
-    nav ul {
-      list-style-type: none;
-      display: flex;
-      gap: 1.25rem;
-      margin: 0;
-      padding: 0;
-    }
-    nav ul li a {
-      font-weight: 500;
-      font-size: 0.95rem;
-      padding: 0.5rem 0.75rem;
-      border-radius: var(--radius-md);
-      transition: all var(--transition-normal);
-      position: relative;
-      color: #fff; /* Light text on dark background */
-    }
-    nav ul li a:hover {
-      background-color: rgba(255, 255, 255, 0.1);
-    }
-
-    /* Hamburger lines default hidden on large screens */
-    .menu-toggle {
-      display: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-    }
-    .hamburger-line {
-      display: block;
-      width: 25px;
-      height: 3px;
-      background-color: #fff;
-      margin: 5px 0;
-      transition: 0.3s ease;
-    }
-
-    /* Search Container (as in index) */
-    .search-container {
-      position: relative;
-      margin-left: var(--space-md);
-    }
-    .search-container form {
-      margin: 0;
-      padding: 0;
-      display: flex;
-      align-items: center;
-    }
-    .search-input {
-      background-color: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: white;
-      padding: 0.5rem 0.75rem 0.5rem 2.25rem;
-      border-radius: var(--radius-md);
-      font-size: 0.875rem;
-      transition: all var(--transition-normal);
-      width: 150px;
-    }
-    .search-input:focus {
-      outline: none;
-      background-color: rgba(255, 255, 255, 0.15);
-      border-color: rgba(255, 255, 255, 0.3);
-      width: 200px;
-    }
-    .search-icon {
-      position: absolute;
-      left: 0.75rem;
-      top: 50%;
-      transform: translateY(-50%);
-      color: rgba(255, 255, 255, 0.7);
-      font-size: 0.875rem;
-      pointer-events: none;
-    }
-
-    .search-results {
-      position: absolute;
-      top: 100%;
-      right: 0;
-      width: 300px;
-      max-height: 400px;
-      overflow-y: auto;
-      background-color: var(--color-dark);
-      border-radius: var(--radius-md);
-      box-shadow: var(--shadow-lg);
-      z-index: 1000;
-      margin-top: 0.5rem;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      display: none;
-      padding: 0.5rem 0;
-    }
-    .search-result-item {
-      display: block;
-      padding: 0.75rem 1rem;
-      color: white;
-      text-decoration: none;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      transition: background-color var(--transition-normal);
-    }
-    .search-result-item:hover,
-    .search-result-item:focus {
-      background-color: rgba(255, 255, 255, 0.1);
-      outline: none;
-    }
-
-    @media (max-width: 992px) {
-      .search-container {
-        display: none;
-      }
-    }
-    @media (max-width: 768px) {
-      nav {
-        position: relative;
-      }
-      /* Show the hamburger button */
-      .menu-toggle {
-        display: inline-block;
-      }
-      /* Hide the menu by default on mobile */
-      nav ul {
-        display: none;
-        position: absolute;
-        top: 100%;
-        right: 0;
-        background-color: #1E293B;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        flex-direction: column;
-        gap: 0;
-        width: 220px;
-        border-radius: var(--radius-md);
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        overflow: hidden;
-        transform: translateY(10px);
-        opacity: 0;
-        transition: all var(--transition-normal);
-      }
-      nav ul li a {
-        display: block;
-        padding: 0.75rem 1.25rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        color: white;
-        font-weight: 600;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-      }
-      nav.open ul {
-        display: flex;
-        transform: translateY(0);
-        opacity: 1;
-        z-index: 1000;
-      }
-    }
-
-    /*
-      Main Content
-    */
-    main {
-      max-width: 1200px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-      position: relative;
-      z-index: 2; /* So it appears above the #background-canvas */
-      color: #fff;  /* We'll use light text to match the dark background */
-    }
-
-    .tutorial-content {
-      background: rgba(255, 255, 255, 0.02);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-card);
-      padding: 2rem;
-      margin-bottom: 2rem;
-    }
-
-    /*
-      Footer
-    */
-    footer {
-      background: linear-gradient(
-        to top,
-        var(--color-darker) 0%,
-        transparent 100%
-      );
-      color: rgba(255, 255, 255, 0.8);
-      text-align: center;
-      padding: 1rem;
-      margin-top: 2rem;
-      position: relative;
-      z-index: 2;
-      font-size: 0.9rem;
-    }
-
-    footer p {
-      margin: 0;
-      color: rgba(255, 255, 255, 0.8);
-    }
-
-    /*
-      Pandoc & Code Block Styles
-      (Merged from original tutorial styling + site theme)
-    */
-
-    /* Let headings use Manrope for consistency with index page */
-    h1, h2, h3, h4, h5, h6 {
-      font-family: 'Manrope', sans-serif;
-      color: #fff;
-      margin-top: 1.5rem;
-      margin-bottom: 0.75rem;
-    }
-    /* Title and date specifically from Pandoc output */
-    h1.title {
-      font-size: 2rem !important;
-      margin-top: 1rem;
-      margin-bottom: 0.5rem;
-    }
-    h4.date {
-      font-size: 0.95rem;
-      font-weight: 400;
-      color: rgba(255, 255, 255, 0.6);
-      margin-bottom: 1rem;
-    }
-    h2 {
-      font-size: 1.375rem;
-      font-weight: 700;
-      border-bottom: 2px solid rgba(255,255,255,0.1);
-      padding-bottom: 0.25rem;
-    }
-    h3 {
-      font-size: 1.125rem;
-      font-weight: 600;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
-    p {
-      margin-bottom: 1rem;
-      color: rgba(255, 255, 255, 0.9);
-    }
-    ul {
-      margin: 0.5rem 1.5rem;
-      list-style: disc;
-      color: rgba(255, 255, 255, 0.9);
-    }
-    ul li {
-      margin-bottom: 0.5rem;
-    }
-    blockquote {
-      background-color: rgba(255, 255, 255, 0.05);
-      padding: 0.5rem 1rem;
-      border-radius: var(--radius-md);
-      margin: 1rem 0;
-      border-left: 4px solid #9CA3AF;
-    }
-    table {
-      border-collapse: collapse;
-      margin: 1.5rem 0;
-      width: 100%;
-      color: #fff;
-    }
-    table th, table td {
-      border: 1px solid #DDDDDD;
-      padding: 0.75rem;
-    }
-    table thead {
-      background-color: rgba(255,255,255,0.1);
-    }
-    hr {
-      border: none;
-      border-top: 1px solid rgba(255,255,255,0.1);
-      margin: 2rem 0;
-    }
-
-    /* Code blocks matching the “index” dark style but preserving pandoc classes */
-    code {
-      font-family: "Source Code Pro", Consolas, monospace;
-      font-size: 0.9rem;
-      background-color: #1E1E1E;
-      color: #D4D4D4;
-      border-radius: 3px;
-      padding: 0.1rem 0.3rem;
-    }
-    pre {
-      background-color: #1E1E1E;
-      color: #D4D4D4;
-      padding: 1rem;
-      margin: 1em 0;
-      border-radius: var(--radius-md);
-      overflow-x: auto;
-    }
-    pre > code.sourceCode {
-      white-space: pre;
-      position: relative;
-    }
-    pre > code.sourceCode > span {
-      display: inline-block;
-      line-height: 1.25;
-    }
-    pre > code.sourceCode > span:empty {
-      height: 1.2em;
-    }
-    .highlight {
-      background-color: #C3C5C8;
-    }
-
-    /*
-      Keyframes for background effects, etc.
-      (Same as index)
-    */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
-    }
-    @keyframes shine-bg {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    @keyframes glow {
-      0% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
-      50% { box-shadow: 0 0 20px rgba(255, 165, 0, 0.8); }
-      100% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
-    }
-
-    /* Simple fade/pulse for .animate-fade-in if needed */
-    .animate-fade-in {
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeIn 1s ease-out forwards;
-    }
-  </style>
-
-  <!-- Dynamically load MathJax (if needed) -->
+<!-- Dynamically load MathJax (if needed) -->
   <script>
     (function () {
       var script = document.createElement("script");
@@ -529,8 +72,8 @@
             Documentation
           </a>
         </li>
-        <li><a href="tutorials.html" style="background-color: rgba(255,255,255,0.2)">Tutorials</a></li>
-        <li><a href="aboutus.html">About Us</a></li>
+        <li><a href="tutorials.html" class="active" aria-current="page">Tutorials</a></li>
+        <li><a href="aboutus.html">About</a></li>
       </ul>
 
       <!-- Search Container (Same logic as index) -->
@@ -555,26 +98,27 @@
     <div class="tutorial-content animate-fade-in">
       <!-- Pandoc-generated Title & Date -->
       <h1 class="title toc-ignore">FastRerandomize Package Tutorial</h1>
-      <h4 class="date">2025-01-22</h4>
+      <h4 class="date">2026-01-24</h4>
 
-      <!-- BEGIN: Insanely Great Native Share Button -->
-      <div style="text-align: left; margin: 1em 0;">
-        <button id="share-button" 
-                style="
-                  display: inline-flex;
-                  align-items: center;
-                  justify-content: center;
-                  gap: 8px; 
-                  padding: 5px 10px;
-                  font-size: 16px;
-                  font-weight: normal;
-                  color: #000;
-                  background-color: #fff;
-                  border: 1px solid #ddd;
-                  border-radius: 6px;
-                  cursor: pointer;
-                  box-shadow: 0 1.5px 0 #000;
-                ">
+      <div class="section-card animate-fade-in">
+        <p class="eyebrow">Citation</p>
+        <p>
+          Connor T. Jerzak, Rebecca Goldstein, Aniket Kamat, and Fucheng Warren Zhu.
+          FastRerandomize: An R Package for Fast Rerandomization Using Accelerated Computing.
+          SoftwareX, 2026.
+        </p>
+        <div class="citation-card">
+          <pre><code>@article{jerzak2025fastrerandomize,
+  title={FastRerandomize: An R Package for Fast Rerandomization Using Accelerated Computing},
+  author={Jerzak, Connor T. and Rebecca Goldstein and Aniket Kamat and Fucheng Warren Zhu},
+  journal={SoftwareX},
+  year={2026}
+}</code></pre>
+        </div>
+      </div>
+
+      <div class="share-container">
+        <button id="share-button">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="18" cy="5" r="3"></circle>
@@ -593,15 +137,8 @@
 
         function showCopyNotification() {
           const notification = document.createElement('div');
+          notification.className = 'copy-notification';
           notification.innerText = 'Copied to clipboard';
-          notification.style.position = 'fixed';
-          notification.style.bottom = '20px';
-          notification.style.right = '20px';
-          notification.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
-          notification.style.color = '#fff';
-          notification.style.padding = '8px 12px';
-          notification.style.borderRadius = '4px';
-          notification.style.zIndex = '9999';
           document.body.appendChild(notification);
 
           setTimeout(() => {
@@ -922,7 +459,7 @@ if(RunMainAnalysis){
 
   <!-- Footer -->
   <footer>
-    <p>&copy; 2025 fastrerandomize developers</p>
+    <p>&copy; 2026 fastrerandomize developers</p>
   </footer>
 
   <!-- Scripts -->
@@ -943,6 +480,7 @@ if(RunMainAnalysis){
       '∞','π','ξ','ζ','γ','ε','∛','∝','∠','∧','∨','∩','∪','≈','≠','≤','≥',
       '≡','∈','∉','⊂','⊃','⊆','⊇','⊕','⊗','⊥','Z','P','R','N'
     ];
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 
     let width, height, columns;
     let drops = [], sizes = [], speeds = [], opacities = [], hues = [];
@@ -961,17 +499,17 @@ if(RunMainAnalysis){
       hues = [];
       for (let i = 0; i < columns; i++) {
         drops[i] = Math.random() * -100;
-        sizes[i] = 12 + Math.floor(Math.random() * 12);
-        speeds[i] = 0.1 + Math.random() * 0.3;
-        opacities[i] = 0.1 + Math.random() * 0.3;
-        hues[i] = 200 + Math.random() * 40;
+        sizes[i] = 10 + Math.floor(Math.random() * 10);
+        speeds[i] = 0.05 + Math.random() * 0.2;
+        opacities[i] = 0.04 + Math.random() * 0.1;
+        hues[i] = 210 + Math.random() * 20;
       }
     }
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
     function draw() {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillStyle = prefersDark ? 'rgba(12, 13, 16, 0.12)' : 'rgba(247, 246, 242, 0.08)';
       ctx.fillRect(0, 0, width, height);
 
       for (let i = 0; i < drops.length; i++) {
@@ -979,17 +517,18 @@ if(RunMainAnalysis){
         const x = i * 20;
         const y = drops[i] * 20;
         ctx.font = `${sizes[i]}px monospace`;
-        ctx.fillStyle = `hsla(${hues[i]}, 80%, 60%, ${opacities[i]})`;
+        const lightness = prefersDark ? 70 : 30;
+        ctx.fillStyle = `hsla(${hues[i]}, 40%, ${lightness}%, ${opacities[i]})`;
         ctx.fillText(text, x, y);
         drops[i] += speeds[i];
         if (y > height && Math.random() > 0.99) {
           drops[i] = -1;
-          speeds[i] = 0.1 + Math.random() * 0.3;
-          opacities[i] = 0.1 + Math.random() * 0.3;
+          speeds[i] = 0.05 + Math.random() * 0.2;
+          opacities[i] = 0.04 + Math.random() * 0.1;
         }
       }
     }
-    setInterval(draw, 33);
+    setInterval(draw, 60);
 
     // 3) SEARCH FUNCTIONALITY
     (function() {
@@ -1010,7 +549,7 @@ if(RunMainAnalysis){
           url: "tutorials.html"
         },
         {
-          title: "About Us",
+          title: "About",
           description: "Information about the developers and contributors",
           url: "aboutus.html"
         },
@@ -1022,7 +561,17 @@ if(RunMainAnalysis){
         {
           title: "CRAN Package",
           description: "Official R package distribution",
-          url: "https://cran.rstudio.com/web/packages/fastrerandomize/index.html"
+          url: "https://cran.r-project.org/package=fastrerandomize"
+        },
+        {
+          title: "Performance",
+          description: "CPU vs GPU benchmarks and scaling results",
+          url: "index.html#performance"
+        },
+        {
+          title: "Citation",
+          description: "SoftwareX reference and BibTeX entry",
+          url: "index.html#citation"
         }
       ];
 
@@ -1050,19 +599,15 @@ if(RunMainAnalysis){
             resultItem.href = result.url;
             resultItem.className = 'search-result-item';
             resultItem.innerHTML = `
-              <div style="font-weight: 600; margin-bottom: 0.25rem;">${result.title}</div>
-              <div style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.7);">
-                ${result.description}
-              </div>
+              <div class="search-result-title">${result.title}</div>
+              <div class="search-result-desc">${result.description}</div>
             `;
             searchResults.appendChild(resultItem);
           });
         } else {
           searchResults.style.display = 'block';
           searchResults.innerHTML = `
-            <div style="padding: 1rem; color: rgba(255, 255, 255, 0.7); text-align: center;">
-              No results found for "${query}"
-            </div>
+            <div class="search-empty">No results found for "${query}"</div>
           `;
         }
       }

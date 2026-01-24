@@ -5,1090 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>fastrerandomize - Fast Rerandomization Using Accelerated Computing</title>
   
-  <!-- Google Fonts: Manrope for headings, Inter for body text -->
+    <!-- Google Fonts: Space Grotesk + IBM Plex Sans + IBM Plex Mono -->
   <link rel="preconnect" href="https://fonts.gstatic.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+
   
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+  <link rel="stylesheet" href="styles.css"/>
 
-  <style>
-    :root {
-      /* Color System */
-      --color-primary: #3B82F6;
-      --color-primary-dark: #1D4ED8;
-      --color-primary-light: #60A5FA;
-      --color-secondary: #10B981;
-      --color-accent: #8B5CF6;
-      --color-dark: #1E293B;
-      --color-darker: #0F172A;
-      --color-light: #F3F4F6;
-      --color-lighter: #F9FAFB;
-      
-      /* Spacing System */
-      --space-xs: 0.25rem;
-      --space-sm: 0.5rem;
-      --space-md: 1rem;
-      --space-lg: 1.5rem;
-      --space-xl: 2rem;
-      --space-xxl: 3rem;
-      
-      /* Shadow System */
-      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-      --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.08);
-      
-      /* Border Radius */
-      --radius-sm: 0.25rem;
-      --radius-md: 0.5rem;
-      --radius-lg: 0.75rem;
-      --radius-xl: 1rem;
-      
-      /* Transitions */
-      --transition-fast: 150ms ease;
-      --transition-normal: 300ms ease;
-      --transition-slow: 500ms ease;
-    }
-
-    /* 
-      Base Styles
-      -----------
-    */
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", 
-                  "Roboto", "Helvetica Neue", Arial, sans-serif;
-      color: #111827;
-      line-height: 1.7;
-      background: transparent;
-      scroll-behavior: smooth;
-    }
-    
-    #background-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: -999;
-      width: 100%;
-      height: 100%;
-      display: block;
-      background: linear-gradient(135deg, var(--color-darker) 0%, var(--color-dark) 100%);
-    }
-
-    a {
-      text-decoration: none;
-      color: inherit;
-      transition: color var(--transition-fast);
-    }
-    
-    h1, h2, h3, h4, h5, h6 {
-      font-family: 'Manrope', sans-serif;
-      font-weight: 700;
-      line-height: 1.3;
-      margin-top: 0;
-    }
-    
-    .highlight {
-      color: var(--color-primary);
-      position: relative;
-      display: inline-block;
-    }
-    
-    .highlight::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 6px;
-      background-color: rgba(59, 130, 246, 0.2);
-      border-radius: var(--radius-sm);
-      z-index: -1;
-    }
-    
-    .container {
-      width: 100%;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 var(--space-md);
-    }
-    
-    .badge {
-      display: inline-block;
-      padding: 0.25rem 0.75rem;
-      border-radius: 50px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    
-    .badge-primary {
-      background-color: rgba(59, 130, 246, 0.15);
-      color: var(--color-primary);
-    }
-    
-    .badge-secondary {
-      background-color: rgba(16, 185, 129, 0.15);
-      color: var(--color-secondary);
-    }
-    
-    .badge-accent {
-      background-color: rgba(139, 92, 246, 0.15);
-      color: var(--color-accent);
-    }
-    
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      padding: 0.75rem 1.5rem;
-      font-weight: 600;
-      border: none;
-      border-radius: var(--radius-md);
-      cursor: pointer;
-      transition: all var(--transition-normal);
-    }
-    
-    .btn-primary {
-      background-color: var(--color-primary);
-      color: white;
-      box-shadow: 0 4px 6px rgba(59, 130, 246, 0.25);
-    }
-    
-    .btn-primary:hover {
-      background-color: var(--color-primary-dark);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 8px rgba(59, 130, 246, 0.3);
-    }
-    
-    .btn-secondary {
-      background-color: white;
-      color: var(--color-dark);
-      border: 1px solid #E5E7EB;
-    }
-    
-    .btn-secondary:hover {
-      background-color: var(--color-light);
-      transform: translateY(-2px);
-    }
-    
-    .btn-lg {
-      padding: 0.875rem 2rem;
-      font-size: 1.125rem;
-    }
-    
-    /* 
-      Header + Navigation 
-      --------------------
-    */
-    header {
-      background: linear-gradient(135deg, var(--color-dark) 0%, var(--color-primary-dark) 100%);
-      color: #FFF;
-      position: sticky;
-      top: 0;
-      z-index: 999;
-      box-shadow: var(--shadow-md);
-    }
-    
-    nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 1rem;
-      position: relative;
-    }
-    
-    .logo {
-      font-family: 'Manrope', sans-serif;
-      font-size: 1.4rem;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      transition: all var(--transition-normal);
-    }
-    
-    .logo:hover {
-      transform: scale(1.05);
-      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-    }
-    
-    nav ul {
-      list-style-type: none;
-      display: flex;
-      gap: 1.25rem;
-      margin: 0;
-      padding: 0;
-    }
-    
-    nav ul li {
-      position: relative;
-    }
-    
-    nav ul li a {
-      font-weight: 500;
-      font-size: 0.95rem;
-      padding: 0.5rem 0.75rem;
-      border-radius: var(--radius-md);
-      transition: all var(--transition-normal);
-      position: relative;
-    }
-    
-    nav ul li a::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 0;
-      height: 2px;
-      background-color: white;
-      transition: width var(--transition-normal);
-    }
-    
-    nav ul li a:hover {
-      background-color: rgba(255, 255, 255, 0.1);
-    }
-    
-    nav ul li a:hover::after {
-      width: 80%;
-    }
-    
-    /* Search Container Styling */
-    .search-container {
-      position: relative;
-      margin-left: var(--space-md);
-    }
-
-    .search-container form {
-      margin: 0;
-      padding: 0;
-      display: flex;
-      align-items: center;
-    }
-
-    .search-input {
-      background-color: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: white;
-      padding: 0.5rem 0.75rem 0.5rem 2.25rem;
-      border-radius: var(--radius-md);
-      font-size: 0.875rem;
-      transition: all var(--transition-normal);
-      width: 150px;
-    }
-
-    .search-input:focus {
-      outline: none;
-      background-color: rgba(255, 255, 255, 0.15);
-      border-color: rgba(255, 255, 255, 0.3);
-      width: 200px;
-    }
-
-    .search-icon {
-      position: absolute;
-      left: 0.75rem;
-      top: 50%;
-      transform: translateY(-50%);
-      color: rgba(255, 255, 255, 0.7);
-      font-size: 0.875rem;
-      pointer-events: none;
-    }
-
-    /* Search Results Styling */
-    .search-results {
-      position: absolute;
-      top: 100%;
-      right: 0;
-      width: 300px;
-      max-height: 400px;
-      overflow-y: auto;
-      background-color: var(--color-dark);
-      border-radius: var(--radius-md);
-      box-shadow: var(--shadow-lg);
-      z-index: 1000;
-      margin-top: 0.5rem;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      display: none;
-      padding: 0.5rem 0;
-      scroll-behavior: smooth;
-    }
-
-    .search-result-item {
-      display: block;
-      padding: 0.75rem 1rem;
-      color: white;
-      text-decoration: none;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      transition: background-color var(--transition-normal);
-    }
-
-    .search-result-item:last-child {
-      border-bottom: none;
-    }
-
-    .search-result-item:hover,
-    .search-result-item:focus {
-      background-color: rgba(255, 255, 255, 0.1);
-      outline: none;
-    }
-
-    .search-result-item:focus-visible {
-      box-shadow: 0 0 0 2px var(--color-primary) inset;
-    }
-
-    /* Handle small screens */
-    @media (max-width: 992px) {
-      .search-results {
-        width: 100%;
-        left: 0;
-        right: auto;
-      }
-    }
-    
-    /* Hamburger lines default hidden on large screens */
-    .menu-toggle {
-      display: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-    }
-    
-    .hamburger-line {
-      display: block;
-      width: 25px;
-      height: 3px;
-      background-color: #fff;
-      margin: 5px 0;
-      transition: 0.3s ease;
-    }
-
-    /* Show/hide logic on narrow screens */
-    @media (max-width: 992px) {
-      .search-container {
-        display: none;
-      }
-    }
-    
-    @media (max-width: 768px) {
-      nav {
-        position: relative;
-      }
-      
-      /* Show the hamburger button */
-      .menu-toggle {
-        display: inline-block;
-      }
-
-      /* Hide the menu by default on mobile */
-      nav ul {
-        display: none;
-        position: absolute;
-        top: 100%;
-        right: 0;
-        background-color: #1E293B; /* Completely opaque background, no transparency */
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        flex-direction: column;
-        gap: 0;
-        width: 220px;
-        border-radius: var(--radius-md);
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Stronger shadow */
-        overflow: hidden;
-        transform: translateY(10px);
-        opacity: 0;
-        transition: all var(--transition-normal);
-      }
-
-      /* Each nav item is full-width on mobile */
-      nav ul li a {
-        display: block;
-        padding: 0.75rem 1.25rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        color: white;
-        font-weight: 600;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-      }
-      
-      nav ul li a::after {
-        display: none;
-      }
-      
-      /* When nav has .open, reveal the menu */
-      nav.open ul {
-        display: flex;
-        transform: translateY(0);
-        opacity: 1;
-        z-index: 1000; /* Ensure menu is above other elements */
-      }
-    }
-
-    /*
-      Hero Section
-      ------------
-    */
-    .hero {
-      text-align: center;
-      padding: 4rem 1rem 5rem;
-      background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.7));
-      position: relative;
-      margin-top: 0;
-    }
-    
-    .hero-content {
-      max-width: 800px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 2;
-    }
-    
-    .hero h1 {
-      font-size: 3.25rem;
-      margin-bottom: 0.75rem;
-      font-weight: 800;
-      letter-spacing: -1px;
-      background: linear-gradient(135deg, #fff 0%, #a5c4fd 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    
-    .hero p {
-      font-size: 1.25rem;
-      font-weight: 400;
-      margin-bottom: 1.5rem;
-      max-width: 700px;
-      margin-left: auto;
-      margin-right: auto;
-      color: rgba(255, 255, 255, 0.9);
-    }
-    
-    .hero-stats {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 2rem;
-      margin-top: var(--space-lg);
-      margin-bottom: var(--space-lg);
-    }
-    
-    .stat-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    
-    .stat-value {
-      font-family: 'Manrope', sans-serif;
-      font-size: 2.5rem;
-      font-weight: 800;
-      color: var(--color-primary-light);
-      line-height: 1;
-    }
-    
-    .stat-label {
-      font-size: 0.85rem;
-      font-weight: 500;
-      color: rgba(255, 255, 255, 0.7);
-      margin-top: var(--space-xs);
-    }
-    
-    .hero-buttons {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      margin-top: var(--space-xl);
-    }
-    
-    .hero-canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 0.15;
-    }
-    
-    @media (max-width: 768px) {
-      .hero h1 {
-        font-size: 2.25rem;
-      }
-      
-      .hero p {
-        font-size: 1rem;
-      }
-      
-      .hero-stats {
-        gap: 1rem;
-      }
-      
-      .stat-value {
-        font-size: 1.75rem;
-      }
-      
-      .hero-buttons {
-        flex-direction: column;
-        align-items: center;
-        gap: 0.75rem;
-      }
-    }
-
-    /*
-      Main Content
-      ------------
-    */
-    main {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 2rem 1rem;
-      position: relative;
-      z-index: 2;
-    }
-
-    /* Release Announcement Section */
-    .release-announcement {
-      background: linear-gradient(145deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: var(--radius-lg);
-      padding: 2rem;
-      margin: 0 auto 3rem;
-      max-width: 800px;
-      backdrop-filter: blur(10px);
-      box-shadow: var(--shadow-card);
-      transform: translateY(-50px);
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .release-announcement::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 4px;
-      background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-accent) 100%);
-    }
-    
-    .release-announcement h2 {
-      margin-bottom: 1rem;
-      font-size: 1.75rem;
-      font-weight: 700;
-      color: white;
-      position: relative;
-    }
-    
-    .release-announcement p {
-      margin-bottom: 0.75rem;
-      color: rgba(255, 255, 255, 0.9);
-      font-size: 1.1rem;
-    }
-    
-    .release-announcement a {
-      color: var(--color-primary-light);
-      font-weight: 500;
-      transition: color var(--transition-normal);
-      position: relative;
-    }
-    
-    .release-announcement a::after {
-      content: '';
-      position: absolute;
-      bottom: -2px;
-      left: 0;
-      width: 100%;
-      height: 1px;
-      background-color: var(--color-primary-light);
-      transform: scaleX(0);
-      transform-origin: right center;
-      transition: transform var(--transition-normal);
-    }
-    
-    .release-announcement a:hover {
-      color: var(--color-primary);
-    }
-    
-    .release-announcement a:hover::after {
-      transform: scaleX(1);
-      transform-origin: left center;
-    }
-
-    /* Features Section */
-    .features-title {
-      text-align: center;
-      margin-bottom: 3rem;
-      color: white;
-    }
-    
-    .features-title h2 {
-      font-size: 2.25rem;
-      margin-bottom: 1rem;
-    }
-    
-    .features-title p {
-      font-size: 1.125rem;
-      max-width: 600px;
-      margin: 0 auto;
-      color: rgba(255, 255, 255, 0.8);
-    }
-    
-    .features {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-      margin-bottom: 3rem;
-    }
-    
-    .feature {
-      background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: var(--radius-lg);
-      padding: 2rem;
-      transition: all var(--transition-normal);
-      backdrop-filter: blur(10px);
-      box-shadow: var(--shadow-card);
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .feature::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 4px;
-      background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-accent) 50%, var(--color-secondary) 100%);
-      opacity: 0;
-      transition: opacity var(--transition-normal);
-    }
-    
-    .feature:hover {
-      transform: translateY(-10px);
-      box-shadow: var(--shadow-lg);
-    }
-    
-    .feature:hover::before {
-      opacity: 1;
-    }
-    
-    .feature-icon {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(29, 78, 216, 0.2) 100%);
-      margin-bottom: 1.25rem;
-      font-size: 1.5rem;
-      color: var(--color-primary-light);
-    }
-    
-    .feature:nth-child(2n) .feature-icon {
-      background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.2) 100%);
-      color: var(--color-secondary);
-    }
-    
-    .feature:nth-child(3n) .feature-icon {
-      background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(124, 58, 237, 0.2) 100%);
-      color: var(--color-accent);
-    }
-    
-    .feature h3 {
-      margin-bottom: 0.75rem;
-      font-weight: 700;
-      font-size: 1.25rem;
-      color: white;
-    }
-    
-    .feature p {
-      font-weight: 400;
-      color: rgba(255, 255, 255, 0.8);
-      line-height: 1.7;
-      margin-bottom: 1.25rem;
-    }
-    
-    .feature a {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.375rem;
-      color: var(--color-primary-light);
-      font-weight: 500;
-      font-size: 0.95rem;
-    }
-    
-    .feature a:hover {
-      color: white;
-    }
-    
-    /* Usage Example Section */
-    .usage-example {
-      background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: var(--radius-lg);
-      padding: 2rem;
-      margin-bottom: 3rem;
-      overflow: hidden;
-      backdrop-filter: blur(10px);
-    }
-    
-    .usage-example h3 {
-      color: white;
-      margin-bottom: 1.5rem;
-      font-size: 1.5rem;
-    }
-    
-    .code-tabs {
-      display: flex;
-      gap: 1px;
-      background-color: rgba(255, 255, 255, 0.1);
-      border-radius: var(--radius-md) var(--radius-md) 0 0;
-      margin-bottom: 0;
-      overflow: hidden;
-    }
-    
-    .code-tab {
-      padding: 0.75rem 1.25rem;
-      background-color: rgba(0, 0, 0, 0.3);
-      color: rgba(255, 255, 255, 0.7);
-      font-size: 0.9rem;
-      font-weight: 500;
-      cursor: pointer;
-      border: none;
-      transition: all var(--transition-normal);
-      flex: 1;
-      text-align: center;
-    }
-    
-    .code-tab.active {
-      background-color: #1E1E1E;
-      color: white;
-    }
-    
-    .code-block {
-      background-color: #1E1E1E;
-      border-radius: 0 0 var(--radius-md) var(--radius-md);
-      overflow: hidden;
-      display: none;
-    }
-    
-    .code-block.active {
-      display: block;
-    }
-    
-    .code-content {
-      padding: 1.5rem;
-      font-family: 'Consolas', 'Monaco', 'Andale Mono', monospace;
-      font-size: 0.9rem;
-      line-height: 1.6;
-      color: #D4D4D4;
-      overflow-x: auto;
-      white-space: pre;
-    }
-    
-    .code-keyword {
-      color: #569CD6;
-    }
-    
-    .code-function {
-      color: #DCDCAA;
-    }
-    
-    .code-string {
-      color: #CE9178;
-    }
-    
-    .code-comment {
-      color: #6A9955;
-    }
-    
-    .code-number {
-      color: #B5CEA8;
-    }
-
-    /* Prior Work */
-    .prior-work {
-      margin-top: 2rem;
-      padding: 2rem;
-      border-radius: var(--radius-lg);
-      background: linear-gradient(145deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(10px);
-    }
-    
-    .prior-work h3 {
-      color: white;
-      margin-bottom: 1rem;
-    }
-    
-    .prior-work p {
-      color: rgba(255, 255, 255, 0.9);
-    }
-    
-    .prior-work a {
-      color: var(--color-primary-light);
-      font-weight: 500;
-      position: relative;
-    }
-    
-    .prior-work a::after {
-      content: '';
-      position: absolute;
-      bottom: -2px;
-      left: 0;
-      width: 100%;
-      height: 1px;
-      background-color: var(--color-primary-light);
-      transform: scaleX(0);
-      transform-origin: right center;
-      transition: transform var(--transition-normal);
-    }
-    
-    .prior-work a:hover::after {
-      transform: scaleX(1);
-      transform-origin: left center;
-    }
-
-    /* Share Button Styles */
-    .share-container {
-      text-align: center;
-      margin: 2rem 0;
-    }
-    
-    #share-button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      padding: 0.75rem 1.25rem;
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: white;
-      background-color: var(--color-dark);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: var(--radius-md);
-      cursor: pointer;
-      transition: all var(--transition-normal);
-    }
-    
-    #share-button:hover {
-      background-color: rgba(255, 255, 255, 0.1);
-    }
-    
-    #share-button svg {
-      transition: transform var(--transition-normal);
-    }
-    
-    #share-button:hover svg {
-      transform: rotate(15deg);
-    }
-
-    /* Demo Section */
-    .demo-section {
-      margin-top: 3rem;
-      text-align: center;
-    }
-    
-    .demo-section h2 {
-      color: white;
-      margin-bottom: 1.5rem;
-      font-size: 1.75rem;
-    }
-    
-    .demo-frame {
-      width: 100%;
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      box-shadow: var(--shadow-lg);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      background-color: rgba(255, 255, 255, 0.02);
-      transition: transform var(--transition-normal);
-      transform: scale(0.98);
-    }
-    
-    .demo-frame:hover {
-      transform: scale(1);
-    }
-
-    /*
-      Footer
-      ------
-    */
-    footer {
-      background: linear-gradient(to top, var(--color-darker) 0%, transparent 100%);
-      color: rgba(255, 255, 255, 0.8);
-      text-align: center;
-      padding: 3rem 1rem;
-      margin-top: 3rem;
-      position: relative;
-    }
-    
-    .footer-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 2rem;
-      text-align: left;
-    }
-    
-    .footer-column h4 {
-      color: white;
-      margin-bottom: 1rem;
-      font-size: 1.1rem;
-    }
-    
-    .footer-links {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    
-    .footer-links li {
-      margin-bottom: 0.75rem;
-    }
-    
-    .footer-links a {
-      color: rgba(255, 255, 255, 0.6);
-      transition: color var(--transition-normal);
-      font-size: 0.9rem;
-    }
-    
-    .footer-links a:hover {
-      color: white;
-    }
-    
-    .footer-bottom {
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      margin-top: 2rem;
-      padding-top: 2rem;
-      text-align: center;
-      color: rgba(255, 255, 255, 0.6);
-      font-size: 0.9rem;
-    }
-    
-    @media (max-width: 768px) {
-      .footer-content {
-        grid-template-columns: 1fr;
-        text-align: center;
-      }
-      
-      .footer-column {
-        margin-bottom: 1.5rem;
-      }
-    }
-
-    /* Animations */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
-    }
-    
-    .animate-fade-in {
-      animation: fadeIn 1s ease-out forwards;
-    }
-    
-    .animate-pulse {
-      animation: pulse 2s infinite ease-in-out;
-    }
-    
-    /* Delay classes for staggered animations */
-    .delay-100 { animation-delay: 100ms; }
-    .delay-200 { animation-delay: 200ms; }
-    .delay-300 { animation-delay: 300ms; }
-    .delay-400 { animation-delay: 400ms; }
-    .delay-500 { animation-delay: 500ms; }
-
-
-/* Ensure canvas visibility throughout */
-#background-canvas {
-  z-index: -1;
-}
-
-main, footer, header, section {
-  background-color: transparent;
-  position: relative;
-  z-index: 1;
-}
-
-/* Adjust specific element backgrounds for transparency */
-.feature, 
-.usage-example, 
-.release-announcement, 
-.prior-work, 
-.demo-section {
-  background: rgba(255,255,255,0.02);
-  backdrop-filter: blur(10px);
-}
-
-@keyframes shine-bg {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
-
-@keyframes glow {
-  0% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
-  50% { box-shadow: 0 0 20px rgba(255, 165, 0, 0.8); }
-  100% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
-}
-
-.highlight {
-  background: linear-gradient(90deg, #ffd700, #ff8c00, #ff4500, #ffa500, #ffd700);
-  background-size: 400% 100%;
-  animation: 
-    shine-bg 3s infinite ease-in-out,
-    pulse 2s infinite ease-in-out,
-    glow 3s infinite ease-in-out;
-  padding: 2px 10px;
-  border-radius: 6px;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
-  font-weight: bold;
-  display: inline-block;
-  position: relative;
-  color: #fff;
-  letter-spacing: 0.5px;
-  border: 1px solid rgba(255, 165, 0, 0.3);
-  transition: all 0.3s ease;
-}
-
-.highlight:hover {
-  transform: translateY(-2px) scale(1.05);
-  text-shadow: 0 2px 4px rgba(0,0,0,0.4);
-}
-
-.highlight::before {
-  content: '';
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  border-radius: 8px;
-  background: linear-gradient(45deg, #ffd700, transparent, #ffa500, transparent, #ffd700);
-  background-size: 400% 400%;
-  z-index: -1;
-  animation: shine-bg 5s infinite linear;
-  opacity: 0.6;
-}
-  </style>
 </head>
 
 <body>
@@ -1099,7 +24,7 @@ main, footer, header, section {
   <header>
     <nav>
       <div class="logo">
-        <a href="index.html">fastrerandomize</a>
+        <a href="index.html">FastRerandomize</a>
       </div>
 
       <!-- HAMBURGER BUTTON -->
@@ -1111,11 +36,11 @@ main, footer, header, section {
       <!-- /HAMBURGER BUTTON -->
 
       <ul>
-        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html" class="active" aria-current="page">Home</a></li>
         <li><a href="install.html">Install</a></li>
         <li><a href="https://github.com/cjerzak/fastrerandomize-software/blob/main/fastrerandomize.pdf?raw=true">Documentation</a></li>
         <li><a href="tutorials.html">Tutorials</a></li>
-        <li><a href="aboutus.html">About Us</a></li>
+        <li><a href="aboutus.html">About</a></li>
       </ul>
       
      <!-- Update the search container in your HTML -->
@@ -1133,30 +58,31 @@ main, footer, header, section {
     <div class="hero">
       <canvas id="hero-canvas" class="hero-canvas"></canvas>
       <div class="hero-content">
-        <h1 class="animate-fade-in">fastrerandomize</h1>
-        <p class="animate-fade-in delay-100">An R Package for <span class="highlight">Fast Rerandomization</span> Using Accelerated Computing</p>
+        <p class="eyebrow animate-fade-in">Rerandomization, streamlined</p>
+        <h1 class="animate-fade-in delay-100">FastRerandomize</h1>
+        <p class="animate-fade-in delay-200">FastRerandomize pairs batched candidate generation, key-only storage, and design-respecting inference with accelerated computing in a minimal workflow that delivers order‑of‑magnitude speedups while preserving balance precision.</p>
         
-        <div class="hero-stats animate-fade-in delay-200">
+        <div class="hero-stats animate-fade-in delay-300">
           <div class="stat-item">
             <div class="stat-value">>50x</div>
-            <div class="stat-label">Faster Processing</div>
+            <div class="stat-label">Speedup</div>
           </div>
           <div class="stat-item">
             <div class="stat-value">100k+</div>
-            <div class="stat-label">Max Sample Size</div>
+            <div class="stat-label">Units</div>
           </div>
           <div class="stat-item">
-            <div class="stat-value">GPU</div>
-            <div class="stat-label">Acceleration</div>
+            <div class="stat-value">CPU + GPU</div>
+            <div class="stat-label">Unified compute</div>
           </div>
         </div>
         
-        <div class="hero-buttons animate-fade-in delay-300">
-          <a href="https://cran.rstudio.com/web/packages/fastrerandomize/index.html" class="btn btn-primary btn-lg">
-            <i class="fas fa-download"></i> Get Started: v1.0
+        <div class="hero-buttons animate-fade-in delay-400">
+          <a href="https://cran.r-project.org/package=fastrerandomize" class="btn btn-primary btn-lg">
+            <i class="fas fa-download"></i> Install from CRAN
           </a>
           <a href="https://github.com/cjerzak/fastrerandomize-software" class="btn btn-secondary">
-            <i class="fab fa-github"></i> View on GitHub
+            <i class="fab fa-github"></i> Source on GitHub
           </a>
         </div>
       </div>
@@ -1167,80 +93,82 @@ main, footer, header, section {
   <main>
     <!-- Release Announcement -->
     <section class="release-announcement animate-fade-in">
-      <h2>fastrerandomize <span class="badge badge-primary">Released!</span></h2>
+      <p class="eyebrow">Publication</p>
+      <h2>FastRerandomize in SoftwareX (2026)</h2>
       <p>
-        Our new R package leverages GPU acceleration and parallel processing to make rerandomization 
-        feasible for large-scale experiments with complex balance requirements.
+        FastRerandomize pairs accelerated hardware with a minimal software interface, making rigorous
+        rerandomization feasible for large-scale experiments without extra complexity.
       </p>
-      <p>Read the accompanying package paper <a href="https://arxiv.org/abs/2501.07642">here</a>.</p>
+      <p>Access the full manuscript on <a href="https://arxiv.org/abs/2501.07642">arXiv</a>; the formal SoftwareX citation is listed below for reference.</p>
     </section>
 
     <!-- Features Section -->
     <div class="features-title">
       <h2>Features</h2>
-      <p>Designed to make rerandomization accessible for experimental
-    designs at any and all scales.</p>
+      <p>Designed for clarity and speed across experimental scales.</p>
     </div>
     
     <section class="features">
       <div class="feature animate-fade-in">
         <div class="feature-icon">
-          <i class="fas fa-bolt"></i>
+          <i class="fas fa-sliders"></i>
         </div>
-        <h3>Accelerated Computation</h3>
-        <p>Employs batched processing, autovectorization, just-in-time-compilation, and (optionally) GPU acceleration to dramatically improve performance (>50x compared to traditional methods).</p>
-        <a href="documentation.html">Learn more <i class="fas fa-arrow-right"></i></a>
+        <h3>Sharper balance, better precision</h3>
+        <p>Rerandomization lets you enforce tighter covariate balance so estimates are more precise without changing your study design.</p>
       </div>
       
       <div class="feature animate-fade-in delay-100">
         <div class="feature-icon">
-          <i class="fas fa-chart-bar"></i>
+          <i class="fas fa-layer-group"></i>
         </div>
-        <h3>Scale to Any Size</h3>
-        <p>Allows for use in cases where the sample size or number of covariates is very large, making rerandomization practical for modern, large-scale experiments.</p>
+        <h3>Practical at modern scale</h3>
+        <p>Handles large samples and high-dimensional covariates so rerandomization remains usable in real-world, data-rich experiments.</p>
       </div>
       
       <div class="feature animate-fade-in delay-200">
         <div class="feature-icon">
-          <i class="fas fa-code-branch"></i>
+          <i class="fas fa-bolt"></i>
         </div>
-        <h3>Open-Source</h3>
-        <p>Distributed under a 
-          <a href="https://github.com/cjerzak/fastrerandomize-software?tab=License-1-ov-file#readme">GPL-3 license</a>, 
-          fastrerandomize is developed and maintained publicly on 
-          <a href="https://github.com/cjerzak/fastrerandomize-software?tab=readme-ov-file">GitHub</a>.
-        </p>
+        <h3>Accelerated balance checks</h3>
+        <p>Batched, auto-vectorized kernels with just-in-time compilation, plus optional GPU/TPU execution via JAX/XLA.</p>
+        <a href="https://arxiv.org/abs/2501.07642">Technical details <i class="fas fa-arrow-right"></i></a>
       </div>
       
       <div class="feature animate-fade-in delay-300">
         <div class="feature-icon">
-          <i class="fas fa-balance-scale"></i>
+          <i class="fas fa-key"></i>
         </div>
-        <h3>Balanced Assignment</h3>
-        <p>Generates pools of acceptable randomizations based on a given acceptance probability, ensuring optimal covariate balance across treatment groups.</p>
+        <h3>Key-only storage</h3>
+        <p>Stores compact PRNG keys instead of full assignment matrices, allowing massive pools without memory blowups.</p>
       </div>
-      
-      <div class="feature animate-fade-in delay-400">
-        <div class="feature-icon">
-          <i class="fas fa-vial"></i>
-        </div>
-        <h3>Tests and Thresholds</h3>
-        <p>Conducts exact rerandomization tests and computes optimal rerandomization acceptance thresholds for reliable statistical inference.</p>
-      </div>
-      
-      <div class="feature animate-fade-in delay-500">
-        <div class="feature-icon">
-          <i class="fas fa-globe"></i>
-        </div>
-        <h3>Real-world Applications</h3>
-        <p>Speed ups in applications to economic and geographical experiments, making complex designs accessible to practitioners.</p>
-        <a href="tutorials.html">View applications <i class="fas fa-arrow-right"></i></a>
+    </section>
+
+    <!-- Performance Section -->
+    <section id="performance" class="performance-section animate-fade-in">
+      <p class="eyebrow">Performance</p>
+      <h2>CPU vs GPU scaling</h2>
+      <p>Benchmark results from the FastRerandomize paper, highlighting accelerated performance as sample sizes grow.</p>
+      <div class="performance-grid">
+        <figure class="figure-card">
+          <a href="https://arxiv.org/abs/2501.07642">
+            <img src="https://connorjerzak.com/wp-content/uploads/2026/01/CPU_v_GPU_FALSE_100_light.webp#gh-light-mode-only" alt="Performance benchmarks for n=100 (light mode)" loading="lazy"/>
+            <img src="https://connorjerzak.com/wp-content/uploads/2026/01/CPU_v_GPU_FALSE_100_dark.webp#gh-dark-mode-only" alt="Performance benchmarks for n=100 (dark mode)" loading="lazy"/>
+          </a>
+          <figcaption>Performance: n = 100.</figcaption>
+        </figure>
+        <figure class="figure-card">
+          <a href="https://arxiv.org/abs/2501.07642">
+            <img src="https://connorjerzak.com/wp-content/uploads/2026/01/CPU_v_GPU_FALSE_1000_light.webp#gh-light-mode-only" alt="Performance benchmarks for n=1000 (light mode)" loading="lazy"/>
+            <img src="https://connorjerzak.com/wp-content/uploads/2026/01/CPU_v_GPU_FALSE_1000_dark.webp#gh-dark-mode-only" alt="Performance benchmarks for n=1000 (dark mode)" loading="lazy"/>
+          </a>
+          <figcaption>Performance: n = 1000.</figcaption>
+        </figure>
       </div>
     </section>
     
     <!-- Usage Example Section -->
     <section class="usage-example animate-fade-in">
-      <h3>Example Use</h3>
+      <h3>Minimal API example</h3>
       <div class="code-tabs">
         <button class="code-tab active" data-tab="tab1">Setup & Basic Usage</button>
         <button class="code-tab" data-tab="tab2">Monte Carlo Randomization</button>
@@ -1357,12 +285,22 @@ X <- <span class="code-keyword">matrix</span>(<span class="code-keyword">rnorm</
     </section>
 
     <!-- Prior Work Section with citation -->
-    <section class="prior-work animate-fade-in">
-      <h3>Research & Citations</h3>
+    <section id="citation" class="prior-work animate-fade-in">
+      <p class="eyebrow">Citation</p>
+      <h3>How to cite FastRerandomize</h3>
       <p>
-        For more information, see the <a href="https://arxiv.org/abs/2501.07642">package paper</a>:
-        Connor T. Jerzak, Rebecca Goldstein, Aniket Kamat, Fucheng Warren Zhu. "fastrerandomize: An R Package for Fast Rerandomization Using Accelerated Computing," 2025.
+        Connor T. Jerzak, Rebecca Goldstein, Aniket Kamat, and Fucheng Warren Zhu.
+        FastRerandomize: An R Package for Fast Rerandomization Using Accelerated Computing.
+        SoftwareX, 2026. Also available on <a href="https://arxiv.org/abs/2501.07642">arXiv</a>.
       </p>
+      <div class="citation-card">
+        <pre><code>@article{jerzak2025fastrerandomize,
+  title={FastRerandomize: An R Package for Fast Rerandomization Using Accelerated Computing},
+  author={Jerzak, Connor T. and Rebecca Goldstein and Aniket Kamat and Fucheng Warren Zhu},
+  journal={SoftwareX},
+  year={2026}
+}</code></pre>
+      </div>
     </section>
 
     <!-- Share Button -->
@@ -1437,7 +375,7 @@ X <- <span class="code-keyword">matrix</span>(<span class="code-keyword">rnorm</
     </div>
     
     <div class="footer-bottom">
-      <p>&copy; 2025 fastrerandomize developers. All rights reserved.</p>
+      <p>&copy; 2026 fastrerandomize developers. All rights reserved.</p>
     </div>
   </footer>
 
@@ -1475,15 +413,8 @@ X <- <span class="code-keyword">matrix</span>(<span class="code-keyword">rnorm</
 
       function showCopyNotification() {
         const notification = document.createElement('div');
+        notification.className = 'copy-notification';
         notification.innerText = 'Copied to clipboard';
-        notification.style.position = 'fixed';
-        notification.style.bottom = '20px';
-        notification.style.right = '20px';
-        notification.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
-        notification.style.color = '#fff';
-        notification.style.padding = '8px 12px';
-        notification.style.borderRadius = '4px';
-        notification.style.zIndex = '9999';
         document.body.appendChild(notification);
 
         setTimeout(() => {
@@ -1542,6 +473,7 @@ X <- <span class="code-keyword">matrix</span>(<span class="code-keyword">rnorm</
       '∞','π','ξ','ζ','γ','ε','∛','∝','∠','∧','∨','∩','∪','≈','≠','≤','≥',
       '≡','∈','∉','⊂','⊃','⊆','⊇','⊕','⊗','⊥','Z','P','R','N'
     ];
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 
     let width, height;
     let columns;       // Number of columns for the symbols
@@ -1569,10 +501,10 @@ X <- <span class="code-keyword">matrix</span>(<span class="code-keyword">rnorm</
       
       for (let i = 0; i < columns; i++) {
         drops[i] = Math.random() * -100; // Start at different positions above the canvas
-        sizes[i] = 12 + Math.floor(Math.random() * 12); // Font sizes between 12px and 24px
-        speeds[i] = 0.1 + Math.random() * 0.3; // Different speeds
-        opacities[i] = 0.1 + Math.random() * 0.3; // Different opacities
-        hues[i] = 200 + Math.random() * 40; // Different hues in blue range
+        sizes[i] = 10 + Math.floor(Math.random() * 10); // Font sizes between 10px and 20px
+        speeds[i] = 0.05 + Math.random() * 0.2; // Slower, subtle motion
+        opacities[i] = 0.04 + Math.random() * 0.1; // Lighter opacity
+        hues[i] = 210 + Math.random() * 20; // Subtle blue range
       }
     }
 
@@ -1581,7 +513,7 @@ X <- <span class="code-keyword">matrix</span>(<span class="code-keyword">rnorm</
 
     function draw() {
       // Semi-transparent background to give a trailing effect
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillStyle = prefersDark ? 'rgba(12, 13, 16, 0.12)' : 'rgba(247, 246, 242, 0.08)';
       ctx.fillRect(0, 0, width, height);
 
       for (let i = 0; i < drops.length; i++) {
@@ -1596,7 +528,8 @@ X <- <span class="code-keyword">matrix</span>(<span class="code-keyword">rnorm</
         ctx.font = `${sizes[i]}px monospace`;
         
         // Set color based on hue with saturation and lightness
-        ctx.fillStyle = `hsla(${hues[i]}, 80%, 60%, ${opacities[i]})`;
+        const lightness = prefersDark ? 70 : 30;
+        ctx.fillStyle = `hsla(${hues[i]}, 40%, ${lightness}%, ${opacities[i]})`;
         
         // Draw the symbol
         ctx.fillText(text, x, y);
@@ -1608,14 +541,14 @@ X <- <span class="code-keyword">matrix</span>(<span class="code-keyword">rnorm</
         if (y > height && Math.random() > 0.99) {
           drops[i] = -1;
           // Maybe change other properties when resetting
-          speeds[i] = 0.1 + Math.random() * 0.3;
-          opacities[i] = 0.1 + Math.random() * 0.3;
+          speeds[i] = 0.05 + Math.random() * 0.2;
+          opacities[i] = 0.04 + Math.random() * 0.1;
         }
       }
     }
 
     // Draw loop
-    setInterval(draw, 33); // ~30fps for smoother animation
+    setInterval(draw, 60); // ~16fps for subtle animation
 
     /*
       Hero Animation - Randomization Visualization
@@ -1627,7 +560,7 @@ X <- <span class="code-keyword">matrix</span>(<span class="code-keyword">rnorm</
     
     let heroWidth, heroHeight;
     let points = [];
-    const numPoints = 100;
+    const numPoints = 70;
     const groups = ['A', 'B']; // Treatment groups
     
     function resizeHeroCanvas() {
@@ -1695,7 +628,7 @@ X <- <span class="code-keyword">matrix</span>(<span class="code-keyword">rnorm</
         }
       }
       
-      heroCtx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+      heroCtx.strokeStyle = prefersDark ? 'rgba(244, 246, 248, 0.08)' : 'rgba(16, 18, 23, 0.08)';
       heroCtx.stroke();
       
       // Draw points
@@ -1721,9 +654,9 @@ X <- <span class="code-keyword">matrix</span>(<span class="code-keyword">rnorm</
           heroCtx.arc(point.x, point.y, point.radius, 0, Math.PI * 2);
           
           if (point.group === 'A') {
-            heroCtx.fillStyle = 'rgba(59, 130, 246, 0.7)'; // Blue for group A
+            heroCtx.fillStyle = prefersDark ? 'rgba(106, 162, 255, 0.35)' : 'rgba(11, 95, 255, 0.35)';
           } else {
-            heroCtx.fillStyle = 'rgba(139, 92, 246, 0.7)'; // Purple for group B
+            heroCtx.fillStyle = prefersDark ? 'rgba(244, 246, 248, 0.25)' : 'rgba(16, 18, 23, 0.25)';
           }
           
           heroCtx.fill();
@@ -1731,7 +664,7 @@ X <- <span class="code-keyword">matrix</span>(<span class="code-keyword">rnorm</
           // Points without groups
           heroCtx.beginPath();
           heroCtx.arc(point.x, point.y, point.radius, 0, Math.PI * 2);
-          heroCtx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+          heroCtx.fillStyle = prefersDark ? 'rgba(244, 246, 248, 0.2)' : 'rgba(16, 18, 23, 0.12)';
           heroCtx.fill();
         }
       });
@@ -1806,7 +739,7 @@ X <- <span class="code-keyword">matrix</span>(<span class="code-keyword">rnorm</
           url: "#tab3"
         },
         {
-          title: "About Us",
+          title: "About",
           description: "Information about the developers and contributors",
           url: "aboutus.html"
         },
@@ -1818,17 +751,17 @@ X <- <span class="code-keyword">matrix</span>(<span class="code-keyword">rnorm</
         {
           title: "CRAN Package",
           description: "Official R package distribution",
-          url: "https://cran.rstudio.com/web/packages/fastrerandomize/index.html"
+          url: "https://cran.r-project.org/package=fastrerandomize"
         },
         {
-          title: "GPU Acceleration",
-          description: "Using GPU for faster computation",
-          url: "#"
+          title: "Performance",
+          description: "CPU vs GPU benchmarks and scaling results",
+          url: "#performance"
         },
         {
-          title: "Benchmarks",
-          description: "Performance comparisons and metrics",
-          url: "benchmarks.html"
+          title: "Citation",
+          description: "SoftwareX reference and BibTeX entry",
+          url: "#citation"
         }
       ];
 
@@ -1876,8 +809,8 @@ X <- <span class="code-keyword">matrix</span>(<span class="code-keyword">rnorm</
             resultItem.className = 'search-result-item';
             
             resultItem.innerHTML = `
-              <div style="font-weight: 600; margin-bottom: 0.25rem;">${result.title}</div>
-              <div style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.7);">${result.description}</div>
+              <div class="search-result-title">${result.title}</div>
+              <div class="search-result-desc">${result.description}</div>
             `;
             
             searchResults.appendChild(resultItem);
@@ -1886,9 +819,7 @@ X <- <span class="code-keyword">matrix</span>(<span class="code-keyword">rnorm</
           // Show "no results" message
           searchResults.style.display = 'block';
           searchResults.innerHTML = `
-            <div style="padding: 1rem; color: rgba(255, 255, 255, 0.7); text-align: center;">
-              No results found for "${query}"
-            </div>
+            <div class="search-empty">No results found for "${query}"</div>
           `;
         }
       }
