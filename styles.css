@@ -952,13 +952,16 @@ footer {
     position: absolute;
     top: 100%;
     right: var(--space-lg);
-    background: var(--paper-strong);
+    background-color: var(--paper-strong);
     border: 1px solid var(--line);
     border-radius: var(--radius-md);
     flex-direction: column;
     gap: 0;
     min-width: 200px;
     box-shadow: var(--shadow-md);
+    opacity: 1;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
     z-index: 20;
     overflow: hidden;
   }
