@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>FastRerandomize - Fast Rerandomization Using Accelerated Computing</title>
+  <link rel="icon" type="image/png" href="figures/FRR_logo.png" />
   
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
@@ -249,7 +250,7 @@ X <- <span class="code-keyword">matrix</span>(<span class="code-keyword">rnorm</
 <span class="code-keyword">library</span>(<span class="code-string">fastrerandomize</span>)
 
 <span class="code-comment"># Create example data with many covariates</span>
-<span class="code-keyword">set.seed</span>(42)
+<span class="code-keyword">set.seed</span>(987)
 n <- 5000
 p <- 20
 X <- <span class="code-keyword">matrix</span>(<span class="code-keyword">rnorm</span>(n * p), n, p)
