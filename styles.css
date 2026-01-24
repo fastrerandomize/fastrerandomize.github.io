@@ -254,13 +254,22 @@ nav {
 }
 
 .logo {
-  font-size: 1.25rem;
-  font-weight: 700;
-  letter-spacing: -0.03em;
+  display: flex;
+  align-items: center;
 }
 
 .logo a {
   color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+}
+
+.logo img {
+  height: 36px;
+  width: auto;
+  max-width: 200px;
+  display: block;
 }
 
 nav ul {
@@ -972,6 +981,11 @@ footer {
 @media (max-width: 768px) {
   nav {
     flex-wrap: wrap;
+  }
+
+  .logo img {
+    height: 32px;
+    max-width: 180px;
   }
 
   .menu-toggle {
