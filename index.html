@@ -62,22 +62,6 @@
         <h1 class="animate-fade-in delay-100">FastRerandomize</h1>
         <p class="animate-fade-in delay-200">Batched candidate generation, key-only storage, and design-respecting inference—FastRerandomize combines them in a minimal, accelerated workflow. That structure drives order‑of‑magnitude speedups. It enables greater degrees of covariate balance in high-dimensional data. Better precision comes from selecting assignments with stronger covariate balance; the gains are biggest when those covariates are highly predictive of outcomes and when you can afford to be very selective. In high-dimensional settings, that selectivity often needs to be even stricter to see the same gains.</p>
 
-        <div class="concept-explainer animate-fade-in delay-250">
-          <h4>What is rerandomization?</h4>
-          <p>Rerandomization is a <em>design-stage</em> procedure: repeatedly draw treatment assignments and <strong>keep only</strong> those that meet a pre-specified covariate-balance rule.</p>
-          <p>The default rule accepts an assignment when the <strong>Mahalanobis distance</strong> between treatment and control covariate means is below a cutoff: <strong>accept if M ≤ a</strong>.</p>
-          <p>The <strong>acceptance probability q</strong> is the fraction of random assignments that would pass this rule; <strong>smaller q</strong> means more stringent balance.</p>
-        </div>
-
-        <div class="workflow-note animate-fade-in delay-300">
-          <p><strong>Design changes the randomization distribution—so inference must match the design.</strong></p>
-          <ol>
-            <li><strong>Design:</strong> choose covariates + a balance rule (e.g., M ≤ a, equivalently q).</li>
-            <li><strong>Generate:</strong> draw many candidate assignments and keep the accepted set.</li>
-            <li><strong>Infer:</strong> randomization tests must resample <em>from the accepted set</em>, not from all possible assignments.</li>
-          </ol>
-        </div>
-
         <div class="hero-stats animate-fade-in delay-400">
           <div class="stat-item">
             <div class="stat-value">>50x</div>
@@ -122,6 +106,22 @@
       </p>
       <p>Access the full manuscript on <a href="https://arxiv.org/abs/2501.07642">arXiv</a>; the formal SoftwareX citation is listed below for reference.</p>
     </section>
+
+    <div class="concept-explainer animate-fade-in delay-250">
+      <h4>What is rerandomization?</h4>
+      <p>Rerandomization is a <em>design-stage</em> procedure: repeatedly draw treatment assignments and <strong>keep only</strong> those that meet a pre-specified covariate-balance rule.</p>
+      <p>The default rule accepts an assignment when the <strong>Mahalanobis distance</strong> between treatment and control covariate means is below a cutoff: <strong>accept if M ≤ a</strong>.</p>
+      <p>The <strong>acceptance probability q</strong> is the fraction of random assignments that would pass this rule; <strong>smaller q</strong> means more stringent balance.</p>
+    </div>
+
+    <div class="workflow-note animate-fade-in delay-300">
+      <p><strong>Design changes the randomization distribution—so inference must match the design.</strong></p>
+      <ol>
+        <li><strong>Design:</strong> choose covariates + a balance rule (e.g., M ≤ a, equivalently q).</li>
+        <li><strong>Generate:</strong> draw many candidate assignments and keep the accepted set.</li>
+        <li><strong>Infer:</strong> randomization tests must resample <em>from the accepted set</em>, not from all possible assignments.</li>
+      </ol>
+    </div>
 
     <!-- Features Section -->
     <div class="features-title">
