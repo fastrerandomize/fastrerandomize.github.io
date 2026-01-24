@@ -427,7 +427,7 @@ nav ul li a[aria-current="page"] {
 }
 
 .hero-lede-logo {
-  width: clamp(140px, 16vw, 220px);
+  width: clamp(170px, 18vw, 260px);
   height: auto;
   flex: 0 0 auto;
 }
@@ -963,7 +963,7 @@ footer {
   }
 
   .hero-lede-logo {
-    width: clamp(120px, 28vw, 200px);
+    width: clamp(150px, 32vw, 230px);
   }
 }
 
