@@ -1053,6 +1053,11 @@ img[src*="#gh-dark-mode-only"] {
   font-size: 1.1rem;
 }
 
+.concept-pair .concept-explainer h4,
+.concept-pair .workflow-note h4 {
+  color: var(--ink);
+}
+
 .concept-explainer p,
 .workflow-note p,
 .concept-box p,
