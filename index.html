@@ -99,6 +99,11 @@
         FastRerandomize pairs accelerated hardware with a minimal software interface, making rigorous
         rerandomization feasible for large-scale experiments without extra complexity.
       </p>
+      <p>
+        The paper documents three advances: accelerated balance checks, key-only storage, and design-respecting
+        inference. The package uses a two-layer design: an R front-end for ergonomics and a JAX/XLA backend for
+        batched kernels on CPU, GPU, or TPU.
+      </p>
       <p>Access the full manuscript on <a href="https://arxiv.org/abs/2501.07642">arXiv</a>; the formal SoftwareX citation is listed below for reference.</p>
     </section>
 
@@ -148,6 +153,12 @@
       <p class="eyebrow">Performance</p>
       <h2>CPU vs GPU scaling</h2>
       <p>Benchmark results from the FastRerandomize paper, highlighting accelerated performance as sample sizes grow.</p>
+      <p>
+        In a representative benchmark (n = 100, d = 100, 2e5 draws), the GPU backend completes pool generation
+        in about 5 s versus about 112 s for a baseline R workflow (about 24x faster). At n = 1000 and d = 1000,
+        GPU time drops from about 91 s (CPU) to about 7 s (GPU), a ~96% reduction, and peak speedups reach ~42x
+        in high-dimensional, stringent settings.
+      </p>
       <div class="performance-grid">
         <figure class="figure-card">
           <a href="https://arxiv.org/abs/2501.07642">
@@ -169,6 +180,13 @@
     <!-- Usage Example Section -->
     <section class="usage-example animate-fade-in">
       <h3>Minimal API example</h3>
+      <p>
+        Acceptance probability q sets stringency; holding q fixed, more draws mainly increase the accepted pool
+        (lowering the minimum attainable randomization-test p-value) without improving expected balance. At
+        q = 1%, 1e5 draws yields about 1,000 accepted assignments (min p about 0.0010), while 2e5 draws yields
+        about 2,000 accepted (min p about 0.0005). Use <code>diagnose_rerandomization()</code> to choose q based
+        on n, d, R^2, sigma, and a target effect size.
+      </p>
       <div class="code-tabs">
         <button class="code-tab active" data-tab="tab1">Setup & Basic Usage</button>
         <button class="code-tab" data-tab="tab2">Monte Carlo Randomization</button>
@@ -321,6 +339,10 @@ X <- <span class="code-keyword">matrix</span>(<span class="code-keyword">rnorm</
     <!-- Demo Section -->
     <section class="demo-section">
       <h2>Try fastrerandomize:</h2>
+      <p>
+        This interactive capsule reproduces the paper's workflow and performance comparisons in a browser-friendly
+        environment. It mirrors the same accelerated backend used in the package.
+      </p>
       <iframe
         class="demo-frame"
         src="https://cjerzak-fastrerandomize.hf.space"

@@ -213,6 +213,12 @@
           <li>Conducting a randomization-based inference test</li>
         </ul>
         <p>
+          In the paper's diagnostics, acceptance at q = 1% yields a shrinkage factor of about 0.45 at d = 30 but
+          about 0.88 at d = 1000, so stringency has diminishing returns in very high-dimensional settings. In the
+          same illustrative setup (n_T = n_C = 500, R^2 = 0.5), that corresponds to about 15% RMSE reduction at
+          d = 30 versus about 3% at d = 1000.
+        </p>
+        <p>
           Note: This tutorial assumes you have installed the fastrerandomize
           package, either from source or via GitHub:
         </p>
@@ -268,6 +274,13 @@ n_treated <- round(nrow(X)/2)
           In this example, we’ll use the Monte Carlo approach. Note that
           <code>randomization_accept_prob</code> is set very low (0.0001) purely
           for demonstration.
+        </p>
+        <p>
+          In high-dimensional planning, diagnostics can recommend extremely small q values. For example, in the
+          paper's illustrative case (d = 1000, n_T = n_C = 500, R^2 = 0.4, sigma = 1, |tau| = 0.2), the diagnostic
+          inversion implies q* approx 0.000012 (about 1.2e-5), or roughly 81,226 draws per accepted assignment. Holding
+          q fixed, more draws mainly increase the accepted pool (lowering the minimum attainable p-value) without
+          changing expected balance.
         </p>
         <div class="sourceCode" id="cb3">
           <pre class="sourceCode r"><code class="sourceCode r">
@@ -341,6 +354,11 @@ if(RunMainAnalysis){
         <p>
           Next, we showcase a randomization-based inference procedure using
           fastrerandomize.
+        </p>
+        <p>
+          Randomization tests are conditioned on the accepted assignments: the observed statistic is compared to
+          its distribution over the accepted pool. As a result, p-values are lower-bounded by 1 / M_accept, and
+          optional fiducial intervals are available by inverting the test.
         </p>
 
         <div id="a.-setup-simulated-outcomes" class="section level3">

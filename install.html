@@ -126,10 +126,11 @@
         <div class="tips-card">
           <h3><i class="fas fa-lightbulb"></i> Installation Tips</h3>
           <ul>
-            <li>Ensure you have R version 4.0 or higher installed.</li>
-            <li>The package setup requires Python dependencies which will be automatically installed.</li>
+            <li>Ensure you have R version 4.3 or higher installed.</li>
+            <li>System requirements: Python 3.11+ plus reticulate, JAX/JAXLIB, and NumPy (installed by the backend).</li>
+            <li><code>build_backend()</code> creates a minimal conda environment and selects CPU/GPU/TPU automatically.</li>
             <li>If you encounter any errors during installation, open an issue on <a href="https://github.com/cjerzak/fastrerandomize-software/issues">GitHub</a>.</li>
-            <li>For GPU acceleration, make sure you have appropriate CUDA drivers installed.</li>
+            <li>For GPU acceleration, ensure compatible CUDA (NVIDIA) or Metal (Apple) drivers are installed.</li>
           </ul>
         </div>
       </div>
