@@ -414,6 +414,24 @@ nav ul li a[aria-current="page"] {
   max-width: 640px;
 }
 
+.hero-lede {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-md);
+}
+
+.hero-lede-text {
+  flex: 1 1 0;
+  margin: 0;
+}
+
+.hero-lede-logo {
+  width: clamp(140px, 16vw, 220px);
+  height: auto;
+  flex: 0 0 auto;
+}
+
 .hero-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -937,6 +955,15 @@ footer {
 @media (max-width: 992px) {
   .search-container {
     display: none;
+  }
+
+  .hero-lede {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hero-lede-logo {
+    width: clamp(120px, 28vw, 200px);
   }
 }
 
