@@ -226,10 +226,7 @@
 <span class="code-keyword">library</span>(<span class="code-string">fastrerandomize</span>)
 
 <span class="code-comment"># Build the backend with Python dependencies</span>
-<span class="code-function">build_backend</span>(
-  conda_env = <span class="code-string">"fastrerandomize"</span>, 
-  conda = <span class="code-string">"auto"</span>
-)
+<span class="code-function">build_backend</span>()
 
 <span class="code-comment"># Step 2: Create some example covariate data</span>
 <span class="code-keyword">set.seed</span>(999L)
@@ -317,7 +314,6 @@ X <- <span class="code-keyword">matrix</span>(<span class="code-keyword">rnorm</
 <span class="code-keyword">test_result</span> <- <span class="code-function">randomization_test</span>(
   obsW = obsW,
   obsY = obsY,
-  X = X,
   candidate_randomizations = randomizations$randomizations,
   findFI = TRUE,   <span class="code-comment"># Calculate fiducial interval</span>
   alpha = 0.05     <span class="code-comment"># Significance level</span>
