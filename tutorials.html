@@ -100,23 +100,6 @@
       <h1 class="title toc-ignore">FastRerandomize Package Tutorial</h1>
       <h4 class="date">2026-01-24</h4>
 
-      <div class="section-card animate-fade-in">
-        <p class="eyebrow">Citation</p>
-        <p>
-          Connor T. Jerzak, Rebecca Goldstein, Aniket Kamat, and Fucheng Warren Zhu.
-          FastRerandomize: An R Package for Fast Rerandomization Using Accelerated Computing.
-          SoftwareX, 2026.
-        </p>
-        <div class="citation-card">
-          <pre><code>@article{jerzak2025fastrerandomize,
-  title={FastRerandomize: An R Package for Fast Rerandomization Using Accelerated Computing},
-  author={Jerzak, Connor T. and Rebecca Goldstein and Aniket Kamat and Fucheng Warren Zhu},
-  journal={SoftwareX},
-  year={2026}
-}</code></pre>
-        </div>
-      </div>
-
       <div class="share-container">
         <button id="share-button">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
@@ -213,8 +196,11 @@
           <li>Conducting a randomization-based inference test</li>
         </ul>
         <p>
-          In the paper's diagnostics, acceptance at q = 1% yields a shrinkage factor of about 0.45 at d = 30 but
-          about 0.88 at d = 1000, so stringency has diminishing returns in very high-dimensional settings. In the
+          Stringency refers to how selective the acceptance rule is, typically expressed by the acceptance
+          probability q (lower q means more stringent). The shrinkage factor is the scalar reduction in covariate
+          imbalance variance when conditioning on acceptance. In the paper's diagnostics, acceptance at q = 1%
+          yields a shrinkage factor of about 0.45 at d = 30 but about 0.88 at d = 1000, so stringency has
+          diminishing returns in very high-dimensional settings. In the
           same illustrative setup (n_T = n_C = 500, R^2 = 0.5), that corresponds to about 15% RMSE reduction at
           d = 30 versus about 3% at d = 1000.
         </p>
@@ -471,6 +457,23 @@ if(RunMainAnalysis){
           advanced functionalities, including GPU-accelerated computations via
           JAX and flexible definitions of balance criteria.
         </p>
+      </div>
+
+      <div class="section-card animate-fade-in">
+        <p class="eyebrow">Citation</p>
+        <p>
+          Connor T. Jerzak, Rebecca Goldstein, Aniket Kamat, and Fucheng Warren Zhu.
+          FastRerandomize: An R Package for Fast Rerandomization Using Accelerated Computing.
+          SoftwareX, 2026.
+        </p>
+        <div class="citation-card">
+          <pre><code>@article{jerzak2025fastrerandomize,
+  title={FastRerandomize: An R Package for Fast Rerandomization Using Accelerated Computing},
+  author={Jerzak, Connor T. and Rebecca Goldstein and Aniket Kamat and Fucheng Warren Zhu},
+  journal={SoftwareX},
+  year={2026}
+}</code></pre>
+        </div>
       </div>
     </div> <!-- .tutorial-content -->
   </main>

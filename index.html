@@ -181,7 +181,8 @@
     <section class="usage-example animate-fade-in">
       <h3>Minimal API example</h3>
       <p>
-        Acceptance probability q sets stringency; holding q fixed, more draws mainly increase the accepted pool
+        Acceptance probability q sets stringency (how selective the acceptance rule is; lower q is more stringent);
+        holding q fixed, more draws mainly increase the accepted pool
         (lowering the minimum attainable randomization-test p-value) without improving expected balance. At
         q = 1%, 1e5 draws yields about 1,000 accepted assignments (min p about 0.0010), while 2e5 draws yields
         about 2,000 accepted (min p about 0.0005). Use <code>diagnose_rerandomization()</code> to choose q based
