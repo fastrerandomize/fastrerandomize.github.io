@@ -129,7 +129,7 @@
     <!-- Features Section -->
     <div class="features-title">
       <h2>Features</h2>
-      <p>Designed for clarity and speed across experimental scales.</p>
+      <p>FastRerandomize is designed for clarity and speed across experimental scales.</p>
     </div>
     
     <section class="features">
@@ -173,7 +173,7 @@
       <h2>CPU vs GPU scaling</h2>
       <p>Benchmark results from the FastRerandomize paper, highlighting accelerated performance as sample sizes grow.</p>
       <p>
-        In a representative benchmark (n = 100, d = 100, 2e5 draws), the GPU backend completes pool generation
+        In a representative benchmark (n = 100, d = 100, 2&times;10<sup>5</sup> draws), the GPU backend completes pool generation
         in about 5 s versus about 112 s for a baseline R workflow (about 24x faster). At n = 1000 and d = 1000,
         GPU time drops from about 91 s (CPU) to about 7 s (GPU), a ~96% reduction, and peak speedups reach ~42x
         in high-dimensional, stringent settings.
@@ -210,7 +210,8 @@
         on a finite accepted set.
       </p>
       <p>
-        At q = 1%, 1e5 draws yields about 1,000 accepted assignments (min p about 0.0010), while 2e5 draws yields
+        At q = 1%, 10<sup>5</sup> draws yields about 1,000 accepted assignments (min p about 0.0010), while
+        2&times;10<sup>5</sup> draws yields
         about 2,000 accepted (min p about 0.0005). Use <code>diagnose_rerandomization()</code> to choose q based
         on n, d, R², σ, and a target effect size.
       </p>
