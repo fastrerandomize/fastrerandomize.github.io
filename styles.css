@@ -266,9 +266,9 @@ nav {
 }
 
 .logo img {
-  height: 80px;
+  height: 92px;
   width: auto;
-  max-width: 300px;
+  max-width: 345px;
   display: block;
 }
 
@@ -984,8 +984,8 @@ footer {
   }
 
   .logo img {
-    height: 60px;
-    max-width: 240px;
+    height: 69px;
+    max-width: 276px;
   }
 
   .menu-toggle {
