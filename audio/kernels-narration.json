@@ -52,7 +52,7 @@
       "title": "Background and notation",
       "paragraphs": [
         "Background and notation. Think of the covariates as a rectangular table. Each row represents a unit in the experiment, and each column represents a covariate. We call the number of units N, and the number of covariates P. A treatment assignment is a list of zeros and ones: one means treatment, and zero means control.",
-        "Every candidate assignment has the same number of treated units and the same number of controls. The written equations call those counts N one and N zero. Their sum is N. This fixed treatment count is also a validity check: every generated assignment must contain exactly the required number of ones.",
+        "Every candidate assignment has the same number of treated units and the same number of controls. The written equations call those counts N one and N zero. Their sum is N.",
         "We collect several candidate assignments into a batch. The batch size is B, and each assignment becomes one row of a matrix called capital W. The covariates are centered and transformed before scoring. Under the default diagonal criterion, the columns are standardized. Under full-covariance scoring, they are whitened. Standardization and whitening are different operations, as we will explain in the next section.",
         "Multiplying the assignment matrix by the transformed covariate matrix produces treated-group covariate sums for every candidate in the batch. Each row of the result belongs to one assignment. Those sums determine its balance score, called T squared, which measures how different the treatment and control groups are in their covariates.",
         "The first figure compares a loop over individual assignments with a batched matrix product. At the reference shape, its cost model counts about one hundred and thirty-seven billion floating-point operations for the loop, versus sixty-nine billion for the product. It contrasts two hundred and seventy-five gigabytes of traffic with no reuse against an ideal minimum of one hundred and thirty-four megabytes for the product. The figure illustrates reuse of the same covariates across many candidate assignments; cache behavior matters to the actual memory traffic."
@@ -158,5 +158,5 @@
       ]
     }
   ],
-  "article_sha256": "3f6c0ad73d4faeb08aebc37c725856e3bb514434c0315370143b39e3aef8023a"
+  "article_sha256": "6d729e3824bc44679e5380b67e171506338f73dcb1610a29c34cce2c67b3c384"
 }

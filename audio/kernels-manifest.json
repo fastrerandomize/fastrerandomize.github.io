@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-11-09T15:07:27.700390+00:00",
-  "narration_sha256": "148e5cb752ed591d09c8279c1b371efe833eea3a6c618eadc6a742468ba79299",
-  "article_sha256": "3f6c0ad73d4faeb08aebc37c725856e3bb514434c0315370143b39e3aef8023a",
+  "generated_at": "2026-11-09T19:33:28.521062+00:00",
+  "narration_sha256": "e432ba7a763f2235de1ce38b21cd6f6123cfb65b3096f57a8432f9fb0438a10e",
+  "article_sha256": "6d729e3824bc44679e5380b67e171506338f73dcb1610a29c34cce2c67b3c384",
   "imported_source_sha256": "4c8153273f94f126386871d2ca55adc0050318407f7b23ae9b85ce7fe0046c89",
   "generator_sha256": "6b91ad9beed0c966ac603eee0a5294f3ddc65bfb9db57ea1ea212646d63175ba",
   "settings": {
@@ -21,14 +21,14 @@
     "join_version": 1
   },
   "audio_file": "audio/kernels.mp3",
-  "audio_sha256": "6e64ec2c59fe6b44a43b314ded35b67ece76087ef22cf51f03ad5facf57b3f04",
-  "bytes": 18862737,
-  "duration": 1571.805,
+  "audio_sha256": "4a0c2a62b6d87917cda6427a78aef98cf4c23d30959387df5b81bf26ca8b753b",
+  "bytes": 18767409,
+  "duration": 1563.855,
   "sample_rate": 24000,
   "channels": 1,
   "bitrate": 96000,
-  "loudness_lufs": -19.48,
-  "true_peak_dbtp": -1.55,
+  "loudness_lufs": -19.47,
+  "true_peak_dbtp": -1.72,
   "chapters": [
     {
       "id": "motivation",
@@ -40,55 +40,55 @@
       "id": "notation",
       "title": "Background and notation",
       "start": 127.0,
-      "end": 249.1
+      "end": 241.15
     },
     {
       "id": "scaling",
       "title": "Scale or whiten once, in double precision",
-      "start": 249.8,
-      "end": 429.635
+      "start": 241.85,
+      "end": 421.685
     },
     {
       "id": "batching",
       "title": "One matrix product per batch",
-      "start": 430.335,
-      "end": 666.15
+      "start": 422.385,
+      "end": 658.2
     },
     {
       "id": "keys",
       "title": "Keep keys, not assignments",
-      "start": 666.85,
-      "end": 782.5
+      "start": 658.9,
+      "end": 774.55
     },
     {
       "id": "inference",
       "title": "Precompute candidate statistics for fiducial intervals",
-      "start": 783.2,
-      "end": 1085.405
+      "start": 775.25,
+      "end": 1077.455
     },
     {
       "id": "benchmarks",
       "title": "Change one thing at a time",
-      "start": 1086.105,
-      "end": 1195.675
+      "start": 1078.155,
+      "end": 1187.725
     },
     {
       "id": "profiling",
       "title": "Sorting accounts for most kernel time",
-      "start": 1196.375,
-      "end": 1298.345
+      "start": 1188.425,
+      "end": 1290.395
     },
     {
       "id": "precision",
       "title": "Four safeguards for float32",
-      "start": 1299.045,
-      "end": 1450.53
+      "start": 1291.095,
+      "end": 1442.58
     },
     {
       "id": "summary",
       "title": "Regime, floor, and next steps",
-      "start": 1451.23,
-      "end": 1571.805
+      "start": 1443.28,
+      "end": 1563.855
     }
   ],
   "paragraphs": [
@@ -150,16 +150,16 @@
       "chapter": "notation",
       "index": 1,
       "start": 148.255,
-      "end": 167.355,
-      "text": "Every candidate assignment has the same number of treated units and the same number of controls. The written equations call those counts N one and N zero. Their sum is N. This fixed treatment count is also a validity check: every generated assignment must contain exactly the required number of ones.",
-      "speech_sha256": "8eedcb89c4e874b5642e2d4ec2efa6a2ca59ac7bb8223580e772f8571439e668",
-      "cache_key": "541ea11eb3054788eb204c62daf721a0c8767b944d587c4de7767ff497e5ce52"
+      "end": 159.405,
+      "text": "Every candidate assignment has the same number of treated units and the same number of controls. The written equations call those counts N one and N zero. Their sum is N.",
+      "speech_sha256": "aadd345448d05bbc1021d9e1c2c33e0e5a5321004c91f7748808f133bda94b90",
+      "cache_key": "362dcccc04d6a11dafccdace77b24b87fc389f5b1a50a366b66adbd84ae8b3c2"
     },
     {
       "chapter": "notation",
       "index": 2,
-      "start": 167.635,
-      "end": 193.26,
+      "start": 159.685,
+      "end": 185.31,
       "text": "We collect several candidate assignments into a batch. The batch size is B, and each assignment becomes one row of a matrix called capital W. The covariates are centered and transformed before scoring. Under the default diagonal criterion, the columns are standardized. Under full-covariance scoring, they are whitened. Standardization and whitening are different operations, as we will explain in the next section.",
       "speech_sha256": "1d9be8f45a0fc986d28e792bc84d62aa4f7f0a53a3adf0c2f3db16d533ecb161",
       "cache_key": "fa6d3cd5bce0f94ea3f67ab2a883169ff0a54369e5efdb2b90c0b2ddeb0c8f5d"
@@ -167,8 +167,8 @@
     {
       "chapter": "notation",
       "index": 3,
-      "start": 193.54,
-      "end": 214.265,
+      "start": 185.59,
+      "end": 206.315,
       "text": "Multiplying the assignment matrix by the transformed covariate matrix produces treated-group covariate sums for every candidate in the batch. Each row of the result belongs to one assignment. Those sums determine its balance score, called T squared, which measures how different the treatment and control groups are in their covariates.",
       "speech_sha256": "360df21a752d7af9ca7de6ee59f5d531e8e0a440c4f91fd42ba6ab3cb99e3e66",
       "cache_key": "7da355ddc0e1dac6e50ae407ca3ba5ae1a1a628b360a4c06a426c2c1eaa92320"
@@ -176,8 +176,8 @@
     {
       "chapter": "notation",
       "index": 4,
-      "start": 214.545,
-      "end": 248.82,
+      "start": 206.595,
+      "end": 240.87,
       "text": "The first figure compares a loop over individual assignments with a batched matrix product. At the reference shape, its cost model counts about one hundred and thirty-seven billion floating-point operations for the loop, versus sixty-nine billion for the product. It contrasts two hundred and seventy-five gigabytes of traffic with no reuse against an ideal minimum of one hundred and thirty-four megabytes for the product. The figure illustrates reuse of the same covariates across many candidate assignments; cache behavior matters to the actual memory traffic.",
       "speech_sha256": "9957133b249220c74b08fc1e32ce1a480a4f29d8bbc3baa6ae83a590cd3bb721",
       "cache_key": "230a5cbe6478f9340ffda350ab7be212a0fd68c6d2f077c792ffd7785ea19108"
@@ -185,8 +185,8 @@
     {
       "chapter": "scaling",
       "index": 0,
-      "start": 249.8,
-      "end": 272.975,
+      "start": 241.85,
+      "end": 265.025,
       "text": "The first change is to scale or whiten the covariates once, in double precision. In full-covariance scoring, Hotelling's T squared measures the difference between the two groups' covariate means using the inverse covariance matrix. The inverse covariance accounts for relationships between covariates, so correlated directions are treated differently from independent directions.",
       "speech_sha256": "96358d97bfb64abe9af8b6ea1ec8db2799d513673307216dd175afe99d9bd7fd",
       "cache_key": "72456c85456a2d0a70b67238f4dbed408cd284b6c68c92e3c8245100318c976e"
@@ -194,8 +194,8 @@
     {
       "chapter": "scaling",
       "index": 1,
-      "start": 273.255,
-      "end": 300.33,
+      "start": 265.305,
+      "end": 292.38,
       "text": "The default criterion uses a diagonal approximation. For each covariate, we square the difference between the treatment and control means, divide by that covariate's population variance, and sum across covariates. We then multiply by the treated count times the control count, divided by the total number of units. Constant columns receive zero weight. This calculation standardizes individual columns and ignores cross-covariances.",
       "speech_sha256": "549cba850aab70af9ad323e39d0e0b13629ce44872f06dba2778751799c1eb5e",
       "cache_key": "e7b735098bd195f1cac80a0d8367d726e98400b495788b33304f49e889c02b93"
@@ -203,8 +203,8 @@
     {
       "chapter": "scaling",
       "index": 2,
-      "start": 300.61,
-      "end": 332.385,
+      "start": 292.66,
+      "end": 324.435,
       "text": "For the full-covariance criterion, evaluating the quadratic form directly costs work proportional to the square of the number of covariates, after the group means are known. But the covariates and their covariance matrix do not change between candidate assignments. We can therefore center the covariates and apply the whitening transformation once. In the transformed coordinates, the quadratic form becomes an ordinary squared Euclidean norm. Evaluating that norm takes work proportional to the number of transformed coordinates.",
       "speech_sha256": "ae77d12e1aded20964a33d9f3f20336a0502d16dd056db1e0a0ab2836206ae17",
       "cache_key": "68bc415882816e6faf9c449e182fef5136a762f345dc387ced4a6c017564d3b3"
@@ -212,8 +212,8 @@
     {
       "chapter": "scaling",
       "index": 3,
-      "start": 332.665,
-      "end": 359.94,
+      "start": 324.715,
+      "end": 351.99,
       "text": "Both scoring paths use the same transformed-norm kernel. Each API call prepares the transformed covariates on the host in float64, then transfers them to the device as float32. Our reference benchmark uses default diagonal scoring with the built-in threshold function. It skips covariance construction, and its preparation time is linear in the size of the covariate table: zero point three four five seconds in the reference run.",
       "speech_sha256": "ebc76792fbf1d566eb738c31a59da632aad829dee01ba54a78ad368f5c04cbb5",
       "cache_key": "30bd9b298ef210e1501b0a82693c0f52c127560ecfd5ca3898423fe158e45ba6"
@@ -221,8 +221,8 @@
     {
       "chapter": "scaling",
       "index": 4,
-      "start": 360.22,
-      "end": 383.02,
+      "start": 352.27,
+      "end": 375.07,
       "text": "Centering also simplifies the group means. In exact arithmetic, each centered column sums to zero. Once we know the sum for the treated group, the control-group sum is its negative. The difference between the group means is therefore the treated sum multiplied by the sum of the two reciprocal group sizes. We do not need to calculate two group sums independently.",
       "speech_sha256": "fb79e813bbb61e59f66493f5e45fc731f86214207862041bc889bfa12615ef41",
       "cache_key": "a47aa9e0a77cbf863ae8e0ced0742bba91465dcd8c06a7ea85ee6f37685856d1"
@@ -230,8 +230,8 @@
     {
       "chapter": "scaling",
       "index": 5,
-      "start": 383.3,
-      "end": 400.85,
+      "start": 375.35,
+      "end": 392.9,
       "text": "In floating-point arithmetic, the centered column sum can be slightly different from zero. The implementation retains that total and subtracts the total divided by the control count when reconstructing the mean difference. This accounts for residual column sums after rounding.",
       "speech_sha256": "3c92be0b1384a889056e439e50799f445fd54dc48d6875ff6d75db33f651d2d8",
       "cache_key": "8766f033bb02bf047fe76b0349f199bfea8d12163ebc2535f1a3565f2bfddc5f"
@@ -239,8 +239,8 @@
     {
       "chapter": "scaling",
       "index": 6,
-      "start": 401.13,
-      "end": 429.355,
+      "start": 393.18,
+      "end": 421.405,
       "text": "Centering also reduces cancellation when nearly equal group means are subtracted. In a comparison with covariates near one thousand, the non-whitened per-draw kernel had a maximum relative error of three point four times ten to the minus three. The transformed kernel's error was two point five times ten to the minus seven. That comparison used a float64 reference, one thousand and twenty-four candidate draws, one thousand and twenty-four units, and sixty-four covariates.",
       "speech_sha256": "f669c1e187160fc3c12f5e4dec4c139642ceb73d9eec5278ab7a1ee1f845f94d",
       "cache_key": "94e4b481ba781bcdaf07960b3941b6be0a56384c223e897902bdaf8be68d5dd4"
@@ -248,8 +248,8 @@
     {
       "chapter": "batching",
       "index": 0,
-      "start": 430.335,
-      "end": 456.01,
+      "start": 422.385,
+      "end": 448.06,
       "text": "The second change is to batch the balance calculations. For any assignment, the control-group sum equals the total column sum minus the treated-group sum. The covariates, the total column sum, and the group sizes stay fixed. The assignment-dependent projection is the treated-group sum. Stacking assignments into rows lets us calculate these projections together as a general matrix multiplication, usually called GEMM.",
       "speech_sha256": "db4bc499fd6a5e96fb081b1667c61605249ecc156b52f5780fbccb570e11deb3",
       "cache_key": "64efe734134a6f1b337c0170a9ec34eb87fb0a3737d0f7086739491ecf136deb"
@@ -257,8 +257,8 @@
     {
       "chapter": "batching",
       "index": 1,
-      "start": 456.29,
-      "end": 480.59,
+      "start": 448.34,
+      "end": 472.64,
       "text": "A tiled matrix multiplication reuses blocks of the assignment and covariate matrices in shared memory and registers. Arithmetic intensity measures the amount of arithmetic performed per byte transferred. In the ideal whole-product model, we read each input once and write the result once. For the reference workload, this gives five hundred and twelve floating-point operations per byte.",
       "speech_sha256": "a2dec1d28f7f06ac11cf59cc60b4cc82da1730711502729570563cb3b576d9a1",
       "cache_key": "22de1b507ce206c3d5dd3fe784666cdc3f379b9912b173c91e467fb6fdb7faa4"
@@ -266,8 +266,8 @@
     {
       "chapter": "batching",
       "index": 2,
-      "start": 480.87,
-      "end": 514.42,
+      "start": 472.92,
+      "end": 506.47,
       "text": "The roofline model combines the processor's arithmetic capacity with its memory bandwidth. The ridge point is peak arithmetic throughput divided by peak bandwidth, about thirty-nine operations per byte on this GPU. Below that point, bandwidth sets the model's throughput bound. Above it, arithmetic capacity sets the bound. For a calculation with a known operation count and byte count, the ideal time floor is the larger of two times: operations divided by peak throughput, and bytes divided by peak bandwidth.",
       "speech_sha256": "9e4a59478afb459f30f7be92b409300a69094c7132f45099aa3db53dfa72dd46",
       "cache_key": "88f41ff3c83f9cf070b5ed36dc39c82f53e44ea8697e72aaca574c7e46e063ca"
@@ -275,8 +275,8 @@
     {
       "chapter": "batching",
       "index": 3,
-      "start": 514.7,
-      "end": 541.45,
+      "start": 506.75,
+      "end": 533.5,
       "text": "The second figure plots measured balance-kernel throughput against modeled intensity. Blue points represent measured kernels, open points represent models, and gray points show calibration controls. The sliders change the workload shape and its modeled intensity and time floor. At one thousand and twenty-four units, sixteen covariates, and a batch of four thousand and ninety-six, the measured balance time is zero point two five milliseconds.",
       "speech_sha256": "c1fbb4fc38b31f65cf9ac69c49533e83da8c1e78ce49100194cb55cd329d6606",
       "cache_key": "6822a385616e63003e4363a02b8a135ba8fb357911dad5b455ba09c02c11b8c4"
@@ -284,8 +284,8 @@
     {
       "chapter": "batching",
       "index": 4,
-      "start": 541.73,
-      "end": 573.38,
+      "start": 533.78,
+      "end": 565.43,
       "text": "There is another useful scale for the intensity calculation. The profiler reports a threadblock tile with two hundred and fifty-six rows and one hundred and twenty-eight columns. Counting input loads separately for each tile gives forty-two point seven operations per byte, just above the ridge. This and the whole-product estimate describe different assumptions about reuse. The article's closing ledger notes that actual DRAM and cache traffic were not established because hardware counters were unavailable.",
       "speech_sha256": "3842a8610b8f08bbae34bf593f77bc3833d280fe0e8ab4a3c961ff4b7eff5dce",
       "cache_key": "877432c16a8ac1708fe3e04c72cc73db5bfbf5c5ef3e10c62807b21f882f24da"
@@ -293,8 +293,8 @@
     {
       "chapter": "batching",
       "index": 5,
-      "start": 573.66,
-      "end": 611.685,
+      "start": 565.71,
+      "end": 603.735,
       "text": "The same matrix-product strategy also helps the standalone pairwise-distance utility. The squared distance between two vectors equals the squared length of the first, plus the squared length of the second, minus twice their inner product. That identity avoids storing a separate difference for every pair and every feature. For two datasets of one thousand and twenty-four rows each, with two hundred and fifty-six features, a four-megabyte inner-product matrix replaces a one point zero seven gigabyte intermediate difference tensor. This utility operates outside the assignment-screening pipeline.",
       "speech_sha256": "e5e1db4712ac0a51957ea4226e532cfe98d651ebe322b45d5b6eb584a0ddc8c1",
       "cache_key": "6ddf5120c5ed40c5acc97c07b4f2a334c2f0bc22ef6ef222c895e947a242ec6a"
@@ -302,8 +302,8 @@
     {
       "chapter": "batching",
       "index": 6,
-      "start": 611.965,
-      "end": 643.615,
+      "start": 604.015,
+      "end": 635.665,
       "text": "Batch size controls how much assignment storage is needed at one time. The automatic rule targets two to the twenty-second float32 entries. At four bytes each, that is sixteen mebibytes, meaning sixteen binary megabytes. It rounds the target number of draws down to a power of two, clamps the batch size between one thousand and twenty-four and sixty-five thousand, five hundred and thirty-six, and caps it at the requested total number of draws. The lower bound can exceed the memory target when the number of units is large.",
       "speech_sha256": "a3b06aeccb5b26d6f6f601fc66619a3de050b64ce9b04b36c4cf5df7506d830f",
       "cache_key": "92de2172871c6bdcc3a8964276dfd3cd011a326d1bab7bf8b3cf42bfc2c57493"
@@ -311,8 +311,8 @@
     {
       "chapter": "batching",
       "index": 7,
-      "start": 643.895,
-      "end": 665.87,
+      "start": 635.945,
+      "end": 657.92,
       "text": "The reference benchmark explicitly uses four thousand and ninety-six draws per batch and four thousand and ninety-six units. Its assignment buffer is therefore sixty-four binary megabytes, equivalent to sixty-seven point one decimal megabytes. For this workload, the automatic rule would instead choose a batch of one thousand and twenty-four.",
       "speech_sha256": "cbd32ff8f1747b4774c5f4ce21a1c7f72df9dc77041553778a5e005d192118a7",
       "cache_key": "9fb76ce93ef55125d8ccd67c75677be4de8f6cfcd417d9ae577801d6d191c779"
@@ -320,8 +320,8 @@
     {
       "chapter": "keys",
       "index": 0,
-      "start": 666.85,
-      "end": 688.225,
+      "start": 658.9,
+      "end": 680.275,
       "text": "The third change is to regenerate assignments instead of storing the entire candidate pool. More than a million assignments for four thousand and ninety-six units would occupy four point two nine gigabytes even if every indicator used just one byte. Yet only one thousand and forty-nine assignments are retained in the reference workload.",
       "speech_sha256": "b1b873897c15d5ad0cbfda13fdb8a7eda35b8e525249c2a69881eb8f6c670bdd",
       "cache_key": "238e3508a419a2344539e3d95ff565b7a9034ab7ff37097de83fa57d7e1ff586"
@@ -329,8 +329,8 @@
     {
       "chapter": "keys",
       "index": 1,
-      "start": 688.505,
-      "end": 710.855,
+      "start": 680.555,
+      "end": 702.905,
       "text": "Each candidate has a global draw index. Its pseudorandom-number generator key is a pure function of that index and one shared root key. The device computes these keys as needed. For a fixed root key, a given draw index receives the same key regardless of batch size. Changing the batch size therefore preserves the sequence of treatment assignments.",
       "speech_sha256": "431ce2efdeb53524a1a90653595efa1e1d6ba7153a55f842d69617191bd201dd",
       "cache_key": "2719c788e84909e3c213b2f5e0135abef7b4fe9bc1bad127a2b46501c265ff4c"
@@ -338,8 +338,8 @@
     {
       "chapter": "keys",
       "index": 2,
-      "start": 711.135,
-      "end": 739.635,
+      "start": 703.185,
+      "end": 731.685,
       "text": "To construct an assignment, JAX shuffles a list containing the required number of ones and zeros. It generates pseudorandom integer sort keys and sorts the treatment indicators by those keys. The payload uses int32 because sorting one-byte payloads on ROCm produced incorrect treated counts at two hundred and fifty-six or more units. Preserving existing seeds requires preserving the full mapping from root key and draw index to assignment, including the permutation step.",
       "speech_sha256": "036aaf3acf1c0a000c7350d314c93b2de27e775b223a85fd9d6e7d0b5fdbdad3",
       "cache_key": "e2be473d5607b4600b26f2400c19340be5b3104abfbf1cee2509cedef373fdfa"
@@ -347,8 +347,8 @@
     {
       "chapter": "keys",
       "index": 3,
-      "start": 739.915,
-      "end": 759.04,
+      "start": 731.965,
+      "end": 751.09,
       "text": "Each batch uses scratch memory for its assignments and writes one float32 score per draw. Only the scores persist across batches. The third figure shows the memory comparison: an eight-byte root key and a four point two megabyte score vector replace the four point two nine gigabyte assignment pool.",
       "speech_sha256": "94951c95e4706857dee1684e082bf721768ef3fbfbc2a6db657f6aebc7afdc07",
       "cache_key": "c2a37c658d66aee608eeabb5678f01bcb7243a5ec8bf8a35425eaef21446898a"
@@ -356,8 +356,8 @@
     {
       "chapter": "keys",
       "index": 4,
-      "start": 759.32,
-      "end": 782.22,
+      "start": 751.37,
+      "end": 774.27,
       "text": "On the reference NVIDIA system, all two hundred and fifty-six batches run inside one compiled program, avoiding a host round trip for every batch. Metal defaults to dispatching each compiled batch from R, so it retains a host dispatch cost per batch. After a final sort ranks the full score vector, the accepted assignments are regenerated from their indices.",
       "speech_sha256": "3f9e252632a8f468dbb442341728084d6ab51684e4f367512f621c42cce776ae",
       "cache_key": "26321e99eb338f3763755bf0c4534bf2545ad093c5545ff6d0b63138093309ce"
@@ -365,8 +365,8 @@
     {
       "chapter": "inference",
       "index": 0,
-      "start": 783.2,
-      "end": 802.225,
+      "start": 775.25,
+      "end": 794.275,
       "text": "The fourth change concerns inference after the experiment. We select the implemented assignment uniformly from the retained pool and use that same pool for inference. Once outcomes have been observed, we compare the actual treatment effect estimate with statistics under the retained candidate assignments.",
       "speech_sha256": "3802854b32c8b385b7e832a158379d4266485a128419e61c377e8a04de18030c",
       "cache_key": "42901a4c56213027dddc656780eda7b07c92a26eac0a796906806ac0e213de90"
@@ -374,8 +374,8 @@
     {
       "chapter": "inference",
       "index": 1,
-      "start": 802.505,
-      "end": 842.605,
+      "start": 794.555,
+      "end": 834.655,
       "text": "The package's fiducial interval inverts randomization tests. For each hypothesized constant treatment effect, it asks whether either of two one-sided tests rejects at half the significance level. The interval retains effects for which neither test rejects. Under uniform selection from the retained rows and the constant additive-effect model, enumerating those rows with equal weight gives exact, potentially conservative randomization tests conditional on the pool. Exact inversion has coverage of at least one minus the significance level, conditional on that pool. A different selection rule requires inference using its actual assignment probabilities.",
       "speech_sha256": "e5257422799d1a9191167a1ba7ddb1c05715da0285a80ba57f4bb18ccbab659a",
       "cache_key": "1384564e5fc3d7a0b1cdc76831b4e49d7016aaf79d7fc8741b7170778db61eaf"
@@ -383,8 +383,8 @@
     {
       "chapter": "inference",
       "index": 2,
-      "start": 842.885,
-      "end": 868.185,
+      "start": 834.935,
+      "end": 860.235,
       "text": "To understand the computation, begin with the difference in means: the average outcome among treated units minus the average among controls. Call the hypothesized effect tau. Under the sharp null of a constant effect, we can reconstruct the outcomes for any candidate assignment. Start with the observed outcomes, remove tau from units that were actually treated, and add tau to units treated by the candidate assignment.",
       "speech_sha256": "3cef70f50a2675a02e98ac9489bfeb7ddbd9ed79690f04abd4decdad6ca4227b",
       "cache_key": "9eaca423cc841961d8c96f853499943a26813d7432592c99d3941c4860f157c6"
@@ -392,8 +392,8 @@
     {
       "chapter": "inference",
       "index": 3,
-      "start": 868.465,
-      "end": 891.515,
+      "start": 860.515,
+      "end": 883.565,
       "text": "Each candidate fixes the weights in the difference in means. Its adjusted outcomes change linearly with tau. The candidate's statistic must therefore follow a straight line as tau changes. One intercept and one slope determine the entire line. The interval search can evaluate this line instead of recalculating averages over all units at every trial effect.",
       "speech_sha256": "94da106f7327b911214066f786a88366e81faa785b8bdb0f4f484b0866c60510",
       "cache_key": "a06452f614d8b22deb61992b26dede904b779521489948864717d8757a24966c"
@@ -401,8 +401,8 @@
     {
       "chapter": "inference",
       "index": 4,
-      "start": 891.795,
-      "end": 924.945,
+      "start": 883.845,
+      "end": 916.995,
       "text": "The intercept, called A in the written equations, is the candidate's difference in means using the observed outcomes. Another coefficient, B, is the difference in means of the observed treatment indicators under that candidate. A third coefficient, C, is the candidate's treated count divided by the fixed treated-group size. C equals one for the fixed-count assignments considered here. The slope is C minus B. When the candidate is the observed assignment itself, B and C both equal one. Its line is horizontal, at the observed treatment effect estimate.",
       "speech_sha256": "7322669077f0b863d5102d72563cb17442374a8e959f3cdf49edc79307acbdf1",
       "cache_key": "d1ed3edbc89a193f90c44fe3ba88953efcd633c4211f693faf136e9559440c83"
@@ -410,8 +410,8 @@
     {
       "chapter": "inference",
       "index": 5,
-      "start": 925.225,
-      "end": 943.325,
+      "start": 917.275,
+      "end": 935.375,
       "text": "This affine identity is exact in real arithmetic under the constant additive-effect model. The finite pool does not itself make these conditional tests approximate. The finite endpoint search approximates the interval, and floating-point arithmetic introduces rounding error.",
       "speech_sha256": "6f7db3906adfcb276ae1afa2829ef59f3136a2718a5fd071e3561471aeec32a5",
       "cache_key": "8294541818d5af6d16899ed14a24df5b3cb4626470331d28990c11b92d40d806"
@@ -419,8 +419,8 @@
     {
       "chapter": "inference",
       "index": 6,
-      "start": 943.605,
-      "end": 963.955,
+      "start": 935.655,
+      "end": 956.005,
       "text": "On the device, the Candidate Moments kernel calculates three raw sums for each retained assignment in one pass. First, it sums the centered outcomes of the units treated by that candidate. Second, it counts the units treated under both the candidate and observed assignments. Third, it counts the candidate's treated units.",
       "speech_sha256": "4b19f2e07d59d2f0e51fe8b62d269acb4e2fe1728a1811c770d3713c3e297e2d",
       "cache_key": "d3909f3a204054c9274b7b6cce9844ab86c55e057e25d52fe32a009ac7adeddf"
@@ -428,8 +428,8 @@
     {
       "chapter": "inference",
       "index": 7,
-      "start": 964.235,
-      "end": 993.485,
+      "start": 956.285,
+      "end": 985.535,
       "text": "These three sums map directly to the coefficients. Multiply the centered-outcome sum by the sum of the reciprocal treatment and control counts to obtain the intercept. To obtain B, divide the overlap count by the treatment count, then subtract the number of observed treated units outside the candidate's treated group divided by the control count. C is the total candidate treated count divided by the treatment count. These identities apply in exact arithmetic with the fixed group sizes.",
       "speech_sha256": "7541be1129b012b26e1fa94dd344a529cec1da2b4c20b3608c3eadcab4a52ddc",
       "cache_key": "d7170f2e238cc1e51e002d626c81b745f12fa384fcc09c3c0e7e971ec9c3600c"
@@ -437,8 +437,8 @@
     {
       "chapter": "inference",
       "index": 8,
-      "start": 993.765,
-      "end": 1013.14,
+      "start": 985.815,
+      "end": 1005.19,
       "text": "R converts the sums into intercepts and slopes once per candidate. At a hypothesized effect of zero, the candidate statistic is simply its intercept. The API's two-sided p-value for zero effect compares the magnitudes of these intercepts with the magnitude of the observed effect estimate.",
       "speech_sha256": "7d949d16acfd5845d66c5b0df4b3fedffc60e5b816e7178b15eea9b237fbf2de",
       "cache_key": "cd67df3c67a2ea8eed90ce9d0b7e654a87fd32178cbd0357fcc24a90ca5dff50"
@@ -446,8 +446,8 @@
     {
       "chapter": "inference",
       "index": 9,
-      "start": 1013.42,
-      "end": 1045.07,
+      "start": 1005.47,
+      "end": 1037.12,
       "text": "For the interval, R first makes five hundred stochastic updates. Each update samples one retained assignment and adjusts lower and upper effect estimates toward the relevant tail-probability crossings. It then evaluates all candidates at one hundred effect values on a grid expanded beyond those estimates. It returns the range of grid values whose smaller empirical tail probability exceeds half the significance level. Each candidate evaluation is a multiply-add. The search makes no further calls to the device.",
       "speech_sha256": "701c80ac7dee79b169da4ed851954a4a359d825dc93a9aa28da321b22e980535",
       "cache_key": "40384c78bcea1da50bd0ca81bce8d230b187997ac560403ce93b99d13d0e6f16"
@@ -455,8 +455,8 @@
     {
       "chapter": "inference",
       "index": 10,
-      "start": 1045.35,
-      "end": 1085.125,
+      "start": 1037.4,
+      "end": 1077.175,
       "text": "Figure four illustrates this geometry with forty units, five covariates, and twenty thousand initial draws. It retains the most balanced five percent: one thousand assignments. Two numbers describe each candidate line. The observed line is horizontal, and the interval corresponds to effects where it remains outside both extreme tails of the candidate statistics. With a significance level of five percent, the figure shows a nominal ninety-five percent fiducial interval from zero point five three to one point five three. The nominal level assumes uniform selection from the retained rows and is conditional on the pool.",
       "speech_sha256": "a897652d75a6709d16b0a3a7f6a8f9997ee9fdcbfc4b3b24ff9cdf40d9a003af",
       "cache_key": "b5b312a897beb355e391428fd6b3c3fd39bdbe109316dabd3cf7d7cd84446825"
@@ -464,8 +464,8 @@
     {
       "chapter": "benchmarks",
       "index": 0,
-      "start": 1086.105,
-      "end": 1113.78,
+      "start": 1078.155,
+      "end": 1105.83,
       "text": "We now turn from the four changes to their measurements. Arithmetic intensity describes reuse in operations per byte. Runtime speedups also depend on cache behavior and execution overhead. To compare algorithmic changes under a fixed resource budget, the article benchmarks standalone Python implementations on two CPU cores. Each comparison changes one algorithm, after compilation and warm-up, and reports the median of seven calls.",
       "speech_sha256": "f28bd8267e6494c67f08ec54754b488389e4121b3f5c239adedf9a64fdbc7d59",
       "cache_key": "2cef5237bac92d5f03d10755f3c118daf76470966263f866b5b3961920e43683"
@@ -473,8 +473,8 @@
     {
       "chapter": "benchmarks",
       "index": 1,
-      "start": 1114.06,
-      "end": 1131.985,
+      "start": 1106.11,
+      "end": 1124.035,
       "text": "For balance calculations with at least two hundred and fifty-six covariates, the CPU speedups range from one point five to two point two times. The full-inverse comparison reports two point nine times. At sixteen covariates, the change is small, about one point one times.",
       "speech_sha256": "c69c62ca17a262f7571b699718be9e7a0abfc791cb98b87a04f0e40ac67f5ee9",
       "cache_key": "1c8a0b28f33bbabb39bb9f013e3248635531919603097051a3b0f98bad5d7ef8"
@@ -482,8 +482,8 @@
     {
       "chapter": "benchmarks",
       "index": 2,
-      "start": 1132.265,
-      "end": 1159.64,
+      "start": 1124.315,
+      "end": 1151.69,
       "text": "Pairwise distances and the fiducial search show larger gains. Replacing the broadcast difference tensor with a matrix product speeds up the distance comparisons by eight point two to nine point six times. Precomputing candidate intercepts and slopes speeds up the fiducial-search comparisons by seventy-six to one hundred and fifty-eight times. The interval search avoids repeatedly taking inner products over all units at every trial effect.",
       "speech_sha256": "a4baa081909b7362de833dd819f35663cc0ed2a8e923edb9c9442a2d8100258b",
       "cache_key": "c73d6745b05c33040ecdee6d03bdc29e74a24468714a1a464dada48ea8573e9e"
@@ -491,8 +491,8 @@
     {
       "chapter": "benchmarks",
       "index": 3,
-      "start": 1159.92,
-      "end": 1195.395,
+      "start": 1151.97,
+      "end": 1187.445,
       "text": "These CPU comparisons are separate from the reference NVIDIA roofline measurement. The article also cites a separate AMD GPU comparison from the package's release notes. With all optimizations enabled, repeated whole-function calls on an RX seventy-six hundred M X T were ten to one hundred and ten times faster for Monte Carlo generation, and six to one hundred and eighty times faster for randomization testing. These ranges describe different workloads and hardware; they are not alternative speedups for the single reference calculation.",
       "speech_sha256": "6d70fbbbe5b38574bd73ffcb6e177de66ee506276a139838dc4a1d5c10a6a42d",
       "cache_key": "8afbb0cc8b2a40aab245848a34d3b989bc0f4ecebcfc6b44cc7ef435b9b5532a"
@@ -500,8 +500,8 @@
     {
       "chapter": "profiling",
       "index": 0,
-      "start": 1196.375,
-      "end": 1217.825,
+      "start": 1188.425,
+      "end": 1209.875,
       "text": "Profiling shows where the reference GPU spends its time after the changes. Balance checks take about three point seven milliseconds per batch, or thirty-two percent of kernel time. Sorting to generate permutations takes seven point one milliseconds, or sixty-one percent. All other kernels take about zero point nine milliseconds.",
       "speech_sha256": "14a90efea774add4312bb45c2f7fe5af39df68883bc04ce192a344ce4808e0b2",
       "cache_key": "29f1ece0a5b57eb5eb04d3029351c45b972e9424ae7900eb12cf0c0002b99918"
@@ -509,8 +509,8 @@
     {
       "chapter": "profiling",
       "index": 1,
-      "start": 1218.105,
-      "end": 1238.43,
+      "start": 1210.155,
+      "end": 1230.48,
       "text": "Amdahl's law limits the gain from optimizing any one part. Even if the balance product took no time at all, this decomposition would allow at most a one point four seven times speedup. Eliminating permutation sorting would allow at most two point five five times. Those are hypothetical limits, not achieved speedups.",
       "speech_sha256": "c6d72307bcb73de108d7eafc9295933d46d27e62a98c8689111faae0308de5fa",
       "cache_key": "2046d3d76a4ca7a5d7d58559d0d30791a90189cf2f15523c52edcef8e04c4b26"
@@ -518,8 +518,8 @@
     {
       "chapter": "profiling",
       "index": 2,
-      "start": 1238.71,
-      "end": 1270.36,
+      "start": 1230.76,
+      "end": 1262.41,
       "text": "Figure five compares generation and balance times across several shapes. With one thousand and twenty-four units and a batch of four thousand and ninety-six, the generation estimates range from two point two five to two point five zero milliseconds as the number of covariates ranges from sixteen to two thousand and forty-eight. In that figure, generation time is obtained by subtracting a separately measured balance time from the batch time. The generation workload depends on the number of units and the batch size.",
       "speech_sha256": "915998f425bae432b04523e8f00aba61b10ced41c06303a9fd1c98085d477d6e",
       "cache_key": "4cc52a05052c29e996a11602301e7f964ea59fa93a8aee74a1b4d8f68e905ec5"
@@ -527,8 +527,8 @@
     {
       "chapter": "profiling",
       "index": 3,
-      "start": 1270.64,
-      "end": 1298.065,
+      "start": 1262.69,
+      "end": 1290.115,
       "text": "Permutation sampling is the next optimization target. Each draw needs a random subset with the specified treatment count. A selection procedure might replace the full sort. The article presents this as a conjecture, not an implemented change. Replacing the sampler would change the mapping from keys to assignments, so existing seeds would no longer produce the same assignments. Performance and seed compatibility would both need consideration.",
       "speech_sha256": "a189c2fd10a7cd92659d825eebfad078a49b8a4920d994972a9619dfade26703",
       "cache_key": "3d779f891c398b16af3e707f6936cce9113c13b228da17c5ed84880cd268aed5"
@@ -536,8 +536,8 @@
     {
       "chapter": "precision",
       "index": 0,
-      "start": 1299.045,
-      "end": 1314.22,
+      "start": 1291.095,
+      "end": 1306.27,
       "text": "The batch loop uses float32, which stores four bytes per value and has twenty-four bits of precision for its significant digits. The loop uses four safeguards to ensure numerical accuracy, valid assignments, and reproducibility.",
       "speech_sha256": "cd9cd6c9c1c6f994baa9417a046ec22182639b9516dff588e9d42795aad88536",
       "cache_key": "7b64222f94813255d0880c78a8ffa3b58a0707a8e8fec305c2d331d1aa8b7674"
@@ -545,8 +545,8 @@
     {
       "chapter": "precision",
       "index": 1,
-      "start": 1314.5,
-      "end": 1340.0,
+      "start": 1306.55,
+      "end": 1332.05,
       "text": "First, use float64 for steps that are vulnerable to cancellation. Centering, scaling or whitening on the host, and the observed treatment effect use double precision. Near-ties in the two-sided p-value comparison need particular care. If a candidate's absolute statistic is very close to the absolute observed effect, float32 rounding can change which side of the comparison it falls on.",
       "speech_sha256": "3237d371ac4d71aa192733fdf8a9202e18b09b5e6eef2156ba335f05053c2f26",
       "cache_key": "676e7afd07984f8c7d45991dea651ac95b385b9f7c2c2f795227873003eabaa7"
@@ -554,8 +554,8 @@
     {
       "chapter": "precision",
       "index": 2,
-      "start": 1340.28,
-      "end": 1376.53,
+      "start": 1332.33,
+      "end": 1368.58,
       "text": "The implementation defines a tolerance called epsilon. It multiplies four times the number of units, times two to the minus twenty-four, times the sum of the absolute centered outcomes, times the sum of the reciprocal treatment and control counts. Two to the minus twenty-four is float32 unit roundoff. The explicit factor for the number of units allows for accumulated summation error, and four is the implementation's extra margin. Candidates whose absolute statistic falls within this tolerance of the observed magnitude are evaluated again in float64 before the comparison.",
       "speech_sha256": "a992b841ff9ffe37d1343547449fc3f338a21f57ddfc06cc2203ec14893e3731",
       "cache_key": "784daa4cc1c43c3a17d4b78e04994d70c6f7358a89b3f893a000609f8cc7b490"
@@ -563,8 +563,8 @@
     {
       "chapter": "precision",
       "index": 3,
-      "start": 1376.81,
-      "end": 1404.91,
+      "start": 1368.86,
+      "end": 1396.96,
       "text": "Second, the balance and distance products use JAX's highest precision setting. On NVIDIA GPUs, this requests float32 dot products using the full twenty-four bits of input precision. The reduced-precision format TF32 rounds inputs to ten fraction bits plus an implicit leading bit. The choice of full float32 input precision can affect throughput. The article's comparison with a hardware roof uses an FP32 reference.",
       "speech_sha256": "b1e1e830d1b8efe27a780593747f4cdd80a3f4c1d588e80926a71482b89183e4",
       "cache_key": "20805984bab9064a43d5170f3c85611d0f04e8b9dcd59ef47a43a54420d2f1a7"
@@ -572,8 +572,8 @@
     {
       "chapter": "precision",
       "index": 4,
-      "start": 1405.19,
-      "end": 1419.74,
+      "start": 1397.24,
+      "end": 1411.79,
       "text": "Third, sorting uses int32 treatment indicators, and generated assignments are checked to contain the required number of treated units. This addresses the payload correctness issue discussed in the key-generation section.",
       "speech_sha256": "859d3ac2bfafd5119ff194d09f59b5b89b6d1c26836e3ce7ce9754c4d3080964",
       "cache_key": "dffed8cb55e466a41d60bc35d368e134ffc9f1c4e9e4554d2c7c65133050e035"
@@ -581,8 +581,8 @@
     {
       "chapter": "precision",
       "index": 5,
-      "start": 1420.02,
-      "end": 1432.77,
+      "start": 1412.07,
+      "end": 1424.82,
       "text": "Fourth, accepted assignments are regenerated from their keys and scored again as a reproduction check. Together, these checks cover treatment counts, numerical comparisons, and the regenerated scores.",
       "speech_sha256": "d0bf6e0801898d045977ffbd58c36c01d3d9a57c5f20bf7511db35db195acb0c",
       "cache_key": "48ef38877a218018c788d2061a1bea24ce0326737561ed5d2636f8afd4451113"
@@ -590,8 +590,8 @@
     {
       "chapter": "precision",
       "index": 6,
-      "start": 1433.05,
-      "end": 1450.25,
+      "start": 1425.1,
+      "end": 1442.3,
       "text": "In the reference run, sixty-four accepted scores were compared with a float64 R reference. The maximum relative error among those checked scores was nine point zero seven times ten to the minus eight. That reported error applies to the checked scores in this run.",
       "speech_sha256": "0ab6c0913032f9694b430a6683f0befa2782e4ec5d3b44756d6e6ec1488753ee",
       "cache_key": "146ff516022a8dde55496248eeb7b6438e843f89a05d7e4dd2f2bf9ed5d43cac"
@@ -599,8 +599,8 @@
     {
       "chapter": "summary",
       "index": 0,
-      "start": 1451.23,
-      "end": 1471.255,
+      "start": 1443.28,
+      "end": 1463.305,
       "text": "To close, distinguish the balance product's hardware floor from the time for the complete operation. Both traffic models place the reference balance product above the compute-to-bandwidth ridge: five hundred and twelve operations per byte for the whole-product model, forty-two point seven for the tile model, and about thirty-nine at the ridge.",
       "speech_sha256": "60c88be3f6f507d570231814b771586813189f8fe86b429fd0fa331f2f5d1c0c",
       "cache_key": "60216afbf908410bb740dff9e268044547aa2a9c71d33bacf58fc88c7707b5ee"
@@ -608,8 +608,8 @@
     {
       "chapter": "summary",
       "index": 1,
-      "start": 1471.535,
-      "end": 1499.335,
+      "start": 1463.585,
+      "end": 1491.385,
       "text": "The balance-only floor is one point nine five six milliseconds per batch. Across two hundred and fifty-six batches, that is approximately zero point five zero one seconds for the full reference workload. The measured median balance product takes three point seven zero four milliseconds per batch. It sustains eighteen point five five trillion floating-point operations per second, or fifty-two point eight percent of the FP32 reference at the listed boost clock.",
       "speech_sha256": "7fd0844d4bd555edb7994830523970dcf6344b285a3342fc0dac30222c6739b4",
       "cache_key": "a6fed8c07f42e089c56988a565443fa676f72f02ec3d5b80b13ab197bfa5d5a4"
@@ -617,8 +617,8 @@
     {
       "chapter": "summary",
       "index": 2,
-      "start": 1499.615,
-      "end": 1534.09,
+      "start": 1491.665,
+      "end": 1526.14,
       "text": "The measured GPU stage takes two point nine five one seconds for generation, validation, balance scoring, and score ranking. The complete R call takes three point four one seconds, including host preparation and bookkeeping. Permutation sorting accounts for sixty-one percent of profiled GPU kernel time and is outside the balance-only floor. Per-batch kernel medians and whole-call medians were measured separately, so their sums need not match. Actual DRAM and cache traffic, and the old kernel's GPU time, were not established by these measurements.",
       "speech_sha256": "0859a253dcbea74aa68071703789a843343921b9cac454e7ba9770382d7c4e7d",
       "cache_key": "0bc9109ac193a78e49601013d47cb3decb691e3636b181efee4a423e38dd35c3"
@@ -626,8 +626,8 @@
     {
       "chapter": "summary",
       "index": 3,
-      "start": 1534.37,
-      "end": 1545.57,
+      "start": 1526.42,
+      "end": 1537.62,
       "text": "The written article includes the R call for reproducing the reference workload, links to the benchmark report and reproduction instructions, and the sources for its hardware cost model.",
       "speech_sha256": "ebaddc774a307d8d418cc143362105c6eae2f01134c7145ca3a7766f715349b5",
       "cache_key": "5781555f4ae20e08a634f4eae331bf5f26e9676f10bd69949b3d8a3481958161"
@@ -635,12 +635,11 @@
     {
       "chapter": "summary",
       "index": 4,
-      "start": 1545.85,
-      "end": 1571.525,
+      "start": 1537.9,
+      "end": 1563.575,
       "text": "We moved fixed calculations out of the draw loop, batched balance checks, regenerated assignments from keys, and reused candidate statistics during inference. The purpose is to make stringent balance criteria and treatment-effect inference practical for experiments with more units and covariates, with safeguards for numerical accuracy and reproducibility. That concludes the audio adaptation of Inside the kernels.",
       "speech_sha256": "655bc0097a77962a2733f2966d611f4eeffba78f55d262b1c87725c0033f5873",
       "cache_key": "5c16345724cc455dafc7eab06835bc829b4a6800c0e4c1c1270f540767f7a8ee"
     }
-  ],
-  "article_reviewed_at": "2026-11-09T15:40:37.863895+00:00"
+  ]
 }
