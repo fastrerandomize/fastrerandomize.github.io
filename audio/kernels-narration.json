@@ -1,0 +1,162 @@
+{
+  "title": "Inside the kernels",
+  "description": "A full spoken adaptation of the FastRerandomize article. Equations and figures are explained in words; code listings and source URLs remain in the written article.",
+  "language": "en-US",
+  "model": "mlx-community/Kokoro-82M-bf16",
+  "model_revision": "a71e4d38b236d968966a2002c4c895dbd12b1c3c",
+  "voice": "af_heart",
+  "speed": 1.0,
+  "sample_rate": 24000,
+  "source_sha256": "4c8153273f94f126386871d2ca55adc0050318407f7b23ae9b85ce7fe0046c89",
+  "pronunciations": {
+    "FastRerandomize": "Fast re-randomize",
+    "rerandomization": "re-randomization",
+    "JAX": "Jacks",
+    "GEMM": "gem",
+    "GPU": "G P U",
+    "CPU": "C P U",
+    "RTX": "R T X",
+    "RX": "R X",
+    "XLA": "X L A",
+    "FP32": "F P thirty-two",
+    "TF32": "T F thirty-two",
+    "ROCm": "rock em",
+    "DRAM": "D ram",
+    "float32": "float thirty-two",
+    "float64": "float sixty-four",
+    "int32": "int thirty-two",
+    "int8": "int eight",
+    "L2": "L two",
+    "T squared": "T squared",
+    "alpha": "alpha",
+    "tau": "tau",
+    "epsilon": "epsilon",
+    "Hotelling": "Hotelling",
+    "Mahalanobis": "Mahalanobis",
+    "fiducial": "fiducial"
+  },
+  "chapters": [
+    {
+      "id": "motivation",
+      "title": "What FastRerandomize computes, when, and why",
+      "paragraphs": [
+        "Inside the kernels. This is the audio adaptation of the FastRerandomize article. We will explain the calculations and the figures in words. The written version contains the equations, benchmark tables, source links, and code needed to reproduce the reference workload.",
+        "FastRerandomize selects treatment assignments that balance covariates between treatment and control groups. Once outcomes are observed, it reuses the retained assignment pool for randomization tests and treatment-effect intervals. Before the experiment, we draw candidate assignments, measure their covariate balance, and retain those that meet the balance criterion. We then draw the implemented assignment uniformly from the retained rows.",
+        "The screening cost matters because a stringent criterion rejects most candidates. At an acceptance probability of one in a thousand, retaining a thousand assignments requires screening a million candidates on average. The cost of each balance check therefore limits the numbers of units and covariates that are feasible.",
+        "Our reference workload screens one million, forty-eight thousand, five hundred and seventy-six assignments for four thousand and ninety-six units, using two thousand and forty-eight covariates. It retains the best one thousand and forty-nine assignments. On an NVIDIA RTX fifty eighty laptop GPU, the complete R call takes three point four one seconds. That is the median of seven warmed calls. The first call, which compiles the kernels, took eleven point nine six seconds.",
+        "The compiled JAX pipeline generates, validates, and scores about three hundred and fifty-five thousand assignments per second. Covariates are transformed once per call and reused across batches. Compatible compiled kernels are reused across calls. We will examine four changes to the computation, compare measured runtimes with hardware limits, and check numerical accuracy. After the experiment, the retained pool, the actual assignment, and the observed outcomes support inference about the treatment effect."
+      ]
+    },
+    {
+      "id": "notation",
+      "title": "Background and notation",
+      "paragraphs": [
+        "Background and notation. Think of the covariates as a rectangular table. Each row represents a unit in the experiment, and each column represents a covariate. We call the number of units N, and the number of covariates P. A treatment assignment is a list of zeros and ones: one means treatment, and zero means control.",
+        "Every candidate assignment has the same number of treated units and the same number of controls. The written equations call those counts N one and N zero. Their sum is N. This fixed treatment count is also a validity check: every generated assignment must contain exactly the required number of ones.",
+        "We collect several candidate assignments into a batch. The batch size is B, and each assignment becomes one row of a matrix called capital W. The covariates are centered and transformed before scoring. Under the default diagonal criterion, the columns are standardized. Under full-covariance scoring, they are whitened. Standardization and whitening are different operations, as we will explain in the next section.",
+        "Multiplying the assignment matrix by the transformed covariate matrix produces treated-group covariate sums for every candidate in the batch. Each row of the result belongs to one assignment. Those sums determine its balance score, called T squared, which measures how different the treatment and control groups are in their covariates.",
+        "The first figure compares a loop over individual assignments with a batched matrix product. At the reference shape, its cost model counts about one hundred and thirty-seven billion floating-point operations for the loop, versus sixty-nine billion for the product. It contrasts two hundred and seventy-five gigabytes of traffic with no reuse against an ideal minimum of one hundred and thirty-four megabytes for the product. The figure illustrates reuse of the same covariates across many candidate assignments; cache behavior matters to the actual memory traffic."
+      ]
+    },
+    {
+      "id": "scaling",
+      "title": "Scale or whiten once, in double precision",
+      "paragraphs": [
+        "The first change is to scale or whiten the covariates once, in double precision. In full-covariance scoring, Hotelling's T squared measures the difference between the two groups' covariate means using the inverse covariance matrix. The inverse covariance accounts for relationships between covariates, so correlated directions are treated differently from independent directions.",
+        "The default criterion uses a diagonal approximation. For each covariate, we square the difference between the treatment and control means, divide by that covariate's population variance, and sum across covariates. We then multiply by the treated count times the control count, divided by the total number of units. Constant columns receive zero weight. This calculation standardizes individual columns and ignores cross-covariances.",
+        "For the full-covariance criterion, evaluating the quadratic form directly costs work proportional to the square of the number of covariates, after the group means are known. But the covariates and their covariance matrix do not change between candidate assignments. We can therefore center the covariates and apply the whitening transformation once. In the transformed coordinates, the quadratic form becomes an ordinary squared Euclidean norm. Evaluating that norm takes work proportional to the number of transformed coordinates.",
+        "Both scoring paths use the same transformed-norm kernel. Each API call prepares the transformed covariates on the host in float64, then transfers them to the device as float32. Our reference benchmark uses default diagonal scoring with the built-in threshold function. It skips covariance construction, and its preparation time is linear in the size of the covariate table: zero point three four five seconds in the reference run.",
+        "Centering also simplifies the group means. In exact arithmetic, each centered column sums to zero. Once we know the sum for the treated group, the control-group sum is its negative. The difference between the group means is therefore the treated sum multiplied by the sum of the two reciprocal group sizes. We do not need to calculate two group sums independently.",
+        "In floating-point arithmetic, the centered column sum can be slightly different from zero. The implementation retains that total and subtracts the total divided by the control count when reconstructing the mean difference. This accounts for residual column sums after rounding.",
+        "Centering also reduces cancellation when nearly equal group means are subtracted. In a comparison with covariates near one thousand, the non-whitened per-draw kernel had a maximum relative error of three point four times ten to the minus three. The transformed kernel's error was two point five times ten to the minus seven. That comparison used a float64 reference, one thousand and twenty-four candidate draws, one thousand and twenty-four units, and sixty-four covariates."
+      ]
+    },
+    {
+      "id": "batching",
+      "title": "One matrix product per batch",
+      "paragraphs": [
+        "The second change is to batch the balance calculations. For any assignment, the control-group sum equals the total column sum minus the treated-group sum. The covariates, the total column sum, and the group sizes stay fixed. The assignment-dependent projection is the treated-group sum. Stacking assignments into rows lets us calculate these projections together as a general matrix multiplication, usually called GEMM.",
+        "A tiled matrix multiplication reuses blocks of the assignment and covariate matrices in shared memory and registers. Arithmetic intensity measures the amount of arithmetic performed per byte transferred. In the ideal whole-product model, we read each input once and write the result once. For the reference workload, this gives five hundred and twelve floating-point operations per byte.",
+        "The roofline model combines the processor's arithmetic capacity with its memory bandwidth. The ridge point is peak arithmetic throughput divided by peak bandwidth, about thirty-nine operations per byte on this GPU. Below that point, bandwidth sets the model's throughput bound. Above it, arithmetic capacity sets the bound. For a calculation with a known operation count and byte count, the ideal time floor is the larger of two times: operations divided by peak throughput, and bytes divided by peak bandwidth.",
+        "The second figure plots measured balance-kernel throughput against modeled intensity. Blue points represent measured kernels, open points represent models, and gray points show calibration controls. The sliders change the workload shape and its modeled intensity and time floor. At one thousand and twenty-four units, sixteen covariates, and a batch of four thousand and ninety-six, the measured balance time is zero point two five milliseconds.",
+        "There is another useful scale for the intensity calculation. The profiler reports a threadblock tile with two hundred and fifty-six rows and one hundred and twenty-eight columns. Counting input loads separately for each tile gives forty-two point seven operations per byte, just above the ridge. This and the whole-product estimate describe different assumptions about reuse. The article's closing ledger notes that actual DRAM and cache traffic were not established because hardware counters were unavailable.",
+        "The same matrix-product strategy also helps the standalone pairwise-distance utility. The squared distance between two vectors equals the squared length of the first, plus the squared length of the second, minus twice their inner product. That identity avoids storing a separate difference for every pair and every feature. For two datasets of one thousand and twenty-four rows each, with two hundred and fifty-six features, a four-megabyte inner-product matrix replaces a one point zero seven gigabyte intermediate difference tensor. This utility operates outside the assignment-screening pipeline.",
+        "Batch size controls how much assignment storage is needed at one time. The automatic rule targets two to the twenty-second float32 entries. At four bytes each, that is sixteen mebibytes, meaning sixteen binary megabytes. It rounds the target number of draws down to a power of two, clamps the batch size between one thousand and twenty-four and sixty-five thousand, five hundred and thirty-six, and caps it at the requested total number of draws. The lower bound can exceed the memory target when the number of units is large.",
+        "The reference benchmark explicitly uses four thousand and ninety-six draws per batch and four thousand and ninety-six units. Its assignment buffer is therefore sixty-four binary megabytes, equivalent to sixty-seven point one decimal megabytes. For this workload, the automatic rule would instead choose a batch of one thousand and twenty-four."
+      ]
+    },
+    {
+      "id": "keys",
+      "title": "Keep keys, not assignments",
+      "paragraphs": [
+        "The third change is to regenerate assignments instead of storing the entire candidate pool. More than a million assignments for four thousand and ninety-six units would occupy four point two nine gigabytes even if every indicator used just one byte. Yet only one thousand and forty-nine assignments are retained in the reference workload.",
+        "Each candidate has a global draw index. Its pseudorandom-number generator key is a pure function of that index and one shared root key. The device computes these keys as needed. For a fixed root key, a given draw index receives the same key regardless of batch size. Changing the batch size therefore preserves the sequence of treatment assignments. The package checks at startup that its counter keys match JAX's split operation, with a fallback if the check fails. The reference run confirmed agreement for all one million, forty-eight thousand, five hundred and seventy-six keys.",
+        "To construct an assignment, JAX shuffles a list containing the required number of ones and zeros. It generates pseudorandom integer sort keys and sorts the treatment indicators by those keys. The payload uses int32 because sorting one-byte payloads on ROCm produced incorrect treated counts at two hundred and fifty-six or more units. Preserving existing seeds requires preserving the full mapping from root key and draw index to assignment, including the permutation step.",
+        "Each batch uses scratch memory for its assignments and writes one float32 score per draw. Only the scores persist across batches. The third figure shows the memory comparison: an eight-byte root key and a four point two megabyte score vector replace the four point two nine gigabyte assignment pool.",
+        "On the reference NVIDIA system, all two hundred and fifty-six batches run inside one compiled program, avoiding a host round trip for every batch. Metal defaults to dispatching each compiled batch from R, so it retains a host dispatch cost per batch. After a final sort ranks the full score vector, the accepted assignments are regenerated from their indices."
+      ]
+    },
+    {
+      "id": "inference",
+      "title": "Precompute candidate statistics for fiducial intervals",
+      "paragraphs": [
+        "The fourth change concerns inference after the experiment. We select the implemented assignment uniformly from the retained pool and use that same pool for inference. Once outcomes have been observed, we compare the actual treatment effect estimate with statistics under the retained candidate assignments.",
+        "The package's fiducial interval inverts randomization tests. For each hypothesized constant treatment effect, it asks whether either of two one-sided tests rejects at half the significance level. The interval retains effects for which neither test rejects. Under uniform selection from the retained rows and the constant additive-effect model, enumerating those rows with equal weight gives exact, potentially conservative randomization tests conditional on the pool. Exact inversion has coverage of at least one minus the significance level, conditional on that pool. A different selection rule requires inference using its actual assignment probabilities.",
+        "To understand the computation, begin with the difference in means: the average outcome among treated units minus the average among controls. Call the hypothesized effect tau. Under the sharp null of a constant effect, we can reconstruct the outcomes for any candidate assignment. Start with the observed outcomes, remove tau from units that were actually treated, and add tau to units treated by the candidate assignment.",
+        "Each candidate fixes the weights in the difference in means. Its adjusted outcomes change linearly with tau. The candidate's statistic must therefore follow a straight line as tau changes. One intercept and one slope determine the entire line. The interval search can evaluate this line instead of recalculating averages over all units at every trial effect.",
+        "The intercept, called A in the written equations, is the candidate's difference in means using the observed outcomes. Another coefficient, B, is the difference in means of the observed treatment indicators under that candidate. A third coefficient, C, is the candidate's treated count divided by the fixed treated-group size. C equals one for the fixed-count assignments considered here. The slope is C minus B. When the candidate is the observed assignment itself, B and C both equal one. Its line is horizontal, at the observed treatment effect estimate.",
+        "This affine identity is exact in real arithmetic under the constant additive-effect model. The finite pool does not itself make these conditional tests approximate. The finite endpoint search approximates the interval, and floating-point arithmetic introduces rounding error.",
+        "On the device, the Candidate Moments kernel calculates three raw sums for each retained assignment in one pass. First, it sums the centered outcomes of the units treated by that candidate. Second, it counts the units treated under both the candidate and observed assignments. Third, it counts the candidate's treated units.",
+        "These three sums map directly to the coefficients. Multiply the centered-outcome sum by the sum of the reciprocal treatment and control counts to obtain the intercept. To obtain B, divide the overlap count by the treatment count, then subtract the number of observed treated units outside the candidate's treated group divided by the control count. C is the total candidate treated count divided by the treatment count. These identities apply in exact arithmetic with the fixed group sizes.",
+        "R converts the sums into intercepts and slopes once per candidate. At a hypothesized effect of zero, the candidate statistic is simply its intercept. The API's two-sided p-value for zero effect compares the magnitudes of these intercepts with the magnitude of the observed effect estimate.",
+        "For the interval, R first makes five hundred stochastic updates. Each update samples one retained assignment and adjusts lower and upper effect estimates toward the relevant tail-probability crossings. It then evaluates all candidates at one hundred effect values on a grid expanded beyond those estimates. It returns the range of grid values whose smaller empirical tail probability exceeds half the significance level. Each candidate evaluation is a multiply-add. The search makes no further calls to the device.",
+        "Figure four illustrates this geometry with forty units, five covariates, and twenty thousand initial draws. It retains the most balanced five percent: one thousand assignments. Two numbers describe each candidate line. The observed line is horizontal, and the interval corresponds to effects where it remains outside both extreme tails of the candidate statistics. With a significance level of five percent, the figure shows a nominal ninety-five percent fiducial interval from zero point five three to one point five three. The nominal level assumes uniform selection from the retained rows and is conditional on the pool."
+      ]
+    },
+    {
+      "id": "benchmarks",
+      "title": "Change one thing at a time",
+      "paragraphs": [
+        "We now turn from the four changes to their measurements. Arithmetic intensity describes reuse in operations per byte. Runtime speedups also depend on cache behavior and execution overhead. To compare algorithmic changes under a fixed resource budget, the article benchmarks standalone Python implementations on two CPU cores. Each comparison changes one algorithm, after compilation and warm-up, and reports the median of seven calls. These are indicative comparisons; ratios will differ on other hardware.",
+        "For balance calculations with at least two hundred and fifty-six covariates, the CPU speedups range from one point five to two point two times. The full-inverse comparison reports two point nine times. At sixteen covariates, the change is small, about one point one times. Narrow products with at most sixty-four columns use per-column reductions. This path was used because compiling each new GEMM shape on ROCm cost about five seconds.",
+        "Pairwise distances and the fiducial search show larger gains. Replacing the broadcast difference tensor with a matrix product speeds up the distance comparisons by eight point two to nine point six times. Precomputing candidate intercepts and slopes speeds up the fiducial-search comparisons by seventy-six to one hundred and fifty-eight times. The interval search avoids repeatedly taking inner products over all units at every trial effect.",
+        "These CPU comparisons are separate from the reference NVIDIA roofline measurement. The article also cites a separate AMD GPU comparison from the package's release notes. With all changes enabled, repeated whole-function calls on an RX seventy-six hundred M X T were ten to one hundred and ten times faster for Monte Carlo generation, and six to one hundred and eighty times faster for randomization testing. These ranges describe different workloads and hardware; they are not alternative speedups for the single reference calculation."
+      ]
+    },
+    {
+      "id": "profiling",
+      "title": "Sorting accounts for most kernel time",
+      "paragraphs": [
+        "Profiling shows where the reference GPU spends its time after the changes. Balance checks take about three point seven milliseconds per batch, or thirty-two percent of kernel time. Sorting to generate permutations takes seven point one milliseconds, or sixty-one percent. All other kernels take about zero point nine milliseconds.",
+        "Amdahl's law limits the gain from optimizing any one part. Even if the balance product took no time at all, this decomposition would allow at most a one point four seven times speedup. Eliminating permutation sorting would allow at most two point five five times. Those are hypothetical limits, not achieved speedups.",
+        "Figure five compares generation and balance times across several shapes. With one thousand and twenty-four units and a batch of four thousand and ninety-six, the generation estimates range from two point two five to two point five zero milliseconds as the number of covariates ranges from sixteen to two thousand and forty-eight. In that figure, generation time is obtained by subtracting a separately measured balance time from the batch time. The generation workload depends on the number of units and the batch size.",
+        "Permutation sampling is the next optimization target. Each draw needs a random subset with the specified treatment count. A selection procedure might replace the full sort. The article presents this as a conjecture, not an implemented change. Replacing the sampler would change the mapping from keys to assignments, so existing seeds would no longer produce the same assignments. Performance and seed compatibility would both need consideration."
+      ]
+    },
+    {
+      "id": "precision",
+      "title": "Four safeguards for float32",
+      "paragraphs": [
+        "The batch loop uses float32, which stores four bytes per value and has twenty-four bits of precision for its significant digits. The article describes four safeguards for these numerical calculations.",
+        "First, use float64 for steps that are vulnerable to cancellation. Centering, scaling or whitening on the host, and the observed treatment effect use double precision. Near-ties in the two-sided p-value comparison need particular care. If a candidate's absolute statistic is very close to the absolute observed effect, float32 rounding can change which side of the comparison it falls on.",
+        "The implementation defines a tolerance called epsilon. It multiplies four times the number of units, times two to the minus twenty-four, times the sum of the absolute centered outcomes, times the sum of the reciprocal treatment and control counts. Two to the minus twenty-four is float32 unit roundoff. The explicit factor for the number of units allows for accumulated summation error, and four is the implementation's extra margin. Candidates whose absolute statistic falls within this tolerance of the observed magnitude are evaluated again in float64 before the comparison.",
+        "Second, the balance and distance products use JAX's highest precision setting. On NVIDIA GPUs, this requests float32 dot products using the full twenty-four bits of input precision. The reduced-precision format TF32 rounds inputs to ten fraction bits plus an implicit leading bit. The choice of full float32 input precision can affect throughput. The article's comparison with a hardware roof uses an FP32 reference.",
+        "Third, sorting uses int32 treatment indicators, and generated assignments are checked to contain the required number of treated units. This addresses the payload correctness issue discussed in the key-generation section.",
+        "Fourth, accepted assignments are regenerated from their keys and scored again as a reproduction check. Together, these checks cover treatment counts, numerical comparisons, and the regenerated scores.",
+        "In the reference run, sixty-four accepted scores were compared with a float64 R reference. The maximum relative error among those checked scores was nine point zero seven times ten to the minus eight. That reported error applies to the checked scores in this run."
+      ]
+    },
+    {
+      "id": "summary",
+      "title": "Regime, floor, and next steps",
+      "paragraphs": [
+        "To close, distinguish the balance product's hardware floor from the time for the complete operation. Both traffic models place the reference balance product above the compute-to-bandwidth ridge: five hundred and twelve operations per byte for the whole-product model, forty-two point seven for the tile model, and about thirty-nine at the ridge.",
+        "The balance-only floor is one point nine five six milliseconds per batch. Across two hundred and fifty-six batches, that is approximately zero point five zero one seconds for the full reference workload. The measured median balance product takes three point seven zero four milliseconds per batch. It sustains eighteen point five five trillion floating-point operations per second, or fifty-two point eight percent of the FP32 reference at the listed boost clock.",
+        "The measured GPU stage takes two point nine five one seconds for generation, validation, balance scoring, and score ranking. The complete R call takes three point four one seconds, including host preparation and bookkeeping. Permutation sorting accounts for sixty-one percent of profiled GPU kernel time and is outside the balance-only floor. Per-batch kernel medians and whole-call medians were measured separately, so their sums need not match. Actual DRAM and cache traffic, and the old kernel's GPU time, were not established by these measurements.",
+        "The written article includes the R call for reproducing the reference workload, links to the benchmark report and reproduction instructions, and the sources for its hardware cost model.",
+        "We moved fixed calculations out of the draw loop, batched balance checks, regenerated assignments from keys, and reused candidate statistics during inference. The purpose is to make stringent balance criteria and treatment-effect inference practical for experiments with more units and covariates, with safeguards for numerical accuracy and reproducibility. That concludes the audio adaptation of Inside the kernels."
+      ]
+    }
+  ],
+  "article_sha256": "88093a85fa125bd0b615bc6ad5c918dacc40de25e06215b93e1444ab4d3a65f4"
+}

@@ -3,3 +3,6 @@
 CLAUDE.md
 /reports/
 /temp/
+AGENTS.md
+.claude/settings.local.json
+__pycache__/
