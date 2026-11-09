@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-11-09T14:45:01.406387+00:00",
-  "narration_sha256": "9e2ce722ce37e2dd5f5deb069068a5409b6c354228376e698f085882f18d3dc9",
-  "article_sha256": "31b950319b395b75e95f5e30b4a5a38c3db96e9df8768957c04c667a0150dbf9",
+  "generated_at": "2026-11-09T15:07:27.700390+00:00",
+  "narration_sha256": "2bbe5a886a1a2daed768120bde51459659bd4cb86c7141eb3505b869e81f9ed6",
+  "article_sha256": "475a3d2c32d2b6be7009e66a1a8f13b608a1a11bda673e829589db5f75b7cb84",
   "imported_source_sha256": "4c8153273f94f126386871d2ca55adc0050318407f7b23ae9b85ce7fe0046c89",
   "generator_sha256": "6b91ad9beed0c966ac603eee0a5294f3ddc65bfb9db57ea1ea212646d63175ba",
   "settings": {
@@ -21,9 +21,9 @@
     "join_version": 1
   },
   "audio_file": "audio/kernels.mp3",
-  "audio_sha256": "b9ebfae8558f8a79ce1e7ecdf4758cf4b780c90bd254801654ac66b9c24f4db4",
-  "bytes": 18837393,
-  "duration": 1569.68,
+  "audio_sha256": "6e64ec2c59fe6b44a43b314ded35b67ece76087ef22cf51f03ad5facf57b3f04",
+  "bytes": 18862737,
+  "duration": 1571.805,
   "sample_rate": 24000,
   "channels": 1,
   "bitrate": 96000,
@@ -82,13 +82,13 @@
       "id": "precision",
       "title": "Four safeguards for float32",
       "start": 1299.045,
-      "end": 1448.405
+      "end": 1450.53
     },
     {
       "id": "summary",
       "title": "Regime, floor, and next steps",
-      "start": 1449.105,
-      "end": 1569.68
+      "start": 1451.23,
+      "end": 1571.805
     }
   ],
   "paragraphs": [
@@ -537,16 +537,16 @@
       "chapter": "precision",
       "index": 0,
       "start": 1299.045,
-      "end": 1312.095,
-      "text": "The batch loop uses float32, which stores four bytes per value and has twenty-four bits of precision for its significant digits. The article describes four safeguards for these numerical calculations.",
-      "speech_sha256": "d92dcb759cb9dbd59ace25ac03285300758a9889120aae508fbcfa1ecbd37b3d",
-      "cache_key": "17e556941fb34551d316449a1d3db84255d1ec1a6924eb21c4f625170a466cdf"
+      "end": 1314.22,
+      "text": "The batch loop uses float32, which stores four bytes per value and has twenty-four bits of precision for its significant digits. The loop uses four safeguards to ensure numerical accuracy, valid assignments, and reproducibility.",
+      "speech_sha256": "cd9cd6c9c1c6f994baa9417a046ec22182639b9516dff588e9d42795aad88536",
+      "cache_key": "7b64222f94813255d0880c78a8ffa3b58a0707a8e8fec305c2d331d1aa8b7674"
     },
     {
       "chapter": "precision",
       "index": 1,
-      "start": 1312.375,
-      "end": 1337.875,
+      "start": 1314.5,
+      "end": 1340.0,
       "text": "First, use float64 for steps that are vulnerable to cancellation. Centering, scaling or whitening on the host, and the observed treatment effect use double precision. Near-ties in the two-sided p-value comparison need particular care. If a candidate's absolute statistic is very close to the absolute observed effect, float32 rounding can change which side of the comparison it falls on.",
       "speech_sha256": "3237d371ac4d71aa192733fdf8a9202e18b09b5e6eef2156ba335f05053c2f26",
       "cache_key": "676e7afd07984f8c7d45991dea651ac95b385b9f7c2c2f795227873003eabaa7"
@@ -554,8 +554,8 @@
     {
       "chapter": "precision",
       "index": 2,
-      "start": 1338.155,
-      "end": 1374.405,
+      "start": 1340.28,
+      "end": 1376.53,
       "text": "The implementation defines a tolerance called epsilon. It multiplies four times the number of units, times two to the minus twenty-four, times the sum of the absolute centered outcomes, times the sum of the reciprocal treatment and control counts. Two to the minus twenty-four is float32 unit roundoff. The explicit factor for the number of units allows for accumulated summation error, and four is the implementation's extra margin. Candidates whose absolute statistic falls within this tolerance of the observed magnitude are evaluated again in float64 before the comparison.",
       "speech_sha256": "a992b841ff9ffe37d1343547449fc3f338a21f57ddfc06cc2203ec14893e3731",
       "cache_key": "784daa4cc1c43c3a17d4b78e04994d70c6f7358a89b3f893a000609f8cc7b490"
@@ -563,8 +563,8 @@
     {
       "chapter": "precision",
       "index": 3,
-      "start": 1374.685,
-      "end": 1402.785,
+      "start": 1376.81,
+      "end": 1404.91,
       "text": "Second, the balance and distance products use JAX's highest precision setting. On NVIDIA GPUs, this requests float32 dot products using the full twenty-four bits of input precision. The reduced-precision format TF32 rounds inputs to ten fraction bits plus an implicit leading bit. The choice of full float32 input precision can affect throughput. The article's comparison with a hardware roof uses an FP32 reference.",
       "speech_sha256": "b1e1e830d1b8efe27a780593747f4cdd80a3f4c1d588e80926a71482b89183e4",
       "cache_key": "20805984bab9064a43d5170f3c85611d0f04e8b9dcd59ef47a43a54420d2f1a7"
@@ -572,8 +572,8 @@
     {
       "chapter": "precision",
       "index": 4,
-      "start": 1403.065,
-      "end": 1417.615,
+      "start": 1405.19,
+      "end": 1419.74,
       "text": "Third, sorting uses int32 treatment indicators, and generated assignments are checked to contain the required number of treated units. This addresses the payload correctness issue discussed in the key-generation section.",
       "speech_sha256": "859d3ac2bfafd5119ff194d09f59b5b89b6d1c26836e3ce7ce9754c4d3080964",
       "cache_key": "dffed8cb55e466a41d60bc35d368e134ffc9f1c4e9e4554d2c7c65133050e035"
@@ -581,8 +581,8 @@
     {
       "chapter": "precision",
       "index": 5,
-      "start": 1417.895,
-      "end": 1430.645,
+      "start": 1420.02,
+      "end": 1432.77,
       "text": "Fourth, accepted assignments are regenerated from their keys and scored again as a reproduction check. Together, these checks cover treatment counts, numerical comparisons, and the regenerated scores.",
       "speech_sha256": "d0bf6e0801898d045977ffbd58c36c01d3d9a57c5f20bf7511db35db195acb0c",
       "cache_key": "48ef38877a218018c788d2061a1bea24ce0326737561ed5d2636f8afd4451113"
@@ -590,8 +590,8 @@
     {
       "chapter": "precision",
       "index": 6,
-      "start": 1430.925,
-      "end": 1448.125,
+      "start": 1433.05,
+      "end": 1450.25,
       "text": "In the reference run, sixty-four accepted scores were compared with a float64 R reference. The maximum relative error among those checked scores was nine point zero seven times ten to the minus eight. That reported error applies to the checked scores in this run.",
       "speech_sha256": "0ab6c0913032f9694b430a6683f0befa2782e4ec5d3b44756d6e6ec1488753ee",
       "cache_key": "146ff516022a8dde55496248eeb7b6438e843f89a05d7e4dd2f2bf9ed5d43cac"
@@ -599,8 +599,8 @@
     {
       "chapter": "summary",
       "index": 0,
-      "start": 1449.105,
-      "end": 1469.13,
+      "start": 1451.23,
+      "end": 1471.255,
       "text": "To close, distinguish the balance product's hardware floor from the time for the complete operation. Both traffic models place the reference balance product above the compute-to-bandwidth ridge: five hundred and twelve operations per byte for the whole-product model, forty-two point seven for the tile model, and about thirty-nine at the ridge.",
       "speech_sha256": "60c88be3f6f507d570231814b771586813189f8fe86b429fd0fa331f2f5d1c0c",
       "cache_key": "60216afbf908410bb740dff9e268044547aa2a9c71d33bacf58fc88c7707b5ee"
@@ -608,8 +608,8 @@
     {
       "chapter": "summary",
       "index": 1,
-      "start": 1469.41,
-      "end": 1497.21,
+      "start": 1471.535,
+      "end": 1499.335,
       "text": "The balance-only floor is one point nine five six milliseconds per batch. Across two hundred and fifty-six batches, that is approximately zero point five zero one seconds for the full reference workload. The measured median balance product takes three point seven zero four milliseconds per batch. It sustains eighteen point five five trillion floating-point operations per second, or fifty-two point eight percent of the FP32 reference at the listed boost clock.",
       "speech_sha256": "7fd0844d4bd555edb7994830523970dcf6344b285a3342fc0dac30222c6739b4",
       "cache_key": "a6fed8c07f42e089c56988a565443fa676f72f02ec3d5b80b13ab197bfa5d5a4"
@@ -617,8 +617,8 @@
     {
       "chapter": "summary",
       "index": 2,
-      "start": 1497.49,
-      "end": 1531.965,
+      "start": 1499.615,
+      "end": 1534.09,
       "text": "The measured GPU stage takes two point nine five one seconds for generation, validation, balance scoring, and score ranking. The complete R call takes three point four one seconds, including host preparation and bookkeeping. Permutation sorting accounts for sixty-one percent of profiled GPU kernel time and is outside the balance-only floor. Per-batch kernel medians and whole-call medians were measured separately, so their sums need not match. Actual DRAM and cache traffic, and the old kernel's GPU time, were not established by these measurements.",
       "speech_sha256": "0859a253dcbea74aa68071703789a843343921b9cac454e7ba9770382d7c4e7d",
       "cache_key": "0bc9109ac193a78e49601013d47cb3decb691e3636b181efee4a423e38dd35c3"
@@ -626,8 +626,8 @@
     {
       "chapter": "summary",
       "index": 3,
-      "start": 1532.245,
-      "end": 1543.445,
+      "start": 1534.37,
+      "end": 1545.57,
       "text": "The written article includes the R call for reproducing the reference workload, links to the benchmark report and reproduction instructions, and the sources for its hardware cost model.",
       "speech_sha256": "ebaddc774a307d8d418cc143362105c6eae2f01134c7145ca3a7766f715349b5",
       "cache_key": "5781555f4ae20e08a634f4eae331bf5f26e9676f10bd69949b3d8a3481958161"
@@ -635,12 +635,11 @@
     {
       "chapter": "summary",
       "index": 4,
-      "start": 1543.725,
-      "end": 1569.4,
+      "start": 1545.85,
+      "end": 1571.525,
       "text": "We moved fixed calculations out of the draw loop, batched balance checks, regenerated assignments from keys, and reused candidate statistics during inference. The purpose is to make stringent balance criteria and treatment-effect inference practical for experiments with more units and covariates, with safeguards for numerical accuracy and reproducibility. That concludes the audio adaptation of Inside the kernels.",
       "speech_sha256": "655bc0097a77962a2733f2966d611f4eeffba78f55d262b1c87725c0033f5873",
       "cache_key": "5c16345724cc455dafc7eab06835bc829b4a6800c0e4c1c1270f540767f7a8ee"
     }
-  ],
-  "article_reviewed_at": "2026-11-09T14:50:11.631227+00:00"
+  ]
 }

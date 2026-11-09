@@ -137,7 +137,7 @@
       "id": "precision",
       "title": "Four safeguards for float32",
       "paragraphs": [
-        "The batch loop uses float32, which stores four bytes per value and has twenty-four bits of precision for its significant digits. The article describes four safeguards for these numerical calculations.",
+        "The batch loop uses float32, which stores four bytes per value and has twenty-four bits of precision for its significant digits. The loop uses four safeguards to ensure numerical accuracy, valid assignments, and reproducibility.",
         "First, use float64 for steps that are vulnerable to cancellation. Centering, scaling or whitening on the host, and the observed treatment effect use double precision. Near-ties in the two-sided p-value comparison need particular care. If a candidate's absolute statistic is very close to the absolute observed effect, float32 rounding can change which side of the comparison it falls on.",
         "The implementation defines a tolerance called epsilon. It multiplies four times the number of units, times two to the minus twenty-four, times the sum of the absolute centered outcomes, times the sum of the reciprocal treatment and control counts. Two to the minus twenty-four is float32 unit roundoff. The explicit factor for the number of units allows for accumulated summation error, and four is the implementation's extra margin. Candidates whose absolute statistic falls within this tolerance of the observed magnitude are evaluated again in float64 before the comparison.",
         "Second, the balance and distance products use JAX's highest precision setting. On NVIDIA GPUs, this requests float32 dot products using the full twenty-four bits of input precision. The reduced-precision format TF32 rounds inputs to ten fraction bits plus an implicit leading bit. The choice of full float32 input precision can affect throughput. The article's comparison with a hardware roof uses an FP32 reference.",
@@ -158,5 +158,5 @@
       ]
     }
   ],
-  "article_sha256": "31b950319b395b75e95f5e30b4a5a38c3db96e9df8768957c04c667a0150dbf9"
+  "article_sha256": "475a3d2c32d2b6be7009e66a1a8f13b608a1a11bda673e829589db5f75b7cb84"
 }

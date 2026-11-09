@@ -148,7 +148,7 @@
 <!-- KERNELS AUDIO START -->
 <div class="audio-panel" aria-labelledby="listen-title">
   <h2 id="listen-title">Listen to this article</h2>
-  <p class="audio-meta">26:09 &middot; Audio narration</p>
+  <p class="audio-meta">26:11 &middot; Audio narration</p>
   <audio id="kernels-audio" controls preload="none" aria-label="Inside the kernels, full audio adaptation">
     <source src="audio/kernels.mp3" type="audio/mpeg">
     <a href="audio/kernels.mp3">Download the audio version</a>.
@@ -157,7 +157,7 @@
     <label class="audio-speed" hidden>Playback speed
       <select id="audio-speed"><option value="0.75">0.75&times;</option><option value="1" selected>1&times;</option><option value="1.25">1.25&times;</option><option value="1.5">1.5&times;</option><option value="2">2&times;</option></select>
     </label>
-    <a href="audio/kernels.mp3" download="inside-the-kernels.mp3">Download MP3 <span class="audio-size">(18.8 MB)</span></a>
+    <a href="audio/kernels.mp3" download="inside-the-kernels.mp3">Download MP3 <span class="audio-size">(18.9 MB)</span></a>
   </div>
   <p id="audio-status" class="audio-status" role="status" hidden></p>
 </div>
@@ -308,7 +308,7 @@ In exact arithmetic, centering makes <b>1</b>&#7488;<var>X</var><sub>w</sub> = 0
 
 <section id="precision">
 <h2>Four safeguards for float32</h2>
-<p>The batch loop runs in float32 (24-bit significand, 4 bytes per value) and enforces four numerical checks:</p>
+<p>The batch loop runs in float32 (24-bit significand, 4 bytes per value) and uses four safeguards to ensure numerical accuracy, valid assignments, and reproducibility:</p>
 <ul>
 <li><b>Float64 for cancellation-prone steps.</b> Host-side centering, scaling or whitening, and the observed effect &#964;&#770;<sub>obs</sub> use float64. Float32 rounding can change the result of the two-sided p-value comparison <span class="eq-term">|<var>a<sub>w</sub></var>| &#8805; |&#964;&#770;<sub>obs</sub>|</span> for near-ties. Using the mean observed outcome Y&#772;, the near-tie tolerance is:
 <span class="eq"><span class="eq-term">&#949; = 4<var>n</var>&#183;2<sup>&#8722;24</sup> (&#931;<sub><var>j</var></sub> |<var>Y</var><sub><var>j</var></sub> &#8722; Y&#772;|)</span> <span class="eq-term">(1/<var>n</var><sub>1</sub> + 1/<var>n</var><sub>0</sub>)</span></span>
