@@ -29,7 +29,8 @@ def article_digest() -> str:
     from bs4 import BeautifulSoup, NavigableString
 
     soup = BeautifulSoup(ARTICLE.read_text(), "html.parser")
-    sections = soup.select(".kp > section")
+    # Bibliographic references remain in the written article, outside the narration.
+    sections = soup.select(".kp > section:not(#references)")
     for section in sections:
         section.attrs.pop("id", None)
         for node in list(section.descendants):

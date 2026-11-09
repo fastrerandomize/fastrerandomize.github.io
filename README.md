@@ -60,6 +60,8 @@ After editing the article, review the narration for the same changes. Run
 to use a narration source that refers to different article content. The imported
 Downloads-file hash is retained separately as provenance. The generated HTML
 between the `KERNELS AUDIO` comments should be regenerated rather than hand-edited.
+The References section is excluded from the narration hash; citation-only edits
+do not require rebuilding the recording.
 
 `render` refreshes the player from an existing matching recording;
 `check` verifies the source hashes, audio hash, chapter ranges, and paragraph count.
