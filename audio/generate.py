@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-"""Build the checked-in narration, player, and transcript. See the root README."""
+"""Build the checked-in narration and player. See the root README."""
 from __future__ import annotations
 
 import argparse
 import hashlib
-import html
 import importlib.metadata
 import json
 import re
@@ -208,19 +207,6 @@ def read_manifest(source: dict) -> dict:
 def render() -> None:
     source = read_source()
     manifest = read_manifest(source)
-    e = html.escape
-    chapter_items = []
-    transcript = []
-    for chapter, timing in zip(source["chapters"], manifest["chapters"], strict=True):
-        assert chapter["id"] == timing["id"]
-        chapter_items.append(
-            '<li><span class="audio-time">' + stamp(timing["start"]) + '</span>'
-            f'<a href="#{e(chapter["id"])}">{e(chapter["title"])}</a>'
-            f'<button type="button" data-audio-start="{timing["start"]}" hidden '
-            f'aria-label="Play {e(chapter["title"])}">Play</button></li>'
-        )
-        transcript.append(f'<h3><a href="#{e(chapter["id"])}">{e(chapter["title"])}</a></h3>')
-        transcript.extend(f'<p>{e(p)}</p>' for p in chapter["paragraphs"])
     panel = f'''{START}
 <div class="audio-panel" aria-labelledby="listen-title">
   <h2 id="listen-title">Listen to this article</h2>
@@ -236,11 +222,6 @@ def render() -> None:
     <a href="audio/kernels.mp3" download="inside-the-kernels.mp3">Download MP3 <span class="audio-size">({manifest["bytes"] / 1_000_000:.1f} MB)</span></a>
   </div>
   <p id="audio-status" class="audio-status" role="status" hidden></p>
-  <details class="audio-chapters"><summary>Chapters</summary><ol>{''.join(chapter_items)}</ol></details>
-  <details class="audio-transcript"><summary>Read the audio transcript</summary>
-    <p class="audio-note">Adapted for listening: equations and figures are explained in words. The article below includes the full notation, tables, code, and sources.</p>
-    {''.join(transcript)}
-  </details>
 </div>
 {END}'''
     text = ARTICLE.read_text()

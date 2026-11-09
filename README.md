@@ -31,7 +31,7 @@ Package by [Rebecca Goldstein](https://rebeccasgoldstein.com/), [Connor Jerzak](
 
 ## Kernels article and audio
 
-`kernels.html` contains the article and its generated audio player/transcript.
+`kernels.html` contains the article and its generated audio player.
 The spoken adaptation is maintained in `audio/kernels-narration.json`, with ten
 chapters, pronunciation substitutions, and hashes identifying its written source.
 Audio is generated locally with [Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M)
@@ -50,8 +50,8 @@ temp/audio-venv/bin/python audio/generate.py check
 The generator reuses paragraph recordings in the ignored `temp/kernels-audio`
 directory when their spoken text, model, voice, or generation settings have not
 changed. It builds a normalized, mono 96 kbps MP3, measures the encoded output,
-and writes the timing/version manifest before refreshing the player's transcript
-and chapter links. Model weights stay in the local Hugging Face cache. Only the
+and writes the timing/version manifest before refreshing the player.
+Model weights stay in the local Hugging Face cache. Only the
 finished MP3 and the small source, manifest, and generation files belong in Git.
 
 After editing the article, review the narration for the same changes. Run
@@ -61,9 +61,9 @@ to use a narration source that refers to different article content. The imported
 Downloads-file hash is retained separately as provenance. The generated HTML
 between the `KERNELS AUDIO` comments should be regenerated rather than hand-edited.
 
-`render` refreshes the player and transcript from an existing matching recording;
+`render` refreshes the player from an existing matching recording;
 `check` verifies the source hashes, audio hash, chapter ranges, and paragraph count.
 When rebuilding, also review pronunciation and audio joins, check the narration
-against its transcript, and verify playback, chapter seeking, and the article's
+against its narration source, and verify playback, speed controls, and the article's
 interactive figures through a local HTTP preview. GitHub Pages serves the static
 files; there is no runtime speech-generation service.
