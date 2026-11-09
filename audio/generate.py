@@ -211,7 +211,7 @@ def render() -> None:
     panel = f'''{START}
 <div class="audio-panel" aria-labelledby="listen-title">
   <h2 id="listen-title">Listen to this article</h2>
-  <p class="audio-meta">{stamp(manifest["duration"])} &middot; Full audio adaptation &middot; AI narration</p>
+  <p class="audio-meta">{stamp(manifest["duration"])} &middot; Audio narration</p>
   <audio id="kernels-audio" controls preload="none" aria-label="Inside the kernels, full audio adaptation">
     <source src="audio/kernels.mp3" type="audio/mpeg">
     <a href="audio/kernels.mp3">Download the audio version</a>.
