@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-11-09T14:30:40.740810+00:00",
-  "narration_sha256": "f5affb7edf5f784916c5af4102eb3f4072d81630096391c8983e5e1de09ffa1d",
-  "article_sha256": "e699dd831bf9207e9ad59c4032c9e31fbe5369a69c1fa9c8148ca26ef9b3ed71",
+  "generated_at": "2026-11-09T14:45:01.406387+00:00",
+  "narration_sha256": "0f6cdb7ad96cf938599379c4b3bcb9736a02ddc3ad26e1104aa3818b1792a72b",
+  "article_sha256": "1119fce641ecbceb817d3189c0d0b49bcb2dabf1363beb85f6252f1dcc9762b2",
   "imported_source_sha256": "4c8153273f94f126386871d2ca55adc0050318407f7b23ae9b85ce7fe0046c89",
   "generator_sha256": "6b91ad9beed0c966ac603eee0a5294f3ddc65bfb9db57ea1ea212646d63175ba",
   "settings": {
@@ -21,9 +21,9 @@
     "join_version": 1
   },
   "audio_file": "audio/kernels.mp3",
-  "audio_sha256": "ee8ae8e466349c5cc2dcc689136ad54e42c1453dacb135b51c9d530e4af66717",
-  "bytes": 18832497,
-  "duration": 1569.28,
+  "audio_sha256": "b9ebfae8558f8a79ce1e7ecdf4758cf4b780c90bd254801654ac66b9c24f4db4",
+  "bytes": 18837393,
+  "duration": 1569.68,
   "sample_rate": 24000,
   "channels": 1,
   "bitrate": 96000,
@@ -70,25 +70,25 @@
       "id": "benchmarks",
       "title": "Change one thing at a time",
       "start": 1086.105,
-      "end": 1195.275
+      "end": 1195.675
     },
     {
       "id": "profiling",
       "title": "Sorting accounts for most kernel time",
-      "start": 1195.975,
-      "end": 1297.945
+      "start": 1196.375,
+      "end": 1298.345
     },
     {
       "id": "precision",
       "title": "Four safeguards for float32",
-      "start": 1298.645,
-      "end": 1448.005
+      "start": 1299.045,
+      "end": 1448.405
     },
     {
       "id": "summary",
       "title": "Regime, floor, and next steps",
-      "start": 1448.705,
-      "end": 1569.28
+      "start": 1449.105,
+      "end": 1569.68
     }
   ],
   "paragraphs": [
@@ -492,16 +492,16 @@
       "chapter": "benchmarks",
       "index": 3,
       "start": 1159.92,
-      "end": 1194.995,
-      "text": "These CPU comparisons are separate from the reference NVIDIA roofline measurement. The article also cites a separate AMD GPU comparison from the package's release notes. With all changes enabled, repeated whole-function calls on an RX seventy-six hundred M X T were ten to one hundred and ten times faster for Monte Carlo generation, and six to one hundred and eighty times faster for randomization testing. These ranges describe different workloads and hardware; they are not alternative speedups for the single reference calculation.",
-      "speech_sha256": "f1c2e88a8160f321e8379e0a18f3f5be2a8ecae18c76d9455ff7ae015e85b2a2",
-      "cache_key": "baf2235ebb7a733c592904c6a91111c79cdd75fd8c4a09cbdecd6bea92a5e8d7"
+      "end": 1195.395,
+      "text": "These CPU comparisons are separate from the reference NVIDIA roofline measurement. The article also cites a separate AMD GPU comparison from the package's release notes. With all optimizations enabled, repeated whole-function calls on an RX seventy-six hundred M X T were ten to one hundred and ten times faster for Monte Carlo generation, and six to one hundred and eighty times faster for randomization testing. These ranges describe different workloads and hardware; they are not alternative speedups for the single reference calculation.",
+      "speech_sha256": "6d70fbbbe5b38574bd73ffcb6e177de66ee506276a139838dc4a1d5c10a6a42d",
+      "cache_key": "8afbb0cc8b2a40aab245848a34d3b989bc0f4ecebcfc6b44cc7ef435b9b5532a"
     },
     {
       "chapter": "profiling",
       "index": 0,
-      "start": 1195.975,
-      "end": 1217.425,
+      "start": 1196.375,
+      "end": 1217.825,
       "text": "Profiling shows where the reference GPU spends its time after the changes. Balance checks take about three point seven milliseconds per batch, or thirty-two percent of kernel time. Sorting to generate permutations takes seven point one milliseconds, or sixty-one percent. All other kernels take about zero point nine milliseconds.",
       "speech_sha256": "14a90efea774add4312bb45c2f7fe5af39df68883bc04ce192a344ce4808e0b2",
       "cache_key": "29f1ece0a5b57eb5eb04d3029351c45b972e9424ae7900eb12cf0c0002b99918"
@@ -509,8 +509,8 @@
     {
       "chapter": "profiling",
       "index": 1,
-      "start": 1217.705,
-      "end": 1238.03,
+      "start": 1218.105,
+      "end": 1238.43,
       "text": "Amdahl's law limits the gain from optimizing any one part. Even if the balance product took no time at all, this decomposition would allow at most a one point four seven times speedup. Eliminating permutation sorting would allow at most two point five five times. Those are hypothetical limits, not achieved speedups.",
       "speech_sha256": "c6d72307bcb73de108d7eafc9295933d46d27e62a98c8689111faae0308de5fa",
       "cache_key": "2046d3d76a4ca7a5d7d58559d0d30791a90189cf2f15523c52edcef8e04c4b26"
@@ -518,8 +518,8 @@
     {
       "chapter": "profiling",
       "index": 2,
-      "start": 1238.31,
-      "end": 1269.96,
+      "start": 1238.71,
+      "end": 1270.36,
       "text": "Figure five compares generation and balance times across several shapes. With one thousand and twenty-four units and a batch of four thousand and ninety-six, the generation estimates range from two point two five to two point five zero milliseconds as the number of covariates ranges from sixteen to two thousand and forty-eight. In that figure, generation time is obtained by subtracting a separately measured balance time from the batch time. The generation workload depends on the number of units and the batch size.",
       "speech_sha256": "915998f425bae432b04523e8f00aba61b10ced41c06303a9fd1c98085d477d6e",
       "cache_key": "4cc52a05052c29e996a11602301e7f964ea59fa93a8aee74a1b4d8f68e905ec5"
@@ -527,8 +527,8 @@
     {
       "chapter": "profiling",
       "index": 3,
-      "start": 1270.24,
-      "end": 1297.665,
+      "start": 1270.64,
+      "end": 1298.065,
       "text": "Permutation sampling is the next optimization target. Each draw needs a random subset with the specified treatment count. A selection procedure might replace the full sort. The article presents this as a conjecture, not an implemented change. Replacing the sampler would change the mapping from keys to assignments, so existing seeds would no longer produce the same assignments. Performance and seed compatibility would both need consideration.",
       "speech_sha256": "a189c2fd10a7cd92659d825eebfad078a49b8a4920d994972a9619dfade26703",
       "cache_key": "3d779f891c398b16af3e707f6936cce9113c13b228da17c5ed84880cd268aed5"
@@ -536,8 +536,8 @@
     {
       "chapter": "precision",
       "index": 0,
-      "start": 1298.645,
-      "end": 1311.695,
+      "start": 1299.045,
+      "end": 1312.095,
       "text": "The batch loop uses float32, which stores four bytes per value and has twenty-four bits of precision for its significant digits. The article describes four safeguards for these numerical calculations.",
       "speech_sha256": "d92dcb759cb9dbd59ace25ac03285300758a9889120aae508fbcfa1ecbd37b3d",
       "cache_key": "17e556941fb34551d316449a1d3db84255d1ec1a6924eb21c4f625170a466cdf"
@@ -545,8 +545,8 @@
     {
       "chapter": "precision",
       "index": 1,
-      "start": 1311.975,
-      "end": 1337.475,
+      "start": 1312.375,
+      "end": 1337.875,
       "text": "First, use float64 for steps that are vulnerable to cancellation. Centering, scaling or whitening on the host, and the observed treatment effect use double precision. Near-ties in the two-sided p-value comparison need particular care. If a candidate's absolute statistic is very close to the absolute observed effect, float32 rounding can change which side of the comparison it falls on.",
       "speech_sha256": "3237d371ac4d71aa192733fdf8a9202e18b09b5e6eef2156ba335f05053c2f26",
       "cache_key": "676e7afd07984f8c7d45991dea651ac95b385b9f7c2c2f795227873003eabaa7"
@@ -554,8 +554,8 @@
     {
       "chapter": "precision",
       "index": 2,
-      "start": 1337.755,
-      "end": 1374.005,
+      "start": 1338.155,
+      "end": 1374.405,
       "text": "The implementation defines a tolerance called epsilon. It multiplies four times the number of units, times two to the minus twenty-four, times the sum of the absolute centered outcomes, times the sum of the reciprocal treatment and control counts. Two to the minus twenty-four is float32 unit roundoff. The explicit factor for the number of units allows for accumulated summation error, and four is the implementation's extra margin. Candidates whose absolute statistic falls within this tolerance of the observed magnitude are evaluated again in float64 before the comparison.",
       "speech_sha256": "a992b841ff9ffe37d1343547449fc3f338a21f57ddfc06cc2203ec14893e3731",
       "cache_key": "784daa4cc1c43c3a17d4b78e04994d70c6f7358a89b3f893a000609f8cc7b490"
@@ -563,8 +563,8 @@
     {
       "chapter": "precision",
       "index": 3,
-      "start": 1374.285,
-      "end": 1402.385,
+      "start": 1374.685,
+      "end": 1402.785,
       "text": "Second, the balance and distance products use JAX's highest precision setting. On NVIDIA GPUs, this requests float32 dot products using the full twenty-four bits of input precision. The reduced-precision format TF32 rounds inputs to ten fraction bits plus an implicit leading bit. The choice of full float32 input precision can affect throughput. The article's comparison with a hardware roof uses an FP32 reference.",
       "speech_sha256": "b1e1e830d1b8efe27a780593747f4cdd80a3f4c1d588e80926a71482b89183e4",
       "cache_key": "20805984bab9064a43d5170f3c85611d0f04e8b9dcd59ef47a43a54420d2f1a7"
@@ -572,8 +572,8 @@
     {
       "chapter": "precision",
       "index": 4,
-      "start": 1402.665,
-      "end": 1417.215,
+      "start": 1403.065,
+      "end": 1417.615,
       "text": "Third, sorting uses int32 treatment indicators, and generated assignments are checked to contain the required number of treated units. This addresses the payload correctness issue discussed in the key-generation section.",
       "speech_sha256": "859d3ac2bfafd5119ff194d09f59b5b89b6d1c26836e3ce7ce9754c4d3080964",
       "cache_key": "dffed8cb55e466a41d60bc35d368e134ffc9f1c4e9e4554d2c7c65133050e035"
@@ -581,8 +581,8 @@
     {
       "chapter": "precision",
       "index": 5,
-      "start": 1417.495,
-      "end": 1430.245,
+      "start": 1417.895,
+      "end": 1430.645,
       "text": "Fourth, accepted assignments are regenerated from their keys and scored again as a reproduction check. Together, these checks cover treatment counts, numerical comparisons, and the regenerated scores.",
       "speech_sha256": "d0bf6e0801898d045977ffbd58c36c01d3d9a57c5f20bf7511db35db195acb0c",
       "cache_key": "48ef38877a218018c788d2061a1bea24ce0326737561ed5d2636f8afd4451113"
@@ -590,8 +590,8 @@
     {
       "chapter": "precision",
       "index": 6,
-      "start": 1430.525,
-      "end": 1447.725,
+      "start": 1430.925,
+      "end": 1448.125,
       "text": "In the reference run, sixty-four accepted scores were compared with a float64 R reference. The maximum relative error among those checked scores was nine point zero seven times ten to the minus eight. That reported error applies to the checked scores in this run.",
       "speech_sha256": "0ab6c0913032f9694b430a6683f0befa2782e4ec5d3b44756d6e6ec1488753ee",
       "cache_key": "146ff516022a8dde55496248eeb7b6438e843f89a05d7e4dd2f2bf9ed5d43cac"
@@ -599,8 +599,8 @@
     {
       "chapter": "summary",
       "index": 0,
-      "start": 1448.705,
-      "end": 1468.73,
+      "start": 1449.105,
+      "end": 1469.13,
       "text": "To close, distinguish the balance product's hardware floor from the time for the complete operation. Both traffic models place the reference balance product above the compute-to-bandwidth ridge: five hundred and twelve operations per byte for the whole-product model, forty-two point seven for the tile model, and about thirty-nine at the ridge.",
       "speech_sha256": "60c88be3f6f507d570231814b771586813189f8fe86b429fd0fa331f2f5d1c0c",
       "cache_key": "60216afbf908410bb740dff9e268044547aa2a9c71d33bacf58fc88c7707b5ee"
@@ -608,8 +608,8 @@
     {
       "chapter": "summary",
       "index": 1,
-      "start": 1469.01,
-      "end": 1496.81,
+      "start": 1469.41,
+      "end": 1497.21,
       "text": "The balance-only floor is one point nine five six milliseconds per batch. Across two hundred and fifty-six batches, that is approximately zero point five zero one seconds for the full reference workload. The measured median balance product takes three point seven zero four milliseconds per batch. It sustains eighteen point five five trillion floating-point operations per second, or fifty-two point eight percent of the FP32 reference at the listed boost clock.",
       "speech_sha256": "7fd0844d4bd555edb7994830523970dcf6344b285a3342fc0dac30222c6739b4",
       "cache_key": "a6fed8c07f42e089c56988a565443fa676f72f02ec3d5b80b13ab197bfa5d5a4"
@@ -617,8 +617,8 @@
     {
       "chapter": "summary",
       "index": 2,
-      "start": 1497.09,
-      "end": 1531.565,
+      "start": 1497.49,
+      "end": 1531.965,
       "text": "The measured GPU stage takes two point nine five one seconds for generation, validation, balance scoring, and score ranking. The complete R call takes three point four one seconds, including host preparation and bookkeeping. Permutation sorting accounts for sixty-one percent of profiled GPU kernel time and is outside the balance-only floor. Per-batch kernel medians and whole-call medians were measured separately, so their sums need not match. Actual DRAM and cache traffic, and the old kernel's GPU time, were not established by these measurements.",
       "speech_sha256": "0859a253dcbea74aa68071703789a843343921b9cac454e7ba9770382d7c4e7d",
       "cache_key": "0bc9109ac193a78e49601013d47cb3decb691e3636b181efee4a423e38dd35c3"
@@ -626,8 +626,8 @@
     {
       "chapter": "summary",
       "index": 3,
-      "start": 1531.845,
-      "end": 1543.045,
+      "start": 1532.245,
+      "end": 1543.445,
       "text": "The written article includes the R call for reproducing the reference workload, links to the benchmark report and reproduction instructions, and the sources for its hardware cost model.",
       "speech_sha256": "ebaddc774a307d8d418cc143362105c6eae2f01134c7145ca3a7766f715349b5",
       "cache_key": "5781555f4ae20e08a634f4eae331bf5f26e9676f10bd69949b3d8a3481958161"
@@ -635,8 +635,8 @@
     {
       "chapter": "summary",
       "index": 4,
-      "start": 1543.325,
-      "end": 1569.0,
+      "start": 1543.725,
+      "end": 1569.4,
       "text": "We moved fixed calculations out of the draw loop, batched balance checks, regenerated assignments from keys, and reused candidate statistics during inference. The purpose is to make stringent balance criteria and treatment-effect inference practical for experiments with more units and covariates, with safeguards for numerical accuracy and reproducibility. That concludes the audio adaptation of Inside the kernels.",
       "speech_sha256": "655bc0097a77962a2733f2966d611f4eeffba78f55d262b1c87725c0033f5873",
       "cache_key": "5c16345724cc455dafc7eab06835bc829b4a6800c0e4c1c1270f540767f7a8ee"

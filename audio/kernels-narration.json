@@ -120,7 +120,7 @@
         "We now turn from the four changes to their measurements. Arithmetic intensity describes reuse in operations per byte. Runtime speedups also depend on cache behavior and execution overhead. To compare algorithmic changes under a fixed resource budget, the article benchmarks standalone Python implementations on two CPU cores. Each comparison changes one algorithm, after compilation and warm-up, and reports the median of seven calls.",
         "For balance calculations with at least two hundred and fifty-six covariates, the CPU speedups range from one point five to two point two times. The full-inverse comparison reports two point nine times. At sixteen covariates, the change is small, about one point one times.",
         "Pairwise distances and the fiducial search show larger gains. Replacing the broadcast difference tensor with a matrix product speeds up the distance comparisons by eight point two to nine point six times. Precomputing candidate intercepts and slopes speeds up the fiducial-search comparisons by seventy-six to one hundred and fifty-eight times. The interval search avoids repeatedly taking inner products over all units at every trial effect.",
-        "These CPU comparisons are separate from the reference NVIDIA roofline measurement. The article also cites a separate AMD GPU comparison from the package's release notes. With all changes enabled, repeated whole-function calls on an RX seventy-six hundred M X T were ten to one hundred and ten times faster for Monte Carlo generation, and six to one hundred and eighty times faster for randomization testing. These ranges describe different workloads and hardware; they are not alternative speedups for the single reference calculation."
+        "These CPU comparisons are separate from the reference NVIDIA roofline measurement. The article also cites a separate AMD GPU comparison from the package's release notes. With all optimizations enabled, repeated whole-function calls on an RX seventy-six hundred M X T were ten to one hundred and ten times faster for Monte Carlo generation, and six to one hundred and eighty times faster for randomization testing. These ranges describe different workloads and hardware; they are not alternative speedups for the single reference calculation."
       ]
     },
     {
@@ -158,5 +158,5 @@
       ]
     }
   ],
-  "article_sha256": "e699dd831bf9207e9ad59c4032c9e31fbe5369a69c1fa9c8148ca26ef9b3ed71"
+  "article_sha256": "1119fce641ecbceb817d3189c0d0b49bcb2dabf1363beb85f6252f1dcc9762b2"
 }
