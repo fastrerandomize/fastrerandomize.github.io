@@ -1,7 +1,7 @@
 {
   "generated_at": "2026-11-09T15:07:27.700390+00:00",
-  "narration_sha256": "c117d1ecc651ac5d02c037d2450f1bfa3699daeb2e25ef93feac33b94ccac311",
-  "article_sha256": "decddec028619e94fe6562617dbf48d3cfc5993a1b8991a83207371d6bd25d8f",
+  "narration_sha256": "517a6f3fe3a886adccd1a735381511220a11495160e61610a91b03f87abf9c01",
+  "article_sha256": "6bf21e9b587ebb2d210014a57c021069e9a8eb35a31866e9a5502ca00e49bfc0",
   "imported_source_sha256": "4c8153273f94f126386871d2ca55adc0050318407f7b23ae9b85ce7fe0046c89",
   "generator_sha256": "6b91ad9beed0c966ac603eee0a5294f3ddc65bfb9db57ea1ea212646d63175ba",
   "settings": {
@@ -642,5 +642,5 @@
       "cache_key": "5c16345724cc455dafc7eab06835bc829b4a6800c0e4c1c1270f540767f7a8ee"
     }
   ],
-  "article_reviewed_at": "2026-11-09T15:16:53.124038+00:00"
+  "article_reviewed_at": "2026-11-09T15:37:48.731817+00:00"
 }
